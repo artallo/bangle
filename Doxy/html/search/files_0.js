@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['bangle_2ec_2',['bangle.c',['../bangle_8c.html',1,'']]]
+  ['bangle_2ec_4',['bangle.c',['../bangle_8c.html',1,'']]]
 ];

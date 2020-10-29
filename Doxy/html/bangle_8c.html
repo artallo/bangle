@@ -83,14 +83,14 @@ $(function() {
 Macros</h2></td></tr>
 <tr class="memitem:adb2845496c385fbffeccda1b626e3f66"><td class="memItemLeft" align="right" valign="top"><a id="adb2845496c385fbffeccda1b626e3f66"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#adb2845496c385fbffeccda1b626e3f66">GPIO_BUTTON</a>&#160;&#160;&#160;27</td></tr>
-<tr class="memdesc:adb2845496c385fbffeccda1b626e3f66"><td class="mdescLeft">&#160;</td><td class="mdescRight">button <br /></td></tr>
+<tr class="memdesc:adb2845496c385fbffeccda1b626e3f66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Button. <br /></td></tr>
 <tr class="separator:adb2845496c385fbffeccda1b626e3f66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a6f9b8a1df455daa0291a048ccd3c99c7"><td class="memItemLeft" align="right" valign="top"><a id="a6f9b8a1df455daa0291a048ccd3c99c7"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>vTaskButtonCheck</b> (void *pvParameters)</td></tr>
-<tr class="separator:a6f9b8a1df455daa0291a048ccd3c99c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4cd16db3f3c99944c8c45ad1d571314"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#ae4cd16db3f3c99944c8c45ad1d571314">vTaskButtonPressed</a> (void *pvParameters)</td></tr>
+<tr class="memdesc:ae4cd16db3f3c99944c8c45ad1d571314"><td class="mdescLeft">&#160;</td><td class="mdescRight">Task for determining the duration of a button press.  <a href="bangle_8c.html#ae4cd16db3f3c99944c8c45ad1d571314">More...</a><br /></td></tr>
+<tr class="separator:ae4cd16db3f3c99944c8c45ad1d571314"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a630544a7f0a2cc40d8a7fefab7e2fe70"><td class="memItemLeft" align="right" valign="top"><a id="a630544a7f0a2cc40d8a7fefab7e2fe70"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>app_main</b> (void)</td></tr>
 <tr class="separator:a630544a7f0a2cc40d8a7fefab7e2fe70"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -98,15 +98,49 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>app_main</b> (void)</
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a3dabf9b8e7d1dcbc13e77c74aefc7595"><td class="memItemLeft" align="right" valign="top"><a id="a3dabf9b8e7d1dcbc13e77c74aefc7595"></a>
-volatile int64_t&#160;</td><td class="memItemRight" valign="bottom"><b>last_micros</b> = 0</td></tr>
+volatile int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a3dabf9b8e7d1dcbc13e77c74aefc7595">last_micros</a> = 0</td></tr>
+<tr class="memdesc:a3dabf9b8e7d1dcbc13e77c74aefc7595"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delay measuring in usec. <br /></td></tr>
 <tr class="separator:a3dabf9b8e7d1dcbc13e77c74aefc7595"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a689f4bd299ac49204bd295cd47d612ae"><td class="memItemLeft" align="right" valign="top"><a id="a689f4bd299ac49204bd295cd47d612ae"></a>
+volatile bool&#160;</td><td class="memItemRight" valign="bottom"><b>in_isr_begin</b> = false</td></tr>
+<tr class="separator:a689f4bd299ac49204bd295cd47d612ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8dabf3f8bcdbc1807fbe613fdaec268"><td class="memItemLeft" align="right" valign="top"><a id="af8dabf3f8bcdbc1807fbe613fdaec268"></a>
+volatile bool&#160;</td><td class="memItemRight" valign="bottom"><b>in_isr_mid</b> = false</td></tr>
+<tr class="separator:af8dabf3f8bcdbc1807fbe613fdaec268"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><dl class="section author"><dt>Author</dt><dd>Artem (<a href="#" onclick="location.href='mai'+'lto:'+'art'+'al'+'lo@'+'ma'+'il.'+'ru'; return false;">artal<span style="display: none;">.nosp@m.</span>lo@m<span style="display: none;">.nosp@m.</span>ail.r<span style="display: none;">.nosp@m.</span>u</a>) </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>0.1 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2020-10-28</dd></dl>
 <dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2020 </dd></dl>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="ae4cd16db3f3c99944c8c45ad1d571314"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4cd16db3f3c99944c8c45ad1d571314">&#9670;&nbsp;</a></span>vTaskButtonPressed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vTaskButtonPressed </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>pvParameters</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Task for determining the duration of a button press. </p>
+<p>Task in which the duration of the button pressing is determined </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvParameters</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20

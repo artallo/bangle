@@ -14,24 +14,26 @@
 #include "driver/gpio.h"
 #include "sdkconfig.h"
 
-#define GPIO_BUTTON 27 ///< button
+#define GPIO_BUTTON 27 ///< Button
 
-volatile int64_t last_micros = 0;
-volatile bool in_isr_begin = false;
-volatile bool in_isr_mid = false;
+volatile int64_t last_micros = 0;   ///< Delay measuring in usec 
 static TaskHandle_t xTaskButtonPressedHandle = NULL;
 
 void vTaskButtonPressed(void *pvParameters);
 
+/**
+ * @brief Button pressed ISR
+ * 
+ * This ISR direct notify task vTaskButtonPressed in which the duration of the pressing is determined
+ * @param arg - GPIO number that trigger interrupt
+ */
 static void IRAM_ATTR button_isr_handler(void* arg)
 {
     uint32_t gpio_num = (uint32_t) arg;
-    in_isr_begin = true;
-    if(esp_timer_get_time() - last_micros > 50 * 1000) {
-        //Direct to task notification
-        in_isr_mid = true;
-        vTaskNotifyGiveFromISR(xTaskButtonPressedHandle, NULL);
+    if (esp_timer_get_time() - last_micros > 80 * 1000) {    //80ms debounce delay
+        //Direct to task notification is faster, instaed of using binary semaphore
         last_micros = esp_timer_get_time();
+        vTaskNotifyGiveFromISR(xTaskButtonPressedHandle, NULL);
     }
     //xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
 }
@@ -49,34 +51,31 @@ void app_main(void)
     gpio_install_isr_service(0);
     //hook isr handler for specific gpio pin
     gpio_isr_handler_add(GPIO_BUTTON, button_isr_handler, (void*) GPIO_BUTTON);
-
     
-    //vTaskStartScheduler();
-    
-    while(1) {
-        /*printf("Checking button state: ");
-        printf("%d\n", gpio_get_level(GPIO_BUTTON));
-        for (int i = 2; i >= 0; i--) {
-            vTaskDelay(200 / portTICK_PERIOD_MS);
-        }*/
-        printf("in isr begin: %d", in_isr_begin);
-        printf(", in isr mid: %d\n", in_isr_mid);
-        in_isr_begin = false;
-        in_isr_mid = false;
+    while (1) {
         vTaskDelay(500 / portTICK_PERIOD_MS);
     }
 }
 
-
+/**
+ * @brief Task for determining the duration of a button press
+ * 
+ * Task in which the duration of the button pressing is determined
+ * @param pvParameters 
+ */
 void vTaskButtonPressed(void *pvParameters) {
     uint8_t duration = 0;
-    //see realization how measure key press duration in project SD reader/checker for Nikolay domofon
-    while(1) {
-        printf("in task while\n");
+    while (1) {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-        printf("Button pressed\n");
-        /*if (gpio_get_level(BUTTON_GPIO) == 0) {
-            vTaskDelay(50 / portTICK_PERIOD_MS);
-        }*/
+        if (gpio_get_level(GPIO_BUTTON) == 0) {
+            int64_t last_micros = esp_timer_get_time();
+            printf("Button pressed for.. ");
+            while ((gpio_get_level(GPIO_BUTTON) == 0) && (esp_timer_get_time() - last_micros <= 2000 * 1000)) {
+                duration++;
+                vTaskDelay(50 / portTICK_PERIOD_MS);
+            }
+            printf("%dms\n", duration * 50);
+            duration = 0;
+        }
     }
 }
