@@ -73,6 +73,9 @@ $(function() {
 <div class="title">bangle.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Прошивка браслета  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
 <code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
 <code>#include &quot;freertos/task.h&quot;</code><br />
@@ -91,6 +94,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ae4cd16db3f3c99944c8c45ad1d571314"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#ae4cd16db3f3c99944c8c45ad1d571314">vTaskButtonPressed</a> (void *pvParameters)</td></tr>
 <tr class="memdesc:ae4cd16db3f3c99944c8c45ad1d571314"><td class="mdescLeft">&#160;</td><td class="mdescRight">Task for determining the duration of a button press.  <a href="bangle_8c.html#ae4cd16db3f3c99944c8c45ad1d571314">More...</a><br /></td></tr>
 <tr class="separator:ae4cd16db3f3c99944c8c45ad1d571314"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5a5c8f9c1782a70279b28716ff783ae"><td class="memItemLeft" align="right" valign="top">static void IRAM_ATTR&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#ad5a5c8f9c1782a70279b28716ff783ae">button_isr_handler</a> (void *arg)</td></tr>
+<tr class="memdesc:ad5a5c8f9c1782a70279b28716ff783ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Button pressed ISR.  <a href="bangle_8c.html#ad5a5c8f9c1782a70279b28716ff783ae">More...</a><br /></td></tr>
+<tr class="separator:ad5a5c8f9c1782a70279b28716ff783ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a630544a7f0a2cc40d8a7fefab7e2fe70"><td class="memItemLeft" align="right" valign="top"><a id="a630544a7f0a2cc40d8a7fefab7e2fe70"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>app_main</b> (void)</td></tr>
 <tr class="separator:a630544a7f0a2cc40d8a7fefab7e2fe70"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -101,19 +107,51 @@ Variables</h2></td></tr>
 volatile int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a3dabf9b8e7d1dcbc13e77c74aefc7595">last_micros</a> = 0</td></tr>
 <tr class="memdesc:a3dabf9b8e7d1dcbc13e77c74aefc7595"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delay measuring in usec. <br /></td></tr>
 <tr class="separator:a3dabf9b8e7d1dcbc13e77c74aefc7595"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a689f4bd299ac49204bd295cd47d612ae"><td class="memItemLeft" align="right" valign="top"><a id="a689f4bd299ac49204bd295cd47d612ae"></a>
-volatile bool&#160;</td><td class="memItemRight" valign="bottom"><b>in_isr_begin</b> = false</td></tr>
-<tr class="separator:a689f4bd299ac49204bd295cd47d612ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8dabf3f8bcdbc1807fbe613fdaec268"><td class="memItemLeft" align="right" valign="top"><a id="af8dabf3f8bcdbc1807fbe613fdaec268"></a>
-volatile bool&#160;</td><td class="memItemRight" valign="bottom"><b>in_isr_mid</b> = false</td></tr>
-<tr class="separator:af8dabf3f8bcdbc1807fbe613fdaec268"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a840c3a03236d10242daae38687d446be"><td class="memItemLeft" align="right" valign="top"><a id="a840c3a03236d10242daae38687d446be"></a>
+static TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a840c3a03236d10242daae38687d446be">xTaskButtonPressedHandle</a> = NULL</td></tr>
+<tr class="memdesc:a840c3a03236d10242daae38687d446be"><td class="mdescLeft">&#160;</td><td class="mdescRight">vTaskButtonPressed task handler <br /></td></tr>
+<tr class="separator:a840c3a03236d10242daae38687d446be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><dl class="section author"><dt>Author</dt><dd>Artem (<a href="#" onclick="location.href='mai'+'lto:'+'art'+'al'+'lo@'+'ma'+'il.'+'ru'; return false;">artal<span style="display: none;">.nosp@m.</span>lo@m<span style="display: none;">.nosp@m.</span>ail.r<span style="display: none;">.nosp@m.</span>u</a>) </dd></dl>
+<div class="textblock"><p>Прошивка браслета </p>
+<dl class="section author"><dt>Author</dt><dd>Artem (<a href="#" onclick="location.href='mai'+'lto:'+'art'+'al'+'lo@'+'ma'+'il.'+'ru'; return false;">artal<span style="display: none;">.nosp@m.</span>lo@m<span style="display: none;">.nosp@m.</span>ail.r<span style="display: none;">.nosp@m.</span>u</a>) </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>0.1 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>2020-10-28</dd></dl>
-<dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2020 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2020-10-28 </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a id="ad5a5c8f9c1782a70279b28716ff783ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5a5c8f9c1782a70279b28716ff783ae">&#9670;&nbsp;</a></span>button_isr_handler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void IRAM_ATTR button_isr_handler </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>arg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Button pressed ISR. </p>
+<p>This ISR direct notify task vTaskButtonPressed in which the duration of the pressing is determined </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">arg</td><td>- GPIO number that trigger interrupt </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="ae4cd16db3f3c99944c8c45ad1d571314"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae4cd16db3f3c99944c8c45ad1d571314">&#9670;&nbsp;</a></span>vTaskButtonPressed()</h2>
 
