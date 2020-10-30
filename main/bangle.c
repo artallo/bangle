@@ -12,10 +12,18 @@
 #include "driver/gpio.h"
 #include "sdkconfig.h"
 
+typedef enum {
+    POWER_ON_MODE,
+    BACKGROUND_MODE
+} menu_mode_t;
+
 #define GPIO_BUTTON 27 ///< Button
 
 volatile int64_t last_micros = 0;   ///< Delay measuring in usec 
 static TaskHandle_t xTaskButtonPressedHandle = NULL;    ///< vTaskButtonPressed task handler
+static TaskHandle_t xTaskPowerOnModeHandle = NULL;
+static TaskHandle_t xTaskBackgroundHandle = NULL;
+menu_mode_t MenuCurrentMode = POWER_ON_MODE;
 
 void vTaskButtonPressed(void *pvParameters);
 void vTaskMenu(void *pvParameters);
@@ -57,6 +65,14 @@ void app_main(void)
 }
 
 void vTaskMenu(void *pvParameters) {
+    while (1) {
+        if (MenuCurrentMode == POWER_ON_MODE) {
+            xTaskNotifyGive(xTaskPowerOnModeHandle);
+        } else if (MenuCurrentMode == BACKGROUND_MODE) {
+            xTaskNotifyGive(xTaskBackgroundHandle);
+        }
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    }
     
 }
 
