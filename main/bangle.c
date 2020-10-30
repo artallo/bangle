@@ -18,6 +18,7 @@ volatile int64_t last_micros = 0;   ///< Delay measuring in usec
 static TaskHandle_t xTaskButtonPressedHandle = NULL;    ///< vTaskButtonPressed task handler
 
 void vTaskButtonPressed(void *pvParameters);
+void vTaskMenu(void *pvParameters);
 
 /**
  * @brief Button pressed ISR
@@ -53,6 +54,10 @@ void app_main(void)
     while (1) {
         vTaskDelay(500 / portTICK_PERIOD_MS);
     }
+}
+
+void vTaskMenu(void *pvParameters) {
+    
 }
 
 /**
