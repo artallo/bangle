@@ -12,7 +12,7 @@
 #include "driver/gpio.h"
 #include "sdkconfig.h"
 
-typedef enum {
+typedef enum {  ///< Menu modes
     POWER_ON_MODE,
     BACKGROUND_MODE
 } menu_mode_t;
@@ -21,7 +21,7 @@ typedef enum {
 
 volatile int64_t last_micros = 0;   ///< Delay measuring in usec 
 static TaskHandle_t xTaskButtonPressedHandle = NULL;    ///< vTaskButtonPressed task handler
-static TaskHandle_t xTaskPowerOnModeHandle = NULL;
+static TaskHandle_t xTaskPowerOnModeHandle = NULL;  ///< vTaskMenuModePowerOnMode task handler
 static TaskHandle_t xTaskBackgroundHandle = NULL;
 menu_mode_t MenuCurrentMode = POWER_ON_MODE;
 
