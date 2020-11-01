@@ -22,11 +22,16 @@ typedef enum {  ///< Menu modes
 volatile int64_t last_micros = 0;   ///< Delay measuring in usec 
 static TaskHandle_t xTaskButtonPressedHandle = NULL;    ///< vTaskButtonPressed task handler
 static TaskHandle_t xTaskPowerOnModeHandle = NULL;  ///< vTaskMenuModePowerOnMode task handler
-static TaskHandle_t xTaskBackgroundHandle = NULL;
+static TaskHandle_t xTaskBackgroundModeHandle = NULL;
 menu_mode_t MenuCurrentMode = POWER_ON_MODE;
 
 void vTaskButtonPressed(void *pvParameters);
 void vTaskMenu(void *pvParameters);
+void vTaskPowerOnMode(void *pvParameters);
+void vTaskBackgroundMode(void *pvParameters);
+
+bool isExternalPower();
+bool isEnoughBatteryPower();
 
 /**
  * @brief Button pressed ISR
@@ -59,6 +64,12 @@ void app_main(void)
     //hook isr handler for specific gpio pin
     gpio_isr_handler_add(GPIO_BUTTON, button_isr_handler, (void*) GPIO_BUTTON);
     
+    MenuCurrentMode = POWER_ON_MODE;
+    xTaskCreate(vTaskMenu, "Menu", 2048, NULL, 1, &xTaskPowerOnModeHandle);
+    xTaskCreate(vTaskPowerOnMode, "PowerOnMode", 2048, NULL, 1, &xTaskPowerOnModeHandle);
+    xTaskCreate(vTaskBackgroundMode, "BackgroundMode", 2048, NULL, 1, &xTaskBackgroundModeHandle);
+
+    //Main loop
     while (1) {
         vTaskDelay(500 / portTICK_PERIOD_MS);
     }
@@ -69,12 +80,33 @@ void vTaskMenu(void *pvParameters) {
         if (MenuCurrentMode == POWER_ON_MODE) {
             xTaskNotifyGive(xTaskPowerOnModeHandle);
         } else if (MenuCurrentMode == BACKGROUND_MODE) {
-            xTaskNotifyGive(xTaskBackgroundHandle);
+            xTaskNotifyGive(xTaskBackgroundModeHandle);
         }
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
     }
     
 }
+
+void vTaskPowerOnMode(void *pvParameters) {
+    while (1) {
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        //check batterys and notify corespondent task
+        if (isExternalPower()) {
+            /*if (isEnoughBatteryPower()) {
+                xTaskNotifyGive(xTaskDataTransferHandle);
+            }*/
+        } else if (isEnoughBatteryPower()) {
+            xTaskNotifyGive(xTaskBackgroundModeHandle);
+        } 
+    }
+}
+
+void vTaskBackgroundMode(void *pvParameters) {
+    while (1) {
+
+    }
+}
+
 
 /**
  * @brief Task for determining the duration of a button press
@@ -100,4 +132,12 @@ void vTaskButtonPressed(void *pvParameters) {
             duration = 0;
         }
     }
+}
+
+bool isExternalPower() {
+    return false;
+}
+
+bool isEnoughBatteryPower() {
+    return true;
 }
