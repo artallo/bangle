@@ -10,6 +10,7 @@
 #include "driver/gpio.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
+#include "freertos/queue.h"
 #include "freertos/task.h"
 #include "sdkconfig.h"
 
@@ -28,6 +29,7 @@ static TaskHandle_t xTaskButtonPressedHandle = NULL; ///< vTaskButtonPressed tas
 static TaskHandle_t xTaskModeSwitcherHandle = NULL;  ///< vTaskModeSwitcher task handler
 static TaskHandle_t xTaskPowerOnModeHandle = NULL;   ///< vTaskMenuModePowerOnMode task handler
 static TaskHandle_t xTaskBackgroundModeHandle = NULL;
+static QueueHandle_t xQueueButtonHabdle = NULL; ///< Queue for communication between ButtonPressed task and other mode tasks
 menu_mode_t MenuCurrentMode = POWER_ON_MODE;
 
 void vTaskButtonPressed(void *pvParameters);
@@ -56,6 +58,8 @@ static void IRAM_ATTR button_isr_handler(void* arg)
 
 void app_main(void)
 {
+    //Create queue to store button pressing
+    xQueueButtonHabdle = xQueueCreate(1, sizeof(bool));
     //Create task to handle button pressing
     xTaskCreate(vTaskButtonPressed, "ButtonPressed", 2048, NULL, 1, &xTaskButtonPressedHandle);
     //Configure the IOMUX register for pad GPIO_BUTTON
@@ -115,9 +119,12 @@ void vTaskPowerOnMode(void *pvParameters) {
 }
 
 void vTaskBackgroundMode(void *pvParameters) {
+    bool ButtonShortPress = true;
     while (1) {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         ESP_LOGI(TAG_TASK, "BackgroundMode activate");
+        xQueueReceive(xQueueButtonHabdle, &ButtonShortPress, portMAX_DELAY);
+        ESP_LOGI(TAG_TASK, "Button pressed short: %s", (ButtonShortPress ? "true" : "false"));
 
     }
 }
@@ -145,6 +152,11 @@ void vTaskButtonPressed(void *pvParameters) {
             }   //exit when button released or pressing delay > 2s
             printf("%dms\n", duration * 50);
             duration = 0;
+            bool ButtonShortPress = true;
+            if (esp_timer_get_time() - last_micros > 2000 * 1000) {
+                ButtonShortPress = false;
+            }
+            xQueueSendToBack(xQueueButtonHabdle, (void*) &ButtonShortPress, 10 / portTICK_PERIOD_MS);
         }
     }
 }
