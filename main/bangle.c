@@ -14,31 +14,42 @@
 #include "freertos/task.h"
 #include "sdkconfig.h"
 
-typedef enum {  ///< Menu modes
+///Type which describe all working modes
+typedef enum {  
     POWER_ON_MODE,
-    BACKGROUND_MODE
-} menu_mode_t;
+    BACKGROUND_MODE,
+    INITIALIZATION_MODE,
+    SENSOR_CHECK_MODE,
+    DISCONNECTION_MODE,
+    DATA_TRANSFER_MODE,
+    DATA_COLLECTION_MODE,
+    SLEEP_MODE,
+    DEVELOPER_MODE_MODE
+} menu_mode_t; 
 
-#define GPIO_BUTTON 27 ///< Button
+#define GPIO_BUTTON 27 ///< Button pin
 
 //LOGs
 static const char* TAG_TASK = "vTasks";
 
 volatile int64_t last_micros = 0;   ///< Delay measuring in usec 
+menu_mode_t MenuCurrentMode = POWER_ON_MODE; ///< Current working mode, starts from POWER_ON_MODE
+
+//Handlers
 static TaskHandle_t xTaskButtonPressedHandle = NULL; ///< vTaskButtonPressed task handler
 static TaskHandle_t xTaskModeSwitcherHandle = NULL;  ///< vTaskModeSwitcher task handler
-static TaskHandle_t xTaskPowerOnModeHandle = NULL;   ///< vTaskMenuModePowerOnMode task handler
-static TaskHandle_t xTaskBackgroundModeHandle = NULL;
-static QueueHandle_t xQueueButtonHabdle = NULL; ///< Queue for communication between ButtonPressed task and other mode tasks
-menu_mode_t MenuCurrentMode = POWER_ON_MODE;
+static TaskHandle_t xTaskPowerOnModeHandle = NULL;   ///< vTaskPowerOnMode task handler
+static TaskHandle_t xTaskBackgroundModeHandle = NULL; ///< vTaskBackgroundMode task handler
+static QueueHandle_t xQueueButtonHandle = NULL; ///< Queue for communication between ButtonPressed task and other mode tasks
 
+//Tasks
 void vTaskButtonPressed(void *pvParameters);
 void vTaskModeSwitcher(void *pvParameters);
 void vTaskPowerOnMode(void *pvParameters);
 void vTaskBackgroundMode(void *pvParameters);
 
-bool isExternalPower();
-bool isEnoughBatteryPower();
+bool isExternalPower();         ///< Return true if ext. power present
+bool isEnoughBatteryPower();    ///< Return true if bat. charged
 
 /**
  * @brief Button pressed ISR
@@ -48,7 +59,7 @@ bool isEnoughBatteryPower();
  */
 static void IRAM_ATTR button_isr_handler(void* arg)
 {
-    uint32_t gpio_num = (uint32_t) arg;
+    //uint32_t gpio_num = (uint32_t) arg;
     if (esp_timer_get_time() - last_micros > 80 * 1000) {    //80ms debounce delay
         last_micros = esp_timer_get_time(); //update last_micros
         //Give direct to task notification (it's faster, instead of using binary semaphore)
@@ -59,7 +70,7 @@ static void IRAM_ATTR button_isr_handler(void* arg)
 void app_main(void)
 {
     //Create queue to store button pressing
-    xQueueButtonHabdle = xQueueCreate(1, sizeof(bool));
+    xQueueButtonHandle = xQueueCreate(1, sizeof(bool));
     //Create task to handle button pressing
     xTaskCreate(vTaskButtonPressed, "ButtonPressed", 2048, NULL, 1, &xTaskButtonPressedHandle);
     //Configure the IOMUX register for pad GPIO_BUTTON
@@ -87,9 +98,15 @@ void app_main(void)
     }
 }
 
-void vTaskModeSwitcher(void *pvParameters) {
+/**
+ * @brief Task that switch working modes
+ * 
+ * @param pvParameters 
+ */
+void vTaskModeSwitcher(void *pvParameters) {    //может эта задача ненужна, а сразу запускать PowerOn mode без начального ожидания notification и блокировки
     while (1) {
         ESP_LOGI(TAG_TASK, "ModeSwitcher activate");
+        //notificate and unblock coresponding task
         if (MenuCurrentMode == POWER_ON_MODE) {
             ESP_LOGI(TAG_TASK, "Notifing vTaskPowerOnMode");
             xTaskNotifyGive(xTaskPowerOnModeHandle);
@@ -99,14 +116,19 @@ void vTaskModeSwitcher(void *pvParameters) {
         }
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
     }
-    
 }
 
+/**
+ * @brief Task for Power On mode
+ * 
+ * @param pvParameters 
+ */
 void vTaskPowerOnMode(void *pvParameters) {
     while (1) {
+        //wait indefinitly until task was unblocked with notification
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         ESP_LOGI(TAG_TASK, "PowerOnMode activate");
-        //check batterys and notify corespondent task
+        //check ext. power and batterys and notify corespondent task
         if (isExternalPower()) {
             /*if (isEnoughBatteryPower()) {
                 xTaskNotifyGive(xTaskDataTransferHandle);
@@ -118,13 +140,39 @@ void vTaskPowerOnMode(void *pvParameters) {
     }
 }
 
+/**
+ * @brief Task for Background mode
+ * 
+ * @param pvParameters 
+ */
 void vTaskBackgroundMode(void *pvParameters) {
-    bool ButtonShortPress = true;
+    bool ButtonShortPress = true; //flag to read from queue short/long press of button
     while (1) {
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-        ESP_LOGI(TAG_TASK, "BackgroundMode activate");
-        xQueueReceive(xQueueButtonHabdle, &ButtonShortPress, portMAX_DELAY);
-        ESP_LOGI(TAG_TASK, "Button pressed short: %s", (ButtonShortPress ? "true" : "false"));
+        //check current mode to find out that we first time here, and block task and wait indefinitly
+        //or else mode already changed and task is executed
+        if (MenuCurrentMode != BACKGROUND_MODE) {
+            ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+            MenuCurrentMode = BACKGROUND_MODE;
+            ESP_LOGI(TAG_TASK, "BackgroundMode activate");
+        }
+        //check queue for button pressed and block task and wait indefinitly
+        //i.e. wait for button pressed first time
+        xQueueReceive(xQueueButtonHandle, &ButtonShortPress, portMAX_DELAY);
+        ESP_LOGI(TAG_TASK, "Button pressed first time, show charge properties 5sec");
+        //TODO: show charge properties 
+        //wait 5sec for button pressed
+        if (xQueueReceive(xQueueButtonHandle, &ButtonShortPress, 5000 / portTICK_PERIOD_MS) == pdPASS) {
+            if (ButtonShortPress) {     //if short press
+                ESP_LOGI(TAG_TASK, "Short pressing: feedback_blink, go to Initialization Mode");
+                //TODO: feedback_blink, go to Initialization Mode
+            } else {                    //if long press
+                ESP_LOGI(TAG_TASK, "Long pressing: show wifi properties, erros, go to Developer Mode");
+                //TODO: show wifi properties, erros, go to Developer Mode
+            }
+        } else {                        //if no press
+            ESP_LOGI(TAG_TASK, "Not pressed: return to Background Mode begin");
+            //TODO: display off, return to Background Mode begin
+        }
 
     }
 }
@@ -138,25 +186,30 @@ void vTaskBackgroundMode(void *pvParameters) {
  */
 void vTaskButtonPressed(void *pvParameters) {
     uint8_t duration = 0;
+    #define poll_delay 50
     while (1) {
-        //Block indefinitely to wait for a notification, pdTRUE means task notification is being used as a binary semaphore, so the notification value is cleared
+        //Block indefinitely to wait for a notification, pdTRUE means task notification is being used as a binary semaphore,
+        //i.e. wait for interrupt from button
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-        //Check button is pressed
+        //Check button is pressed down
         if (gpio_get_level(GPIO_BUTTON) == 0) {
             int64_t last_micros = esp_timer_get_time(); //get current time for pressing delay measuring
             printf("Button pressed for.. ");
             //while button is pressed and delay < 2s
             while ((gpio_get_level(GPIO_BUTTON) == 0) && (esp_timer_get_time() - last_micros <= 2000 * 1000)) {
                 duration++; //update duration counter
-                vTaskDelay(50 / portTICK_PERIOD_MS);
+                vTaskDelay(poll_delay / portTICK_PERIOD_MS);
             }   //exit when button released or pressing delay > 2s
-            printf("%dms\n", duration * 50);
+            printf("%dms\n", duration * poll_delay); //print duration in msec
             duration = 0;
+            //flag that set it was short or long press
             bool ButtonShortPress = true;
+            //check if it was long press
             if (esp_timer_get_time() - last_micros > 2000 * 1000) {
                 ButtonShortPress = false;
             }
-            xQueueSendToBack(xQueueButtonHabdle, (void*) &ButtonShortPress, 10 / portTICK_PERIOD_MS);
+            //send press flag to the queue of button pressing
+            xQueueSendToBack(xQueueButtonHandle, (void*) &ButtonShortPress, 10 / portTICK_PERIOD_MS);
         }
     }
 }

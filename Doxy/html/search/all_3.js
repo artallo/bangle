@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['vtaskbuttonpressed_4',['vTaskButtonPressed',['../bangle_8c.html#ae4cd16db3f3c99944c8c45ad1d571314',1,'bangle.c']]]
+  ['last_5fmicros_5',['last_micros',['../bangle_8c.html#a3dabf9b8e7d1dcbc13e77c74aefc7595',1,'bangle.c']]]
 ];
