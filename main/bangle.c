@@ -7,9 +7,10 @@
  * 
  */
 #include <stdio.h>
+#include "driver/gpio.h"
+#include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "driver/gpio.h"
 #include "sdkconfig.h"
 
 typedef enum {  ///< Menu modes
@@ -19,14 +20,18 @@ typedef enum {  ///< Menu modes
 
 #define GPIO_BUTTON 27 ///< Button
 
+//LOGs
+static const char* TAG_TASK = "vTasks";
+
 volatile int64_t last_micros = 0;   ///< Delay measuring in usec 
-static TaskHandle_t xTaskButtonPressedHandle = NULL;    ///< vTaskButtonPressed task handler
-static TaskHandle_t xTaskPowerOnModeHandle = NULL;  ///< vTaskMenuModePowerOnMode task handler
+static TaskHandle_t xTaskButtonPressedHandle = NULL; ///< vTaskButtonPressed task handler
+static TaskHandle_t xTaskModeSwitcherHandle = NULL;  ///< vTaskModeSwitcher task handler
+static TaskHandle_t xTaskPowerOnModeHandle = NULL;   ///< vTaskMenuModePowerOnMode task handler
 static TaskHandle_t xTaskBackgroundModeHandle = NULL;
 menu_mode_t MenuCurrentMode = POWER_ON_MODE;
 
 void vTaskButtonPressed(void *pvParameters);
-void vTaskMenu(void *pvParameters);
+void vTaskModeSwitcher(void *pvParameters);
 void vTaskPowerOnMode(void *pvParameters);
 void vTaskBackgroundMode(void *pvParameters);
 
@@ -53,7 +58,7 @@ void app_main(void)
 {
     //Create task to handle button pressing
     xTaskCreate(vTaskButtonPressed, "ButtonPressed", 2048, NULL, 1, &xTaskButtonPressedHandle);
-    //Configure the IOMUX register for pad BLINK_GPIO */
+    //Configure the IOMUX register for pad GPIO_BUTTON
     gpio_pad_select_gpio(GPIO_BUTTON);
     //Set the GPIO as input
     gpio_set_direction(GPIO_BUTTON, GPIO_MODE_INPUT);
@@ -64,10 +69,13 @@ void app_main(void)
     //hook isr handler for specific gpio pin
     gpio_isr_handler_add(GPIO_BUTTON, button_isr_handler, (void*) GPIO_BUTTON);
     
+    //Set starting mode to POWER_ON_MODE
     MenuCurrentMode = POWER_ON_MODE;
-    xTaskCreate(vTaskMenu, "Menu", 2048, NULL, 1, &xTaskPowerOnModeHandle);
+    //First create and start Mode tasks
     xTaskCreate(vTaskPowerOnMode, "PowerOnMode", 2048, NULL, 1, &xTaskPowerOnModeHandle);
     xTaskCreate(vTaskBackgroundMode, "BackgroundMode", 2048, NULL, 1, &xTaskBackgroundModeHandle);
+    //Second start ModeSwitcher task, or else we notify from ModeSwithcher task to nowhere
+    xTaskCreate(vTaskModeSwitcher, "ModeSwitcher", 2048, NULL, 1, &xTaskModeSwitcherHandle);
 
     //Main loop
     while (1) {
@@ -75,11 +83,14 @@ void app_main(void)
     }
 }
 
-void vTaskMenu(void *pvParameters) {
+void vTaskModeSwitcher(void *pvParameters) {
     while (1) {
+        ESP_LOGI(TAG_TASK, "ModeSwitcher activate");
         if (MenuCurrentMode == POWER_ON_MODE) {
+            ESP_LOGI(TAG_TASK, "Notifing vTaskPowerOnMode");
             xTaskNotifyGive(xTaskPowerOnModeHandle);
         } else if (MenuCurrentMode == BACKGROUND_MODE) {
+            ESP_LOGI(TAG_TASK, "Notifing vTaskBackgroundMode");
             xTaskNotifyGive(xTaskBackgroundModeHandle);
         }
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
@@ -90,12 +101,14 @@ void vTaskMenu(void *pvParameters) {
 void vTaskPowerOnMode(void *pvParameters) {
     while (1) {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        ESP_LOGI(TAG_TASK, "PowerOnMode activate");
         //check batterys and notify corespondent task
         if (isExternalPower()) {
             /*if (isEnoughBatteryPower()) {
                 xTaskNotifyGive(xTaskDataTransferHandle);
             }*/
         } else if (isEnoughBatteryPower()) {
+            ESP_LOGI(TAG_TASK, "Notifing vTaskBackgroundMode");
             xTaskNotifyGive(xTaskBackgroundModeHandle);
         } 
     }
@@ -103,6 +116,8 @@ void vTaskPowerOnMode(void *pvParameters) {
 
 void vTaskBackgroundMode(void *pvParameters) {
     while (1) {
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        ESP_LOGI(TAG_TASK, "BackgroundMode activate");
 
     }
 }
