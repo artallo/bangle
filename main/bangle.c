@@ -40,6 +40,8 @@ static TaskHandle_t xTaskButtonPressedHandle = NULL; ///< vTaskButtonPressed tas
 static TaskHandle_t xTaskModeSwitcherHandle = NULL;  ///< vTaskModeSwitcher task handler
 static TaskHandle_t xTaskPowerOnModeHandle = NULL;   ///< vTaskPowerOnMode task handler
 static TaskHandle_t xTaskBackgroundModeHandle = NULL; ///< vTaskBackgroundMode task handler
+static TaskHandle_t xTaskInitializationModeHandle = NULL; ///< vTaskInitializationMode task handler
+static TaskHandle_t xTaskDeveloperModeHandle = NULL; ///< vTaskDeveloperMode task handler
 static QueueHandle_t xQueueButtonHandle = NULL; ///< Queue for communication between ButtonPressed task and other mode tasks
 
 //Tasks
@@ -47,9 +49,11 @@ void vTaskButtonPressed(void *pvParameters);
 void vTaskModeSwitcher(void *pvParameters);
 void vTaskPowerOnMode(void *pvParameters);
 void vTaskBackgroundMode(void *pvParameters);
+void vTaskInitializationMode(void *pvParameters);
+void vTaskDeveloperMode(void *pvParameters);
 
-bool isExternalPower();         ///< Return true if ext. power present
-bool isEnoughBatteryPower();    ///< Return true if bat. charged
+bool isExternalPower();
+bool isEnoughBatteryPower();
 
 /**
  * @brief Button pressed ISR
@@ -89,6 +93,8 @@ void app_main(void)
     //First create and start Mode tasks
     xTaskCreate(vTaskPowerOnMode, "PowerOnMode", 2048, NULL, 1, &xTaskPowerOnModeHandle);
     xTaskCreate(vTaskBackgroundMode, "BackgroundMode", 2048, NULL, 1, &xTaskBackgroundModeHandle);
+    xTaskCreate(vTaskInitializationMode, "InitMode", 2048, NULL, 1, &xTaskInitializationModeHandle);
+    xTaskCreate(vTaskDeveloperMode, "DeveloperMode", 2048, NULL, 1, &xTaskDeveloperModeHandle);
     //Second start ModeSwitcher task, or else we notify from ModeSwithcher task to nowhere
     xTaskCreate(vTaskModeSwitcher, "ModeSwitcher", 2048, NULL, 1, &xTaskModeSwitcherHandle);
 
@@ -130,13 +136,18 @@ void vTaskPowerOnMode(void *pvParameters) {
         ESP_LOGI(TAG_TASK, "PowerOnMode activate");
         //check ext. power and batterys and notify corespondent task
         if (isExternalPower()) {
+            ESP_LOGI(TAG_TASK, "Ext. power YES");
             /*if (isEnoughBatteryPower()) {
                 xTaskNotifyGive(xTaskDataTransferHandle);
             }*/
-        } else if (isEnoughBatteryPower()) {
-            ESP_LOGI(TAG_TASK, "Notifing vTaskBackgroundMode");
-            xTaskNotifyGive(xTaskBackgroundModeHandle);
-        } 
+        } else {
+            ESP_LOGI(TAG_TASK, "Ext. power NO");
+            if (isEnoughBatteryPower()) {
+                ESP_LOGI(TAG_TASK, "Enough batt. power");
+                ESP_LOGI(TAG_TASK, "Notifing vTaskBackgroundMode");
+                xTaskNotifyGive(xTaskBackgroundModeHandle);
+            }
+        }
     }
 }
 
@@ -165,9 +176,13 @@ void vTaskBackgroundMode(void *pvParameters) {
             if (ButtonShortPress) {     //if short press
                 ESP_LOGI(TAG_TASK, "Short pressing: feedback_blink, go to Initialization Mode");
                 //TODO: feedback_blink, go to Initialization Mode
+                //notify xTaskInitializationMode
+                xTaskNotifyGive(xTaskInitializationModeHandle);
             } else {                    //if long press
                 ESP_LOGI(TAG_TASK, "Long pressing: show wifi properties, erros, go to Developer Mode");
                 //TODO: show wifi properties, erros, go to Developer Mode
+                //notify xTaskDeveloperMode
+                xTaskNotifyGive(xTaskDeveloperModeHandle);
             }
         } else {                        //if no press
             ESP_LOGI(TAG_TASK, "Not pressed: return to Background Mode begin");
@@ -177,11 +192,23 @@ void vTaskBackgroundMode(void *pvParameters) {
     }
 }
 
+void vTaskInitializationMode(void *pvParameters) {
+    while (1) {
+        /* code */
+    }
+    
+}
+
+void vTaskDeveloperMode(void *pvParameters) {
+    while (1) {
+        /* code */
+    }
+    
+}
 
 /**
  * @brief Task for determining the duration of a button press
  * 
- * Task in which the duration of the button pressing is determined
  * @param pvParameters 
  */
 void vTaskButtonPressed(void *pvParameters) {
@@ -214,10 +241,22 @@ void vTaskButtonPressed(void *pvParameters) {
     }
 }
 
+/**
+ * @brief Check and return true if ext. power present
+ * 
+ * @return true
+ * @return false
+ */
 bool isExternalPower() {
     return false;
 }
 
+/**
+ * @brief Check and return true if batt. charged
+ * 
+ * @return true
+ * @return false
+ */
 bool isEnoughBatteryPower() {
     return true;
 }
