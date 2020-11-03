@@ -24,7 +24,7 @@ typedef enum {
     DATA_TRANSFER_MODE,
     DATA_COLLECTION_MODE,
     SLEEP_MODE,
-    DEVELOPER_MODE_MODE
+    DEVELOPER_MODE
 } menu_mode_t; 
 
 #define GPIO_BUTTON 27 ///< Button pin
@@ -138,14 +138,14 @@ void vTaskPowerOnMode(void *pvParameters) {
         ESP_LOGI(TAG_TASK, "PowerOnMode activate");
         //check ext. power and batterys and notify corespondent task
         if (isExternalPower()) {
-            ESP_LOGI(TAG_TASK, "Ext. power YES");
+            ESP_LOGI(TAG_TASK, "Ext. power: YES");
             /*if (isEnoughBatteryPower()) {
                 xTaskNotifyGive(xTaskDataTransferHandle);
             }*/
         } else {
-            ESP_LOGI(TAG_TASK, "Ext. power NO");
+            ESP_LOGI(TAG_TASK, "Ext. power: NO");
             if (isEnoughBatteryPower()) {
-                ESP_LOGI(TAG_TASK, "Enough batt. power");
+                ESP_LOGI(TAG_TASK, "Enough batt. power: YES");
                 ESP_LOGI(TAG_TASK, "Notifing vTaskBackgroundMode");
                 xTaskNotifyGive(xTaskBackgroundModeHandle);
             }
@@ -174,17 +174,21 @@ void vTaskBackgroundMode(void *pvParameters) {
         ESP_LOGI(TAG_TASK, "Button pressed first time, show charge properties 5sec");
         //TODO: show charge properties 
         //wait 5sec for button pressed
-        if (xQueueReceive(xQueueButtonHandle, &ButtonShortPress, 5000 / portTICK_PERIOD_MS) == pdPASS) {
+        if (xQueueReceive(xQueueButtonHandle, &ButtonShortPress, 5000 / portTICK_PERIOD_MS) == pdPASS) {    //if it was press
             if (ButtonShortPress) {     //if short press
                 ESP_LOGI(TAG_TASK, "Short pressing: feedback_blink, go to Initialization Mode");
                 //TODO: feedback_blink, go to Initialization Mode
                 //notify xTaskInitializationMode
                 xTaskNotifyGive(xTaskInitializationModeHandle);
+                //delay that new task activate and change MenuCurrentMode variable, so this task go to begin and wait notification in blocked state
+                vTaskDelay(50 / portTICK_PERIOD_MS);
             } else {                    //if long press
                 ESP_LOGI(TAG_TASK, "Long pressing: show wifi properties, erros, go to Developer Mode");
                 //TODO: show wifi properties, erros, go to Developer Mode
                 //notify xTaskDeveloperMode
                 xTaskNotifyGive(xTaskDeveloperModeHandle);
+                //delay that new task activate and change MenuCurrentMode variable, so this task go to begin and wait notification in blocked state
+                vTaskDelay(50 / portTICK_PERIOD_MS);
             }
         } else {                        //if no press
             ESP_LOGI(TAG_TASK, "Not pressed: return to Background Mode begin");
@@ -205,9 +209,12 @@ void vTaskInitializationMode(void *pvParameters) {
         }
         if (isEnoughSensors()) {
             //go to SensorsCheck task
-
+            ESP_LOGI(TAG_TASK, "Enought sensors: YES");
+            ESP_LOGI(TAG_TASK, "go to Sensor check task");
+            vTaskDelay(pdMS_TO_TICKS(5000));
         } else {
             //send auth info via BLE / WiFi
+            ESP_LOGI(TAG_TASK, "Enought sensors: NO");
             BLE_SendAuthInfo();
         }
 
@@ -216,8 +223,30 @@ void vTaskInitializationMode(void *pvParameters) {
 }
 
 void vTaskDeveloperMode(void *pvParameters) {
+    bool ButtonShortPress = true; //flag to read from queue short/long press of button
     while (1) {
-        /* code */
+        //first time wait indefinitley for notification to activate task
+        if (MenuCurrentMode != DEVELOPER_MODE) {
+            ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+            MenuCurrentMode = DEVELOPER_MODE;
+            ESP_LOGI(TAG_TASK, "DeveloperMode activate");
+            //TODO: do some developer staff
+        }
+        //TODO: full feedback
+        ESP_LOGI(TAG_TASK, "full feedback");
+        //wait for button long press
+        if (xQueueReceive(xQueueButtonHandle, &ButtonShortPress, portMAX_DELAY) == pdPASS) {    //if it was press
+            if (ButtonShortPress == false) {  //if long press
+                //go to backrounf mode
+                ESP_LOGI(TAG_TASK, "Long pressing: go to Background Mode");
+                xTaskNotifyGive(xTaskBackgroundModeHandle);
+                //delay that new task activate and change MenuCurrentMode variable, so this task go to begin and wait notification in blocked state
+                vTaskDelay(50 / portTICK_PERIOD_MS);
+            } else {    //if short press
+                ESP_LOGI(TAG_TASK, "Short pressing: go to full feedback");
+            }
+        }
+
     }
     
 }
@@ -278,6 +307,12 @@ bool isEnoughBatteryPower() {
     return true;
 }
 
+/**
+ * @brief Check if all sensors connected
+ * 
+ * @return true 
+ * @return false 
+ */
 bool isEnoughSensors() {
     static uint8_t  sensor_cnt = 0;
     if (sensor_cnt < 9) {
@@ -285,10 +320,15 @@ bool isEnoughSensors() {
         ESP_LOGI(TAG_TASK, "Now %d sensors connected", sensor_cnt);
         return false;
     }
+    //sensor_cnt = 0;
     return true;
 }
 
+/**
+ * @brief Send config message (iBeacon?) with connection info to sensors
+ * 
+ */
 void BLE_SendAuthInfo() {
     ESP_LOGI(TAG_TASK, "send auth info via BLE");
-    vTaskDelay(500 / portTICK_PERIOD_MS);
+    vTaskDelay(1100 / portTICK_PERIOD_MS);
 }
