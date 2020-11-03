@@ -54,6 +54,8 @@ void vTaskDeveloperMode(void *pvParameters);
 
 bool isExternalPower();
 bool isEnoughBatteryPower();
+bool isEnoughSensors();
+void BLE_SendAuthInfo();
 
 /**
  * @brief Button pressed ISR
@@ -194,7 +196,21 @@ void vTaskBackgroundMode(void *pvParameters) {
 
 void vTaskInitializationMode(void *pvParameters) {
     while (1) {
-        /* code */
+        //first time wait indefinitley for notification to activate task
+        if (MenuCurrentMode != INITIALIZATION_MODE) {
+            ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+            MenuCurrentMode = INITIALIZATION_MODE;
+            ESP_LOGI(TAG_TASK, "InitializationMode activate");
+            //TODO: Инициализация сервера, проверка наличия таблицы соответствия
+        }
+        if (isEnoughSensors()) {
+            //go to SensorsCheck task
+
+        } else {
+            //send auth info via BLE / WiFi
+            BLE_SendAuthInfo();
+        }
+
     }
     
 }
@@ -213,7 +229,8 @@ void vTaskDeveloperMode(void *pvParameters) {
  */
 void vTaskButtonPressed(void *pvParameters) {
     uint8_t duration = 0;
-    #define poll_delay 50
+    #define poll_delay_ms 50
+    #define press_delay_ms 1200 //if press <= delay then it's short press, else it's long press
     while (1) {
         //Block indefinitely to wait for a notification, pdTRUE means task notification is being used as a binary semaphore,
         //i.e. wait for interrupt from button
@@ -223,16 +240,16 @@ void vTaskButtonPressed(void *pvParameters) {
             int64_t last_micros = esp_timer_get_time(); //get current time for pressing delay measuring
             printf("Button pressed for.. ");
             //while button is pressed and delay < 2s
-            while ((gpio_get_level(GPIO_BUTTON) == 0) && (esp_timer_get_time() - last_micros <= 2000 * 1000)) {
+            while ((gpio_get_level(GPIO_BUTTON) == 0) && (esp_timer_get_time() - last_micros <= press_delay_ms * 1000)) {
                 duration++; //update duration counter
-                vTaskDelay(poll_delay / portTICK_PERIOD_MS);
+                vTaskDelay(poll_delay_ms / portTICK_PERIOD_MS);
             }   //exit when button released or pressing delay > 2s
-            printf("%dms\n", duration * poll_delay); //print duration in msec
+            printf("%dms\n", duration * poll_delay_ms); //print duration in msec
             duration = 0;
             //flag that set it was short or long press
             bool ButtonShortPress = true;
             //check if it was long press
-            if (esp_timer_get_time() - last_micros > 2000 * 1000) {
+            if (esp_timer_get_time() - last_micros > press_delay_ms * 1000) {
                 ButtonShortPress = false;
             }
             //send press flag to the queue of button pressing
@@ -259,4 +276,19 @@ bool isExternalPower() {
  */
 bool isEnoughBatteryPower() {
     return true;
+}
+
+bool isEnoughSensors() {
+    static uint8_t  sensor_cnt = 0;
+    if (sensor_cnt < 9) {
+        sensor_cnt++;
+        ESP_LOGI(TAG_TASK, "Now %d sensors connected", sensor_cnt);
+        return false;
+    }
+    return true;
+}
+
+void BLE_SendAuthInfo() {
+    ESP_LOGI(TAG_TASK, "send auth info via BLE");
+    vTaskDelay(500 / portTICK_PERIOD_MS);
 }
