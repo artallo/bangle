@@ -33,7 +33,7 @@ typedef enum {
 static const char* TAG_TASK = "vTasks";
 
 volatile int64_t last_micros = 0;   ///< Delay measuring in usec 
-menu_mode_t MenuCurrentMode = POWER_ON_MODE; ///< Current working mode, starts from POWER_ON_MODE
+volatile menu_mode_t MenuCurrentMode = POWER_ON_MODE; ///< Current working mode, starts from POWER_ON_MODE
 
 //Handlers
 static TaskHandle_t xTaskButtonPressedHandle = NULL; ///< vTaskButtonPressed task handler
