@@ -42,6 +42,7 @@ static TaskHandle_t xTaskPowerOnModeHandle = NULL;   ///< vTaskPowerOnMode task 
 static TaskHandle_t xTaskBackgroundModeHandle = NULL; ///< vTaskBackgroundMode task handler
 static TaskHandle_t xTaskInitializationModeHandle = NULL; ///< vTaskInitializationMode task handler
 static TaskHandle_t xTaskDeveloperModeHandle = NULL; ///< vTaskDeveloperMode task handler
+static TaskHandle_t xTaskSensorcheckModeHandle = NULL; ///< vTaskSensorcheckMode task handler
 static QueueHandle_t xQueueButtonHandle = NULL; ///< Queue for communication between ButtonPressed task and other mode tasks
 
 //Tasks
@@ -50,11 +51,13 @@ void vTaskModeSwitcher(void *pvParameters);
 void vTaskPowerOnMode(void *pvParameters);
 void vTaskBackgroundMode(void *pvParameters);
 void vTaskInitializationMode(void *pvParameters);
+void vTaskSensorcheckMode(void *pvParameters);
 void vTaskDeveloperMode(void *pvParameters);
 
 bool isExternalPower();
 bool isEnoughBatteryPower();
 bool isEnoughSensors();
+bool ChekingSensorsConnection();
 void BLE_SendAuthInfo();
 
 /**
@@ -92,12 +95,13 @@ void app_main(void)
     
     //Set starting mode to POWER_ON_MODE
     MenuCurrentMode = POWER_ON_MODE;
-    //First create and start Mode tasks
+    //At First create and start Mode tasks
     xTaskCreate(vTaskPowerOnMode, "PowerOnMode", 2048, NULL, 1, &xTaskPowerOnModeHandle);
     xTaskCreate(vTaskBackgroundMode, "BackgroundMode", 2048, NULL, 1, &xTaskBackgroundModeHandle);
     xTaskCreate(vTaskInitializationMode, "InitMode", 2048, NULL, 1, &xTaskInitializationModeHandle);
+    xTaskCreate(vTaskSensorcheckMode, "SensorcheckMode", 2048, NULL, 1, &xTaskSensorcheckModeHandle);
     xTaskCreate(vTaskDeveloperMode, "DeveloperMode", 2048, NULL, 1, &xTaskDeveloperModeHandle);
-    //Second start ModeSwitcher task, or else we notify from ModeSwithcher task to nowhere
+    //Than second create ModeSwitcher task, or else we notify from ModeSwithcher task to nowhere
     xTaskCreate(vTaskModeSwitcher, "ModeSwitcher", 2048, NULL, 1, &xTaskModeSwitcherHandle);
 
     //Main loop
@@ -198,6 +202,11 @@ void vTaskBackgroundMode(void *pvParameters) {
     }
 }
 
+/**
+ * @brief Task for Initialization mode
+ * 
+ * @param pvParameters 
+ */
 void vTaskInitializationMode(void *pvParameters) {
     while (1) {
         //first time wait indefinitley for notification to activate task
@@ -211,7 +220,10 @@ void vTaskInitializationMode(void *pvParameters) {
             //go to SensorsCheck task
             ESP_LOGI(TAG_TASK, "Enought sensors: YES");
             ESP_LOGI(TAG_TASK, "go to Sensor check task");
-            vTaskDelay(pdMS_TO_TICKS(5000));
+            xTaskNotifyGive(xTaskSensorcheckModeHandle);
+            //delay that new task activate and change MenuCurrentMode variable, so this task go to begin and wait notification in blocked state
+            vTaskDelay(50 / portTICK_PERIOD_MS);
+            //vTaskDelay(pdMS_TO_TICKS(5000));
         } else {
             //send auth info via BLE / WiFi
             ESP_LOGI(TAG_TASK, "Enought sensors: NO");
@@ -222,6 +234,41 @@ void vTaskInitializationMode(void *pvParameters) {
     
 }
 
+/**
+ * @brief Task for Sensor check mode
+ * 
+ * @param pvParameters 
+ */
+void vTaskSensorcheckMode(void *pvParameters) {
+    while (1)     {
+        //first time wait indefinitley for notification to activate task
+        if (MenuCurrentMode != SENSOR_CHECK_MODE) {
+            ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+            MenuCurrentMode = SENSOR_CHECK_MODE;
+            ESP_LOGI(TAG_TASK, "SensorcheckMode activate");
+        }
+        if (ChekingSensorsConnection() == true) {
+            //TODO: Concordance, Starting, Time synchro
+            ESP_LOGI(TAG_TASK, "Cheking sensors connection OK: next do  Concordance, Starting, Time synchro.., go to Data collection mode");
+            //notify xTaskDatacollectionMode
+            //!!!! xTaskNotifyGive(xTaskDatacollectionModeHandle);
+            //delay that new task activate and change MenuCurrentMode variable, so this task go to begin and wait notification in blocked state
+            vTaskDelay(50 / portTICK_PERIOD_MS);
+        } else {
+            ESP_LOGI(TAG_TASK, "Cheking sensors connection NOT OK: feedback, one more try.. go to Initialization mode");
+            //notify xTaskInitializationMode
+            xTaskNotifyGive(xTaskInitializationModeHandle);
+            //delay that new task activate and change MenuCurrentMode variable, so this task go to begin and wait notification in blocked state
+            vTaskDelay(50 / portTICK_PERIOD_MS);
+        }
+    }
+}
+
+/**
+ * @brief Task for Developer mode
+ * 
+ * @param pvParameters 
+ */
 void vTaskDeveloperMode(void *pvParameters) {
     bool ButtonShortPress = true; //flag to read from queue short/long press of button
     while (1) {
@@ -320,8 +367,23 @@ bool isEnoughSensors() {
         ESP_LOGI(TAG_TASK, "Now %d sensors connected", sensor_cnt);
         return false;
     }
-    //sensor_cnt = 0;
+    sensor_cnt = 5;
     return true;
+}
+
+/**
+ * @brief Check and return true if sensors connection OK
+ * 
+ * @return true 
+ * @return false 
+ */
+bool ChekingSensorsConnection() {
+    static bool isContinue = false;
+    if (isContinue) {
+        return true;
+    }
+    isContinue = true;
+    return false;
 }
 
 /**
