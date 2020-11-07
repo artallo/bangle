@@ -43,6 +43,7 @@ static TaskHandle_t xTaskBackgroundModeHandle = NULL; ///< vTaskBackgroundMode t
 static TaskHandle_t xTaskInitializationModeHandle = NULL; ///< vTaskInitializationMode task handler
 static TaskHandle_t xTaskDeveloperModeHandle = NULL; ///< vTaskDeveloperMode task handler
 static TaskHandle_t xTaskSensorcheckModeHandle = NULL; ///< vTaskSensorcheckMode task handler
+static TaskHandle_t xTaskDatacollectionModeHandle = NULL; ///< vTaskDatacollectionMode task handler
 static QueueHandle_t xQueueButtonHandle = NULL; ///< Queue for communication between ButtonPressed task and other mode tasks
 
 //Tasks
@@ -52,12 +53,15 @@ void vTaskPowerOnMode(void *pvParameters);
 void vTaskBackgroundMode(void *pvParameters);
 void vTaskInitializationMode(void *pvParameters);
 void vTaskSensorcheckMode(void *pvParameters);
+void vTaskDatacollectionMode(void *pvParameters);
 void vTaskDeveloperMode(void *pvParameters);
 
 bool isExternalPower();
 bool isEnoughBatteryPower();
 bool isEnoughSensors();
 bool ChekingSensorsConnection();
+bool isDataCheck_OK();
+bool isChangingAccelData();
 void BLE_SendAuthInfo();
 
 /**
@@ -100,6 +104,7 @@ void app_main(void)
     xTaskCreate(vTaskBackgroundMode, "BackgroundMode", 2048, NULL, 1, &xTaskBackgroundModeHandle);
     xTaskCreate(vTaskInitializationMode, "InitMode", 2048, NULL, 1, &xTaskInitializationModeHandle);
     xTaskCreate(vTaskSensorcheckMode, "SensorcheckMode", 2048, NULL, 1, &xTaskSensorcheckModeHandle);
+    xTaskCreate(vTaskDatacollectionMode, "DatacollectionMode", 2048, NULL, 1, &xTaskDatacollectionModeHandle);
     xTaskCreate(vTaskDeveloperMode, "DeveloperMode", 2048, NULL, 1, &xTaskDeveloperModeHandle);
     //Than second create ModeSwitcher task, or else we notify from ModeSwithcher task to nowhere
     xTaskCreate(vTaskModeSwitcher, "ModeSwitcher", 2048, NULL, 1, &xTaskModeSwitcherHandle);
@@ -265,6 +270,56 @@ void vTaskSensorcheckMode(void *pvParameters) {
 }
 
 /**
+ * @brief Task for Data collection mode
+ * 
+ * @param pvParameters 
+ */
+void vTaskDatacollectionMode(void *pvParameters) {
+    bool ButtonShortPress = true;
+    while(1) {
+        //first time wait indefinitley for notification to activate task
+        if (MenuCurrentMode != DATA_COLLECTION_MODE) {
+            ulTaskNotifyTake(pdTRUE, portMAX_DELAY);    
+            MenuCurrentMode = DATA_COLLECTION_MODE;
+            ESP_LOGI(TAG_TASK, "DatacollectionMode activate");
+        }
+        //TODO: start/resume (external?) task for data collection
+        ESP_LOGI(TAG_TASK, "Start external task for (wifi) data collection, saving, data check");
+        //TODO: Data saving, data check - наверно это внутри задачи получения данных
+        //if collected data is not OK
+        if ( ! isDataCheck_OK()) {
+            ESP_LOGI(TAG_TASK, "Data check NOT OK, go to Disconnection mode");
+            // !!!! TODO: notificate Disconnection task
+            continue; //this mean that we go to begin of while loop
+        }
+        //if accel data is not ganging
+        if ( ! isChangingAccelData()) {
+            ESP_LOGI(TAG_TASK, "Accel data not changing, check if it's long time then go to Sleep mode");
+            //TODO: if it's long time not changing then notificate sleep mode task
+            continue; //this mean that we go to begin of while loop
+        }
+        //if we get here then previous if not fired so wait 500ms for button click
+        if (xQueueReceive(xQueueButtonHandle, &ButtonShortPress, pdMS_TO_TICKS(500)) == pdPASS) {
+            //check it was first short click
+            if (ButtonShortPress == true) {
+                //wait next 5sec for second click 
+                if (xQueueReceive(xQueueButtonHandle, &ButtonShortPress, pdMS_TO_TICKS(5000)) == pdPASS) {
+                    if (ButtonShortPress == false) { //if long press
+                        //TODO: stop data collection, go to data transfer
+                        ESP_LOGI(TAG_TASK, "Stop data collection, go to Data transfer task");
+                    } else { //if short press
+                        //TODO: show info, delay
+                        ESP_LOGI(TAG_TASK, "Show info, delay.. until button pressed");
+                        xQueueReceive(xQueueButtonHandle, &ButtonShortPress, portMAX_DELAY);
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/**
  * @brief Task for Developer mode
  * 
  * @param pvParameters 
@@ -384,6 +439,26 @@ bool ChekingSensorsConnection() {
     }
     isContinue = true;
     return false;
+}
+
+/**
+ * @brief Chek if collected data is OK
+ * 
+ * @return true 
+ * @return false 
+ */
+bool isDataCheck_OK() {
+    return true;
+}
+
+/**
+ * @brief Check if accel data is changing
+ * 
+ * @return true 
+ * @return false 
+ */
+bool isChangingAccelData() {
+    return true;
 }
 
 /**
