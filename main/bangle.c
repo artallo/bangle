@@ -44,6 +44,7 @@ static TaskHandle_t xTaskInitializationModeHandle = NULL; ///< vTaskInitializati
 static TaskHandle_t xTaskDeveloperModeHandle = NULL; ///< vTaskDeveloperMode task handler
 static TaskHandle_t xTaskSensorcheckModeHandle = NULL; ///< vTaskSensorcheckMode task handler
 static TaskHandle_t xTaskDatacollectionModeHandle = NULL; ///< vTaskDatacollectionMode task handler
+static TaskHandle_t xTaskDatatransferModeHandle = NULL; ///< vTaskDatatransferMode task handler
 static QueueHandle_t xQueueButtonHandle = NULL; ///< Queue for communication between ButtonPressed task and other mode tasks
 
 //Tasks
@@ -54,14 +55,17 @@ void vTaskBackgroundMode(void *pvParameters);
 void vTaskInitializationMode(void *pvParameters);
 void vTaskSensorcheckMode(void *pvParameters);
 void vTaskDatacollectionMode(void *pvParameters);
+void vTaskDatatransferMode(void *pvParameters);
 void vTaskDeveloperMode(void *pvParameters);
 
-bool isExternalPower();
+bool isExternalPower(bool);
 bool isEnoughBatteryPower();
 bool isEnoughSensors();
 bool ChekingSensorsConnection();
 bool isDataCheck_OK();
 bool isChangingAccelData();
+bool isDataExists();
+bool AskingServer();
 void BLE_SendAuthInfo();
 
 /**
@@ -105,6 +109,7 @@ void app_main(void)
     xTaskCreate(vTaskInitializationMode, "InitMode", 2048, NULL, 1, &xTaskInitializationModeHandle);
     xTaskCreate(vTaskSensorcheckMode, "SensorcheckMode", 2048, NULL, 1, &xTaskSensorcheckModeHandle);
     xTaskCreate(vTaskDatacollectionMode, "DatacollectionMode", 2048, NULL, 1, &xTaskDatacollectionModeHandle);
+    xTaskCreate(vTaskDatatransferMode, "DatatransferMode", 2048, NULL, 1, &xTaskDatatransferModeHandle);
     xTaskCreate(vTaskDeveloperMode, "DeveloperMode", 2048, NULL, 1, &xTaskDeveloperModeHandle);
     //Than second create ModeSwitcher task, or else we notify from ModeSwithcher task to nowhere
     xTaskCreate(vTaskModeSwitcher, "ModeSwitcher", 2048, NULL, 1, &xTaskModeSwitcherHandle);
@@ -146,7 +151,7 @@ void vTaskPowerOnMode(void *pvParameters) {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         ESP_LOGI(TAG_TASK, "PowerOnMode activate");
         //check ext. power and batterys and notify corespondent task
-        if (isExternalPower()) {
+        if (isExternalPower(false)) {
             ESP_LOGI(TAG_TASK, "Ext. power: YES");
             /*if (isEnoughBatteryPower()) {
                 xTaskNotifyGive(xTaskDataTransferHandle);
@@ -310,6 +315,9 @@ void vTaskDatacollectionMode(void *pvParameters) {
                         //TODO: stop data collection, go to data transfer
                         ESP_LOGI(TAG_TASK, "Stop data collection, go to Data transfer task");
                         //!!!!!notificate transfer task
+                        xTaskNotifyGive(xTaskDatatransferModeHandle);
+                        //delay that new task activate and change MenuCurrentMode variable, so this task go to begin and wait notification in blocked state
+                        vTaskDelay(50 / portTICK_PERIOD_MS);
                     } else { //if short press
                         ESP_LOGI(TAG_TASK, "2nd pressing: button short pressed");
                         //TODO: show info, delay
@@ -321,6 +329,43 @@ void vTaskDatacollectionMode(void *pvParameters) {
         }
     }
 
+}
+
+/**
+ * @brief Task for data transfer mode
+ * 
+ * @param pvParameters 
+ */
+void vTaskDatatransferMode(void *pvParameters) {
+    while (1) {
+        //first time wait indefinitley for notification to activate task
+        if (MenuCurrentMode != DATA_TRANSFER_MODE) {
+            ulTaskNotifyTake(pdTRUE, portMAX_DELAY);    
+            MenuCurrentMode = DATA_TRANSFER_MODE;
+            ESP_LOGI(TAG_TASK, "DatatransferMode activate");
+        }
+        if (isExternalPower(true) == true) {    //if ext. power present
+            if (isDataExists()) {   //check if data exists
+                if (AskingServer() ==  true) {  //check if server ready
+                    ESP_LOGI(TAG_TASK, "Ext. power present, data exists and server ready");
+                    //do data transfering
+                    ESP_LOGI(TAG_TASK, "Data transfering..");
+                }
+            } else {    //no data to transfer
+                ESP_LOGI(TAG_TASK, "No data to transfer..");
+                //TODO: feedback blink or display 
+            }
+            //here data was transfered or no data to transfer so then go to Background mode
+            ESP_LOGI(TAG_TASK, ".. go to background mode");
+            xTaskNotifyGive(xTaskBackgroundModeHandle);
+            vTaskDelay(pdMS_TO_TICKS(50));            
+        } else {    //if no ext. power
+            //TODO: show info, delay
+            ESP_LOGI(TAG_TASK, "No ext. power, show info, delay 1500ms.. go to task begin");
+            vTaskDelay(pdMS_TO_TICKS(1500));
+        }
+
+    }
 }
 
 /**
@@ -399,8 +444,8 @@ void vTaskButtonPressed(void *pvParameters) {
  * @return true
  * @return false
  */
-bool isExternalPower() {
-    return false;
+bool isExternalPower(bool flag) {
+    return flag;
 }
 
 /**
@@ -462,6 +507,26 @@ bool isDataCheck_OK() {
  * @return false 
  */
 bool isChangingAccelData() {
+    return true;
+}
+
+/**
+ * @brief Check if data exists
+ * 
+ * @return true 
+ * @return false 
+ */
+bool isDataExists() {
+    return true;
+}
+
+/**
+ * @brief Ask server that it's ready receive data 
+ * 
+ * @return true 
+ * @return false 
+ */
+bool AskingServer() {
     return true;
 }
 
