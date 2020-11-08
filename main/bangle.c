@@ -45,6 +45,7 @@ static TaskHandle_t xTaskDeveloperModeHandle = NULL; ///< vTaskDeveloperMode tas
 static TaskHandle_t xTaskSensorcheckModeHandle = NULL; ///< vTaskSensorcheckMode task handler
 static TaskHandle_t xTaskDatacollectionModeHandle = NULL; ///< vTaskDatacollectionMode task handler
 static TaskHandle_t xTaskDatatransferModeHandle = NULL; ///< vTaskDatatransferMode task handler
+static TaskHandle_t xTaskSleepModeHandle = NULL; ///< vTaskSleepMode task handler
 static QueueHandle_t xQueueButtonHandle = NULL; ///< Queue for communication between ButtonPressed task and other mode tasks
 
 //Tasks
@@ -56,6 +57,7 @@ void vTaskInitializationMode(void *pvParameters);
 void vTaskSensorcheckMode(void *pvParameters);
 void vTaskDatacollectionMode(void *pvParameters);
 void vTaskDatatransferMode(void *pvParameters);
+void vTaskSleepMode(void *pvParameters);
 void vTaskDeveloperMode(void *pvParameters);
 
 bool isExternalPower(bool);
@@ -110,6 +112,7 @@ void app_main(void)
     xTaskCreate(vTaskSensorcheckMode, "SensorcheckMode", 2048, NULL, 1, &xTaskSensorcheckModeHandle);
     xTaskCreate(vTaskDatacollectionMode, "DatacollectionMode", 2048, NULL, 1, &xTaskDatacollectionModeHandle);
     xTaskCreate(vTaskDatatransferMode, "DatatransferMode", 2048, NULL, 1, &xTaskDatatransferModeHandle);
+    xTaskCreate(vTaskSleepMode, "SleepMode", 2048, NULL, 1, &xTaskSleepModeHandle);
     xTaskCreate(vTaskDeveloperMode, "DeveloperMode", 2048, NULL, 1, &xTaskDeveloperModeHandle);
     //Than second create ModeSwitcher task, or else we notify from ModeSwithcher task to nowhere
     xTaskCreate(vTaskModeSwitcher, "ModeSwitcher", 2048, NULL, 1, &xTaskModeSwitcherHandle);
@@ -301,6 +304,8 @@ void vTaskDatacollectionMode(void *pvParameters) {
         if ( ! isChangingAccelData()) {
             ESP_LOGI(TAG_TASK, "Accel data not changing, check if it's long time then go to Sleep mode");
             //TODO: if it's long time not changing then notificate sleep mode task
+            xTaskNotifyGive(xTaskSleepModeHandle);
+            vTaskDelay(pdMS_TO_TICKS(50));
             continue; //this mean that we go to begin of while loop
         }
         //if we get here then previous if not fired so wait 500ms for button click
@@ -366,6 +371,30 @@ void vTaskDatatransferMode(void *pvParameters) {
         }
 
     }
+}
+
+/**
+ * @brief Task for Sleep mode
+ * 
+ * @param pvParameters 
+ */
+void vTaskSleepMode(void *pvParameters) {
+    while (1) {
+        //first time wait indefinitley for notification to activate task
+        if (MenuCurrentMode != SLEEP_MODE) {
+            ulTaskNotifyTake(pdTRUE, portMAX_DELAY);    
+            MenuCurrentMode = SLEEP_MODE;
+            ESP_LOGI(TAG_TASK, "SleepMode activate");
+        }
+        //TODO: BNO to sleep with interrupt from BNO
+        //TODO: ESP sleep and wake by timer or by interrupt from BNO
+        //IF ESP wake by timer then check time < 90min else goto Backgroundmode
+        //IF ESP wake by interrupt from BNO then go to Datacollection mode
+        ESP_LOGI(TAG_TASK, "Sleep long time.. and go to Background mode");
+        xTaskNotifyGive(xTaskBackgroundModeHandle);
+        vTaskDelay(pdMS_TO_TICKS(50));        
+    }
+    
 }
 
 /**
