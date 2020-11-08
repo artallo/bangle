@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['menucurrentmode_28',['MenuCurrentMode',['../bangle_8c.html#ab0a8ff29c7b616b1a115663381616f60',1,'bangle.c']]]
+  ['menucurrentmode_58',['MenuCurrentMode',['../bangle_8c.html#a0c35fb71386d3eae0c00bb167377efc7',1,'bangle.c']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['last_5fmicros_5',['last_micros',['../bangle_8c.html#a3dabf9b8e7d1dcbc13e77c74aefc7595',1,'bangle.c']]]
+  ['gpio_5fbutton_5',['GPIO_BUTTON',['../bangle_8c.html#adb2845496c385fbffeccda1b626e3f66',1,'bangle.c']]]
 ];

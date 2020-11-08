@@ -91,9 +91,12 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#adb2845496c385fbffeccda1b626e3f66">GPIO_BUTTON</a>&#160;&#160;&#160;27</td></tr>
 <tr class="memdesc:adb2845496c385fbffeccda1b626e3f66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Button pin. <br /></td></tr>
 <tr class="separator:adb2845496c385fbffeccda1b626e3f66"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39477b888040a4d3e9ab0188022cf4fd"><td class="memItemLeft" align="right" valign="top"><a id="a39477b888040a4d3e9ab0188022cf4fd"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>poll_delay</b>&#160;&#160;&#160;50</td></tr>
-<tr class="separator:a39477b888040a4d3e9ab0188022cf4fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c12cf99e796ef973b040275bb179269"><td class="memItemLeft" align="right" valign="top"><a id="a5c12cf99e796ef973b040275bb179269"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>poll_delay_ms</b>&#160;&#160;&#160;50</td></tr>
+<tr class="separator:a5c12cf99e796ef973b040275bb179269"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc2fead59faba658babe12d095307efd"><td class="memItemLeft" align="right" valign="top"><a id="afc2fead59faba658babe12d095307efd"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>press_delay_ms</b>&#160;&#160;&#160;1200</td></tr>
+<tr class="separator:afc2fead59faba658babe12d095307efd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -108,7 +111,7 @@ Enumerations</h2></td></tr>
 <b>DATA_COLLECTION_MODE</b>, 
 <b>SLEEP_MODE</b>, 
 <br />
-&#160;&#160;<b>DEVELOPER_MODE_MODE</b>
+&#160;&#160;<b>DEVELOPER_MODE</b>
 <br />
  }</td></tr>
 <tr class="memdesc:aea8b3793f8f84c964eb96c91b0768a70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type which describe all working modes. <br /></td></tr>
@@ -128,18 +131,52 @@ Functions</h2></td></tr>
 <tr class="memitem:a34a460c5c0b689408b68bac85468e34f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a34a460c5c0b689408b68bac85468e34f">vTaskBackgroundMode</a> (void *pvParameters)</td></tr>
 <tr class="memdesc:a34a460c5c0b689408b68bac85468e34f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Task for Background mode.  <a href="bangle_8c.html#a34a460c5c0b689408b68bac85468e34f">More...</a><br /></td></tr>
 <tr class="separator:a34a460c5c0b689408b68bac85468e34f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af10abe668a3749eac6f5718d9c36f0ab"><td class="memItemLeft" align="right" valign="top"><a id="af10abe668a3749eac6f5718d9c36f0ab"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>vTaskInitializationMode</b> (void *pvParameters)</td></tr>
+<tr class="memitem:af10abe668a3749eac6f5718d9c36f0ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#af10abe668a3749eac6f5718d9c36f0ab">vTaskInitializationMode</a> (void *pvParameters)</td></tr>
+<tr class="memdesc:af10abe668a3749eac6f5718d9c36f0ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Task for Initialization mode.  <a href="bangle_8c.html#af10abe668a3749eac6f5718d9c36f0ab">More...</a><br /></td></tr>
 <tr class="separator:af10abe668a3749eac6f5718d9c36f0ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a1a74a0790ad6d7be2e80d25dc34b43"><td class="memItemLeft" align="right" valign="top"><a id="a4a1a74a0790ad6d7be2e80d25dc34b43"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>vTaskDeveloperMode</b> (void *pvParameters)</td></tr>
+<tr class="memitem:a8494f8ed2e03b7ddf5bb2633f362e1cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a8494f8ed2e03b7ddf5bb2633f362e1cc">vTaskSensorcheckMode</a> (void *pvParameters)</td></tr>
+<tr class="memdesc:a8494f8ed2e03b7ddf5bb2633f362e1cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Task for Sensor check mode.  <a href="bangle_8c.html#a8494f8ed2e03b7ddf5bb2633f362e1cc">More...</a><br /></td></tr>
+<tr class="separator:a8494f8ed2e03b7ddf5bb2633f362e1cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0bb00e95f5ca8192d5de25e2fe64514"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#ac0bb00e95f5ca8192d5de25e2fe64514">vTaskDatacollectionMode</a> (void *pvParameters)</td></tr>
+<tr class="memdesc:ac0bb00e95f5ca8192d5de25e2fe64514"><td class="mdescLeft">&#160;</td><td class="mdescRight">Task for Data collection mode.  <a href="bangle_8c.html#ac0bb00e95f5ca8192d5de25e2fe64514">More...</a><br /></td></tr>
+<tr class="separator:ac0bb00e95f5ca8192d5de25e2fe64514"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7324aa4ec1fe692ea2eeae954b7057f0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a7324aa4ec1fe692ea2eeae954b7057f0">vTaskDatatransferMode</a> (void *pvParameters)</td></tr>
+<tr class="memdesc:a7324aa4ec1fe692ea2eeae954b7057f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Task for data transfer mode.  <a href="bangle_8c.html#a7324aa4ec1fe692ea2eeae954b7057f0">More...</a><br /></td></tr>
+<tr class="separator:a7324aa4ec1fe692ea2eeae954b7057f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a940a88352b2d1bcf87480f9da0a3bb52"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a940a88352b2d1bcf87480f9da0a3bb52">vTaskSleepMode</a> (void *pvParameters)</td></tr>
+<tr class="memdesc:a940a88352b2d1bcf87480f9da0a3bb52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Task for Sleep mode.  <a href="bangle_8c.html#a940a88352b2d1bcf87480f9da0a3bb52">More...</a><br /></td></tr>
+<tr class="separator:a940a88352b2d1bcf87480f9da0a3bb52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a1a74a0790ad6d7be2e80d25dc34b43"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a4a1a74a0790ad6d7be2e80d25dc34b43">vTaskDeveloperMode</a> (void *pvParameters)</td></tr>
+<tr class="memdesc:a4a1a74a0790ad6d7be2e80d25dc34b43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Task for Developer mode.  <a href="bangle_8c.html#a4a1a74a0790ad6d7be2e80d25dc34b43">More...</a><br /></td></tr>
 <tr class="separator:a4a1a74a0790ad6d7be2e80d25dc34b43"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ecf92f0ec3b676bccd7264d44abd18c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a7ecf92f0ec3b676bccd7264d44abd18c">isExternalPower</a> ()</td></tr>
-<tr class="memdesc:a7ecf92f0ec3b676bccd7264d44abd18c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check and return true if ext. power present.  <a href="bangle_8c.html#a7ecf92f0ec3b676bccd7264d44abd18c">More...</a><br /></td></tr>
-<tr class="separator:a7ecf92f0ec3b676bccd7264d44abd18c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affb6edb32d49afb4ca7526f2c350467c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#affb6edb32d49afb4ca7526f2c350467c">isExternalPower</a> (bool flag)</td></tr>
+<tr class="memdesc:affb6edb32d49afb4ca7526f2c350467c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check and return true if ext. power present.  <a href="bangle_8c.html#affb6edb32d49afb4ca7526f2c350467c">More...</a><br /></td></tr>
+<tr class="separator:affb6edb32d49afb4ca7526f2c350467c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f9f02467b201497bf3a7d2d4865f832"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a8f9f02467b201497bf3a7d2d4865f832">isEnoughBatteryPower</a> ()</td></tr>
 <tr class="memdesc:a8f9f02467b201497bf3a7d2d4865f832"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check and return true if batt. charged.  <a href="bangle_8c.html#a8f9f02467b201497bf3a7d2d4865f832">More...</a><br /></td></tr>
 <tr class="separator:a8f9f02467b201497bf3a7d2d4865f832"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1891d703da209be96b49a85924aa5855"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a1891d703da209be96b49a85924aa5855">isEnoughSensors</a> ()</td></tr>
+<tr class="memdesc:a1891d703da209be96b49a85924aa5855"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if all sensors connected.  <a href="bangle_8c.html#a1891d703da209be96b49a85924aa5855">More...</a><br /></td></tr>
+<tr class="separator:a1891d703da209be96b49a85924aa5855"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c82bd5aa6222b5684e52393222cc1c4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a0c82bd5aa6222b5684e52393222cc1c4">ChekingSensorsConnection</a> ()</td></tr>
+<tr class="memdesc:a0c82bd5aa6222b5684e52393222cc1c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check and return true if sensors connection OK.  <a href="bangle_8c.html#a0c82bd5aa6222b5684e52393222cc1c4">More...</a><br /></td></tr>
+<tr class="separator:a0c82bd5aa6222b5684e52393222cc1c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbc264cd61e7937a2920534e7a810ea0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#adbc264cd61e7937a2920534e7a810ea0">isDataCheck_OK</a> ()</td></tr>
+<tr class="memdesc:adbc264cd61e7937a2920534e7a810ea0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chek if collected data is OK.  <a href="bangle_8c.html#adbc264cd61e7937a2920534e7a810ea0">More...</a><br /></td></tr>
+<tr class="separator:adbc264cd61e7937a2920534e7a810ea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a684f3c15e12ea43dadb1fad18388cd11"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a684f3c15e12ea43dadb1fad18388cd11">isChangingAccelData</a> ()</td></tr>
+<tr class="memdesc:a684f3c15e12ea43dadb1fad18388cd11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if accel data is changing.  <a href="bangle_8c.html#a684f3c15e12ea43dadb1fad18388cd11">More...</a><br /></td></tr>
+<tr class="separator:a684f3c15e12ea43dadb1fad18388cd11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8887d86aae99820a6477c590136f75a4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a8887d86aae99820a6477c590136f75a4">isDataExists</a> ()</td></tr>
+<tr class="memdesc:a8887d86aae99820a6477c590136f75a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if data exists.  <a href="bangle_8c.html#a8887d86aae99820a6477c590136f75a4">More...</a><br /></td></tr>
+<tr class="separator:a8887d86aae99820a6477c590136f75a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04abf6c86159a917c029fe413e5eeb21"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a04abf6c86159a917c029fe413e5eeb21">AskingServer</a> ()</td></tr>
+<tr class="memdesc:a04abf6c86159a917c029fe413e5eeb21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ask server that it's ready receive data.  <a href="bangle_8c.html#a04abf6c86159a917c029fe413e5eeb21">More...</a><br /></td></tr>
+<tr class="separator:a04abf6c86159a917c029fe413e5eeb21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5cdfc5088d72dc798229a20e007443c"><td class="memItemLeft" align="right" valign="top"><a id="ac5cdfc5088d72dc798229a20e007443c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#ac5cdfc5088d72dc798229a20e007443c">BLE_SendAuthInfo</a> ()</td></tr>
+<tr class="memdesc:ac5cdfc5088d72dc798229a20e007443c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send config message (iBeacon?) with connection info to sensors. <br /></td></tr>
+<tr class="separator:ac5cdfc5088d72dc798229a20e007443c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5a5c8f9c1782a70279b28716ff783ae"><td class="memItemLeft" align="right" valign="top">static void IRAM_ATTR&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#ad5a5c8f9c1782a70279b28716ff783ae">button_isr_handler</a> (void *arg)</td></tr>
 <tr class="memdesc:ad5a5c8f9c1782a70279b28716ff783ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Button pressed ISR.  <a href="bangle_8c.html#ad5a5c8f9c1782a70279b28716ff783ae">More...</a><br /></td></tr>
 <tr class="separator:ad5a5c8f9c1782a70279b28716ff783ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -156,10 +193,10 @@ static const char *&#160;</td><td class="memItemRight" valign="bottom"><b>TAG_TA
 volatile int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a3dabf9b8e7d1dcbc13e77c74aefc7595">last_micros</a> = 0</td></tr>
 <tr class="memdesc:a3dabf9b8e7d1dcbc13e77c74aefc7595"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delay measuring in usec. <br /></td></tr>
 <tr class="separator:a3dabf9b8e7d1dcbc13e77c74aefc7595"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0a8ff29c7b616b1a115663381616f60"><td class="memItemLeft" align="right" valign="top"><a id="ab0a8ff29c7b616b1a115663381616f60"></a>
-<a class="el" href="bangle_8c.html#aea8b3793f8f84c964eb96c91b0768a70">menu_mode_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#ab0a8ff29c7b616b1a115663381616f60">MenuCurrentMode</a> = POWER_ON_MODE</td></tr>
-<tr class="memdesc:ab0a8ff29c7b616b1a115663381616f60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current working mode, starts from POWER_ON_MODE. <br /></td></tr>
-<tr class="separator:ab0a8ff29c7b616b1a115663381616f60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c35fb71386d3eae0c00bb167377efc7"><td class="memItemLeft" align="right" valign="top"><a id="a0c35fb71386d3eae0c00bb167377efc7"></a>
+volatile <a class="el" href="bangle_8c.html#aea8b3793f8f84c964eb96c91b0768a70">menu_mode_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a0c35fb71386d3eae0c00bb167377efc7">MenuCurrentMode</a> = POWER_ON_MODE</td></tr>
+<tr class="memdesc:a0c35fb71386d3eae0c00bb167377efc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current working mode, starts from POWER_ON_MODE. <br /></td></tr>
+<tr class="separator:a0c35fb71386d3eae0c00bb167377efc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a840c3a03236d10242daae38687d446be"><td class="memItemLeft" align="right" valign="top"><a id="a840c3a03236d10242daae38687d446be"></a>
 static TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a840c3a03236d10242daae38687d446be">xTaskButtonPressedHandle</a> = NULL</td></tr>
 <tr class="memdesc:a840c3a03236d10242daae38687d446be"><td class="mdescLeft">&#160;</td><td class="mdescRight">vTaskButtonPressed task handler <br /></td></tr>
@@ -184,6 +221,22 @@ static TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class=
 static TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a514c422ff5dd15d478f2f367ee3647ff">xTaskDeveloperModeHandle</a> = NULL</td></tr>
 <tr class="memdesc:a514c422ff5dd15d478f2f367ee3647ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">vTaskDeveloperMode task handler <br /></td></tr>
 <tr class="separator:a514c422ff5dd15d478f2f367ee3647ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a234c96b67aa3e06f55a48de49ce7e7e5"><td class="memItemLeft" align="right" valign="top"><a id="a234c96b67aa3e06f55a48de49ce7e7e5"></a>
+static TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a234c96b67aa3e06f55a48de49ce7e7e5">xTaskSensorcheckModeHandle</a> = NULL</td></tr>
+<tr class="memdesc:a234c96b67aa3e06f55a48de49ce7e7e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">vTaskSensorcheckMode task handler <br /></td></tr>
+<tr class="separator:a234c96b67aa3e06f55a48de49ce7e7e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aceba3fc16bf1d5e36224418528401309"><td class="memItemLeft" align="right" valign="top"><a id="aceba3fc16bf1d5e36224418528401309"></a>
+static TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#aceba3fc16bf1d5e36224418528401309">xTaskDatacollectionModeHandle</a> = NULL</td></tr>
+<tr class="memdesc:aceba3fc16bf1d5e36224418528401309"><td class="mdescLeft">&#160;</td><td class="mdescRight">vTaskDatacollectionMode task handler <br /></td></tr>
+<tr class="separator:aceba3fc16bf1d5e36224418528401309"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab79c570d4e639b27a35e686e02586c8a"><td class="memItemLeft" align="right" valign="top"><a id="ab79c570d4e639b27a35e686e02586c8a"></a>
+static TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#ab79c570d4e639b27a35e686e02586c8a">xTaskDatatransferModeHandle</a> = NULL</td></tr>
+<tr class="memdesc:ab79c570d4e639b27a35e686e02586c8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">vTaskDatatransferMode task handler <br /></td></tr>
+<tr class="separator:ab79c570d4e639b27a35e686e02586c8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeca269c55d837ebc9356e227d6906c9d"><td class="memItemLeft" align="right" valign="top"><a id="aeca269c55d837ebc9356e227d6906c9d"></a>
+static TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#aeca269c55d837ebc9356e227d6906c9d">xTaskSleepModeHandle</a> = NULL</td></tr>
+<tr class="memdesc:aeca269c55d837ebc9356e227d6906c9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">vTaskSleepMode task handler <br /></td></tr>
+<tr class="separator:aeca269c55d837ebc9356e227d6906c9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64595abd6a1f9926c668db38d0ba0367"><td class="memItemLeft" align="right" valign="top"><a id="a64595abd6a1f9926c668db38d0ba0367"></a>
 static QueueHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a64595abd6a1f9926c668db38d0ba0367">xQueueButtonHandle</a> = NULL</td></tr>
 <tr class="memdesc:a64595abd6a1f9926c668db38d0ba0367"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queue for communication between ButtonPressed task and other mode tasks. <br /></td></tr>
@@ -195,6 +248,28 @@ static QueueHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class
 <dl class="section version"><dt>Version</dt><dd>0.1 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2020-10-28 </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a id="a04abf6c86159a917c029fe413e5eeb21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04abf6c86159a917c029fe413e5eeb21">&#9670;&nbsp;</a></span>AskingServer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool AskingServer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Ask server that it's ready receive data. </p>
+<dl class="section return"><dt>Returns</dt><dd>true </dd>
+<dd>
+false </dd></dl>
+
+</div>
+</div>
 <a id="ad5a5c8f9c1782a70279b28716ff783ae"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad5a5c8f9c1782a70279b28716ff783ae">&#9670;&nbsp;</a></span>button_isr_handler()</h2>
 
@@ -229,6 +304,94 @@ static QueueHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class
 
 </div>
 </div>
+<a id="a0c82bd5aa6222b5684e52393222cc1c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c82bd5aa6222b5684e52393222cc1c4">&#9670;&nbsp;</a></span>ChekingSensorsConnection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ChekingSensorsConnection </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check and return true if sensors connection OK. </p>
+<dl class="section return"><dt>Returns</dt><dd>true </dd>
+<dd>
+false </dd></dl>
+
+</div>
+</div>
+<a id="a684f3c15e12ea43dadb1fad18388cd11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a684f3c15e12ea43dadb1fad18388cd11">&#9670;&nbsp;</a></span>isChangingAccelData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool isChangingAccelData </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if accel data is changing. </p>
+<dl class="section return"><dt>Returns</dt><dd>true </dd>
+<dd>
+false </dd></dl>
+
+</div>
+</div>
+<a id="adbc264cd61e7937a2920534e7a810ea0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbc264cd61e7937a2920534e7a810ea0">&#9670;&nbsp;</a></span>isDataCheck_OK()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool isDataCheck_OK </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Chek if collected data is OK. </p>
+<dl class="section return"><dt>Returns</dt><dd>true </dd>
+<dd>
+false </dd></dl>
+
+</div>
+</div>
+<a id="a8887d86aae99820a6477c590136f75a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8887d86aae99820a6477c590136f75a4">&#9670;&nbsp;</a></span>isDataExists()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool isDataExists </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if data exists. </p>
+<dl class="section return"><dt>Returns</dt><dd>true </dd>
+<dd>
+false </dd></dl>
+
+</div>
+</div>
 <a id="a8f9f02467b201497bf3a7d2d4865f832"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8f9f02467b201497bf3a7d2d4865f832">&#9670;&nbsp;</a></span>isEnoughBatteryPower()</h2>
 
@@ -251,8 +414,30 @@ false </dd></dl>
 
 </div>
 </div>
-<a id="a7ecf92f0ec3b676bccd7264d44abd18c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ecf92f0ec3b676bccd7264d44abd18c">&#9670;&nbsp;</a></span>isExternalPower()</h2>
+<a id="a1891d703da209be96b49a85924aa5855"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1891d703da209be96b49a85924aa5855">&#9670;&nbsp;</a></span>isEnoughSensors()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool isEnoughSensors </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if all sensors connected. </p>
+<dl class="section return"><dt>Returns</dt><dd>true </dd>
+<dd>
+false </dd></dl>
+
+</div>
+</div>
+<a id="affb6edb32d49afb4ca7526f2c350467c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affb6edb32d49afb4ca7526f2c350467c">&#9670;&nbsp;</a></span>isExternalPower()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -260,7 +445,8 @@ false </dd></dl>
         <tr>
           <td class="memname">bool isExternalPower </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>flag</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -325,6 +511,111 @@ false </dd></dl>
 
 </div>
 </div>
+<a id="ac0bb00e95f5ca8192d5de25e2fe64514"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0bb00e95f5ca8192d5de25e2fe64514">&#9670;&nbsp;</a></span>vTaskDatacollectionMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vTaskDatacollectionMode </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>pvParameters</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Task for Data collection mode. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvParameters</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>!!!!notificate transfer task</p>
+
+</div>
+</div>
+<a id="a7324aa4ec1fe692ea2eeae954b7057f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7324aa4ec1fe692ea2eeae954b7057f0">&#9670;&nbsp;</a></span>vTaskDatatransferMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vTaskDatatransferMode </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>pvParameters</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Task for data transfer mode. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvParameters</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4a1a74a0790ad6d7be2e80d25dc34b43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a1a74a0790ad6d7be2e80d25dc34b43">&#9670;&nbsp;</a></span>vTaskDeveloperMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vTaskDeveloperMode </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>pvParameters</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Task for Developer mode. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvParameters</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af10abe668a3749eac6f5718d9c36f0ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af10abe668a3749eac6f5718d9c36f0ab">&#9670;&nbsp;</a></span>vTaskInitializationMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vTaskInitializationMode </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>pvParameters</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Task for Initialization mode. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvParameters</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a4d2d40f6029064dba1ee85d731c4cddb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4d2d40f6029064dba1ee85d731c4cddb">&#9670;&nbsp;</a></span>vTaskModeSwitcher()</h2>
 
@@ -368,6 +659,58 @@ false </dd></dl>
 </div><div class="memdoc">
 
 <p>Task for Power On mode. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvParameters</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8494f8ed2e03b7ddf5bb2633f362e1cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8494f8ed2e03b7ddf5bb2633f362e1cc">&#9670;&nbsp;</a></span>vTaskSensorcheckMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vTaskSensorcheckMode </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>pvParameters</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Task for Sensor check mode. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvParameters</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a940a88352b2d1bcf87480f9da0a3bb52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a940a88352b2d1bcf87480f9da0a3bb52">&#9670;&nbsp;</a></span>vTaskSleepMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vTaskSleepMode </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>pvParameters</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Task for Sleep mode. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pvParameters</td><td></td></tr>
