@@ -256,7 +256,7 @@ void vTaskSensorcheckMode(void *pvParameters) {
             //TODO: Concordance, Starting, Time synchro
             ESP_LOGI(TAG_TASK, "Cheking sensors connection OK: next do  Concordance, Starting, Time synchro.., go to Data collection mode");
             //notify xTaskDatacollectionMode
-            //!!!! xTaskNotifyGive(xTaskDatacollectionModeHandle);
+            xTaskNotifyGive(xTaskDatacollectionModeHandle);
             //delay that new task activate and change MenuCurrentMode variable, so this task go to begin and wait notification in blocked state
             vTaskDelay(50 / portTICK_PERIOD_MS);
         } else {
@@ -284,7 +284,7 @@ void vTaskDatacollectionMode(void *pvParameters) {
             ESP_LOGI(TAG_TASK, "DatacollectionMode activate");
         }
         //TODO: start/resume (external?) task for data collection
-        ESP_LOGI(TAG_TASK, "Start external task for (wifi) data collection, saving, data check");
+        ESP_LOGI(TAG_TASK, "Start/continue external task for (wifi) data collection, saving, data check");
         //TODO: Data saving, data check - наверно это внутри задачи получения данных
         //if collected data is not OK
         if ( ! isDataCheck_OK()) {
@@ -302,12 +302,16 @@ void vTaskDatacollectionMode(void *pvParameters) {
         if (xQueueReceive(xQueueButtonHandle, &ButtonShortPress, pdMS_TO_TICKS(500)) == pdPASS) {
             //check it was first short click
             if (ButtonShortPress == true) {
-                //wait next 5sec for second click 
+                //wait next 5sec for second click
+                ESP_LOGI(TAG_TASK, "Button was pressed 1st time, wait 5sec for second pressing");
                 if (xQueueReceive(xQueueButtonHandle, &ButtonShortPress, pdMS_TO_TICKS(5000)) == pdPASS) {
                     if (ButtonShortPress == false) { //if long press
+                        ESP_LOGI(TAG_TASK, "2nd pressing: button long pressed");
                         //TODO: stop data collection, go to data transfer
                         ESP_LOGI(TAG_TASK, "Stop data collection, go to Data transfer task");
+                        //!!!!!notificate transfer task
                     } else { //if short press
+                        ESP_LOGI(TAG_TASK, "2nd pressing: button short pressed");
                         //TODO: show info, delay
                         ESP_LOGI(TAG_TASK, "Show info, delay.. until button pressed");
                         xQueueReceive(xQueueButtonHandle, &ButtonShortPress, portMAX_DELAY);
@@ -467,5 +471,5 @@ bool isChangingAccelData() {
  */
 void BLE_SendAuthInfo() {
     ESP_LOGI(TAG_TASK, "send auth info via BLE");
-    vTaskDelay(1100 / portTICK_PERIOD_MS);
+    vTaskDelay(600 / portTICK_PERIOD_MS);
 }
