@@ -37,7 +37,7 @@ esp_err_t i2c_master_init(int scl, int sda, int freq, int port_num) {
         esp_err_t res = i2c_driver_install(port_num, i2c_bus.conf.mode, 0, 0, 0);
         if (res == ESP_OK) {
             i2c_bus.is_init = true;
-            ESP_LOGI("I2C", "INIT OK");
+            ESP_LOGI("I2C", "INIT OKk");
         }
         return res;
     }
