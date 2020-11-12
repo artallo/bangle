@@ -14,6 +14,7 @@
 #include "freertos/task.h"
 #include "sdkconfig.h"
 #include "devconfig.h"
+#include "i2c_bus.h"
 
 ///Type which describe all working modes
 typedef enum {  
@@ -115,6 +116,10 @@ void app_main(void)
     xTaskCreate(vTaskDeveloperMode, "DeveloperMode", 2048, NULL, 1, &xTaskDeveloperModeHandle);
     //Than second create ModeSwitcher task, or else we notify from ModeSwithcher task to nowhere
     xTaskCreate(vTaskModeSwitcher, "ModeSwitcher", 2048, NULL, 1, &xTaskModeSwitcherHandle);
+
+    //i2c init
+    ESP_ERROR_CHECK(i2c_master_init(GPIO_I2C_SCL, GPIO_I2C_SDA, I2C_FREQ, I2C_PORT_NUM));
+    //ESP_ERROR_CHECK(i2c_master_init(GPIO_I2C_SCL, GPIO_I2C_SDA, I2C_FREQ, I2C_PORT_NUM));
 
     //Main loop
     while (1) {

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['chekingsensorsconnection_43',['ChekingSensorsConnection',['../bangle_8c.html#a0c82bd5aa6222b5684e52393222cc1c4',1,'bangle.c']]]
+  ['chekingsensorsconnection_56',['ChekingSensorsConnection',['../bangle_8c.html#a0c82bd5aa6222b5684e52393222cc1c4',1,'bangle.c']]]
 ];
