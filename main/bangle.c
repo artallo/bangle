@@ -119,7 +119,7 @@ void app_main(void)
 
     //i2c init
     ESP_ERROR_CHECK(i2c_master_init(GPIO_I2C_SCL, GPIO_I2C_SDA, I2C_FREQ, I2C_PORT_NUM));
-    //ESP_ERROR_CHECK(i2c_master_init(GPIO_I2C_SCL, GPIO_I2C_SDA, I2C_FREQ, I2C_PORT_NUM));
+    
 
     //Main loop
     while (1) {
