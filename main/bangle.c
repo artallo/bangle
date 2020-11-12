@@ -13,6 +13,7 @@
 #include "freertos/queue.h"
 #include "freertos/task.h"
 #include "sdkconfig.h"
+#include "devconfig.h"
 
 ///Type which describe all working modes
 typedef enum {  
@@ -26,8 +27,6 @@ typedef enum {
     SLEEP_MODE,
     DEVELOPER_MODE
 } menu_mode_t; 
-
-#define GPIO_BUTTON 27 ///< Button pin
 
 //LOGs
 static const char* TAG_TASK = "vTasks";
