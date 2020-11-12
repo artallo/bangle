@@ -87,7 +87,7 @@ static void IRAM_ATTR button_isr_handler(void* arg)
 }
 
 void app_main(void)
-{
+{   
     //Create queue to store button pressing
     xQueueButtonHandle = xQueueCreate(1, sizeof(bool));
     //Create task to handle button pressing
