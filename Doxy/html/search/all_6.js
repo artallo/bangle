@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['menu_5fmode_5ft_13',['menu_mode_t',['../bangle_8c.html#aea8b3793f8f84c964eb96c91b0768a70',1,'bangle.c']]],
-  ['menucurrentmode_14',['MenuCurrentMode',['../bangle_8c.html#a0c35fb71386d3eae0c00bb167377efc7',1,'bangle.c']]]
+  ['last_5fmicros_14',['last_micros',['../bangle_8c.html#a3dabf9b8e7d1dcbc13e77c74aefc7595',1,'bangle.c']]]
 ];

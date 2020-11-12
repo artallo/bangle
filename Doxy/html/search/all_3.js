@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['gpio_5fbutton_5',['GPIO_BUTTON',['../bangle_8c.html#adb2845496c385fbffeccda1b626e3f66',1,'bangle.c']]]
+  ['devconfig_2eh_5',['devconfig.h',['../devconfig_8h.html',1,'']]]
 ];

@@ -1,14 +1,13 @@
 var searchData=
 [
-  ['xqueuebuttonhandle_25',['xQueueButtonHandle',['../bangle_8c.html#a64595abd6a1f9926c668db38d0ba0367',1,'bangle.c']]],
-  ['xtaskbackgroundmodehandle_26',['xTaskBackgroundModeHandle',['../bangle_8c.html#ae79a3d69070b6065306c9529465bc27f',1,'bangle.c']]],
-  ['xtaskbuttonpressedhandle_27',['xTaskButtonPressedHandle',['../bangle_8c.html#a840c3a03236d10242daae38687d446be',1,'bangle.c']]],
-  ['xtaskdatacollectionmodehandle_28',['xTaskDatacollectionModeHandle',['../bangle_8c.html#aceba3fc16bf1d5e36224418528401309',1,'bangle.c']]],
-  ['xtaskdatatransfermodehandle_29',['xTaskDatatransferModeHandle',['../bangle_8c.html#ab79c570d4e639b27a35e686e02586c8a',1,'bangle.c']]],
-  ['xtaskdevelopermodehandle_30',['xTaskDeveloperModeHandle',['../bangle_8c.html#a514c422ff5dd15d478f2f367ee3647ff',1,'bangle.c']]],
-  ['xtaskinitializationmodehandle_31',['xTaskInitializationModeHandle',['../bangle_8c.html#afda3169ecbfa13d36a1c6ed47151abdb',1,'bangle.c']]],
-  ['xtaskmodeswitcherhandle_32',['xTaskModeSwitcherHandle',['../bangle_8c.html#a0dafce8d656b6d2e562f7714fef8d497',1,'bangle.c']]],
-  ['xtaskpoweronmodehandle_33',['xTaskPowerOnModeHandle',['../bangle_8c.html#ac07e4c61ef33dc26d4c99aa4607c4a54',1,'bangle.c']]],
-  ['xtasksensorcheckmodehandle_34',['xTaskSensorcheckModeHandle',['../bangle_8c.html#a234c96b67aa3e06f55a48de49ce7e7e5',1,'bangle.c']]],
-  ['xtasksleepmodehandle_35',['xTaskSleepModeHandle',['../bangle_8c.html#aeca269c55d837ebc9356e227d6906c9d',1,'bangle.c']]]
+  ['vtaskbackgroundmode_17',['vTaskBackgroundMode',['../bangle_8c.html#a34a460c5c0b689408b68bac85468e34f',1,'bangle.c']]],
+  ['vtaskbuttonpressed_18',['vTaskButtonPressed',['../bangle_8c.html#ae4cd16db3f3c99944c8c45ad1d571314',1,'bangle.c']]],
+  ['vtaskdatacollectionmode_19',['vTaskDatacollectionMode',['../bangle_8c.html#ac0bb00e95f5ca8192d5de25e2fe64514',1,'bangle.c']]],
+  ['vtaskdatatransfermode_20',['vTaskDatatransferMode',['../bangle_8c.html#a7324aa4ec1fe692ea2eeae954b7057f0',1,'bangle.c']]],
+  ['vtaskdevelopermode_21',['vTaskDeveloperMode',['../bangle_8c.html#a4a1a74a0790ad6d7be2e80d25dc34b43',1,'bangle.c']]],
+  ['vtaskinitializationmode_22',['vTaskInitializationMode',['../bangle_8c.html#af10abe668a3749eac6f5718d9c36f0ab',1,'bangle.c']]],
+  ['vtaskmodeswitcher_23',['vTaskModeSwitcher',['../bangle_8c.html#a4d2d40f6029064dba1ee85d731c4cddb',1,'bangle.c']]],
+  ['vtaskpoweronmode_24',['vTaskPowerOnMode',['../bangle_8c.html#af8562384c6bff082d01f9713a8186cb9',1,'bangle.c']]],
+  ['vtasksensorcheckmode_25',['vTaskSensorcheckMode',['../bangle_8c.html#a8494f8ed2e03b7ddf5bb2633f362e1cc',1,'bangle.c']]],
+  ['vtasksleepmode_26',['vTaskSleepMode',['../bangle_8c.html#a940a88352b2d1bcf87480f9da0a3bb52',1,'bangle.c']]]
 ];
