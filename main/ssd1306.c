@@ -16,7 +16,7 @@ esp_err_t i2c_device_ping(uint8_t dev_addr)
     //i2c_master_write_byte(cmd, byte, 1);
     i2c_master_stop(cmd);    
 
-    esp_err_t ret = i2c_master_cmd_begin(I2C_NUM_1, cmd, 1000 / portTICK_RATE_MS);
+    esp_err_t ret = i2c_master_cmd_begin(SSD1306_I2C_PORT, cmd, 1000 / portTICK_RATE_MS);
     i2c_cmd_link_delete(cmd);
     return ret;
 }
@@ -30,7 +30,7 @@ void ssd1306_WriteCommand(uint8_t byte) {
     i2c_master_write_byte(cmd, byte, 1);
     i2c_master_stop(cmd);    
 
-    esp_err_t ret = i2c_master_cmd_begin(I2C_NUM_1, cmd, 1000 / portTICK_RATE_MS);
+    esp_err_t ret = i2c_master_cmd_begin(SSD1306_I2C_PORT, cmd, 1000 / portTICK_RATE_MS);
     i2c_cmd_link_delete(cmd);
 }
 
@@ -43,7 +43,7 @@ void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) {
     i2c_master_write(cmd, buffer, buff_size, 1);
     i2c_master_stop(cmd);    
 
-    esp_err_t ret = i2c_master_cmd_begin(I2C_NUM_1, cmd, 1000 / portTICK_RATE_MS);
+    esp_err_t ret = i2c_master_cmd_begin(SSD1306_I2C_PORT, cmd, 1000 / portTICK_RATE_MS);
     i2c_cmd_link_delete(cmd);
 
 }
@@ -65,9 +65,14 @@ SSD1306_Error_t ssd1306_FillBuffer(uint8_t* buf, uint32_t len) {
 }
 
 // Initialize the oled screen
-void ssd1306_Init(void) {
+void ssd1306_Init(int reset_pin) {
     // Reset OLED
     //ssd1306_Reset();
+    
+    // Set display reset pin to HIGH (normal operation)
+    gpio_pad_select_gpio(reset_pin);
+    gpio_set_direction(reset_pin, GPIO_MODE_OUTPUT);
+    gpio_set_level(reset_pin, 1);
 
     // Wait for the screen to boot
     vTaskDelay(100 / portTICK_PERIOD_MS);

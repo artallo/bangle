@@ -123,7 +123,7 @@ void app_main(void)
     ESP_ERROR_CHECK(i2c_master_init(GPIO_I2C_SCL, GPIO_I2C_SDA, I2C_FREQ, I2C_PORT_NUM));
 
     //SSD1309 display init
-    ssd1306_Init();
+    ssd1306_Init(GPIO_DISPLAY_RESET);
     
 
     //Main loop
