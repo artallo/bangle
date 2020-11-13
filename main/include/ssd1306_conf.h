@@ -9,9 +9,8 @@
 #ifndef __SSD1306_CONF_H__
 #define __SSD1306_CONF_H__
 
-// I2C Configuration
-#define SSD1306_I2C_PORT 1
-#define SSD1306_I2C_ADDR 0x3C
+#define SSD1306_I2C_PORT I2C_NUM_1 ///< I2C port number. There are 2 i2c port in esp32: I2C_NUM_0 and I2C_NUM_1
+#define SSD1306_I2C_ADDR 0x3C ///< Display addres on i2c bus
 
 // Mirror the screen if needed
 // #define SSD1306_MIRROR_VERT
@@ -21,8 +20,8 @@
 // # define SSD1306_INVERSE_COLOR
 
 // Include only needed fonts
-#define SSD1306_INCLUDE_FONT_6x8
-#define SSD1306_INCLUDE_FONT_7x10
+#define SSD1306_INCLUDE_FONT_6x8 ///< Include font 6x8
+#define SSD1306_INCLUDE_FONT_7x10 ///< Include font 7x10
 //#define SSD1306_INCLUDE_FONT_11x18
 //#define SSD1306_INCLUDE_FONT_16x26
 

@@ -4,21 +4,11 @@
 #include <stddef.h>
 #include <_ansi.h>
 #include "driver/i2c.h"
-//#include "wire.h"
 
 _BEGIN_STD_C
 
 #include "ssd1306_conf.h"
-
 #include "ssd1306_fonts.h"
-
-/* vvv I2C config vvv */
-
-#ifndef SSD1306_I2C_ADDR
-#define SSD1306_I2C_ADDR 0x3C
-#endif
-
-/* ^^^ I2C config ^^^ */
 
 // SSD1306 OLED height in pixels
 #ifndef SSD1306_HEIGHT
