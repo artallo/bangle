@@ -15,6 +15,8 @@
 #include "sdkconfig.h"
 #include "devconfig.h"
 #include "i2c_bus.h"
+#include "ssd1306.h"
+
 
 ///Type which describe all working modes
 typedef enum {  
@@ -119,10 +121,23 @@ void app_main(void)
 
     //i2c init
     ESP_ERROR_CHECK(i2c_master_init(GPIO_I2C_SCL, GPIO_I2C_SDA, I2C_FREQ, I2C_PORT_NUM));
+
+    //SSD1309 display init
+    ssd1306_Init();
     
 
     //Main loop
+    char ch = '0';
     while (1) {
+        ssd1306_SetCursor(60, 27);
+        ssd1306_WriteChar(ch, Font_7x10, White);
+        if (ch < 'z') {
+            ch++;
+        } else {
+            ch = '0';
+        }
+        ssd1306_UpdateScreen();
+        
         vTaskDelay(500 / portTICK_PERIOD_MS);
     }
 }

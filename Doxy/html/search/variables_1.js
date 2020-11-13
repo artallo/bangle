@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['last_5fmicros_76',['last_micros',['../bangle_8c.html#a3dabf9b8e7d1dcbc13e77c74aefc7595',1,'bangle.c']]]
+  ['fontheight_84',['FontHeight',['../struct_font_def.html#a62f376116f9d475e50cf9f8c73b7d5c4',1,'FontDef']]],
+  ['fontwidth_85',['FontWidth',['../struct_font_def.html#a622dc4e31410b33f1944f153864dc0d4',1,'FontDef']]]
 ];

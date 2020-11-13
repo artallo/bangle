@@ -1183,3 +1183,5 @@ build/esp-idf/main/CMakeFiles/__idf_main.dir/i2c_bus.c.obj
 build/esp-idf/main/CMakeFiles/__idf_main.dir/i2c_bus.c.obj
 build/esp-idf/main/CMakeFiles/__idf_main.dir/i2c_bus.c.obj
 build/esp-idf/main/CMakeFiles/__idf_main.dir/i2c_bus.c.obj
+build/esp-idf/main/CMakeFiles/__idf_main.dir/ssd1306_fonts.c.obj
+build/esp-idf/main/CMakeFiles/__idf_main.dir/ssd1306.c.obj
