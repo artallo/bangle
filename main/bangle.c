@@ -31,6 +31,8 @@ typedef enum {
     DEVELOPER_MODE
 } menu_mode_t; 
 
+const char* msgHello = "Hello";
+
 //LOGs
 static const char* TAG_TASK = "vTasks";
 
@@ -48,6 +50,7 @@ static TaskHandle_t xTaskSensorcheckModeHandle = NULL; ///< vTaskSensorcheckMode
 static TaskHandle_t xTaskDatacollectionModeHandle = NULL; ///< vTaskDatacollectionMode task handler
 static TaskHandle_t xTaskDatatransferModeHandle = NULL; ///< vTaskDatatransferMode task handler
 static TaskHandle_t xTaskSleepModeHandle = NULL; ///< vTaskSleepMode task handler
+static TaskHandle_t xTaskDisplayHandle = NULL; ///< vTaskDisplay task handler
 static QueueHandle_t xQueueButtonHandle = NULL; ///< Queue for communication between ButtonPressed task and other mode tasks
 
 //Tasks
@@ -61,6 +64,7 @@ void vTaskDatacollectionMode(void *pvParameters);
 void vTaskDatatransferMode(void *pvParameters);
 void vTaskSleepMode(void *pvParameters);
 void vTaskDeveloperMode(void *pvParameters);
+void vTaskDisplay(void *pvParameters);
 
 bool isExternalPower(bool);
 bool isEnoughBatteryPower();
@@ -90,6 +94,14 @@ static void IRAM_ATTR button_isr_handler(void* arg)
 
 void app_main(void)
 {   
+    ESP_LOGI(TAG_TASK, "%s", msgHello);
+    
+    //i2c init
+    ESP_ERROR_CHECK(i2c_master_init(GPIO_I2C_SCL, GPIO_I2C_SDA, I2C_FREQ, I2C_PORT_NUM));
+
+    //SSD1309 display init
+    ssd1306_Init(GPIO_DISPLAY_RESET);
+
     //Create queue to store button pressing
     xQueueButtonHandle = xQueueCreate(1, sizeof(bool));
     //Create task to handle button pressing
@@ -107,6 +119,8 @@ void app_main(void)
     
     //Set starting mode to POWER_ON_MODE
     MenuCurrentMode = POWER_ON_MODE;
+    //Create Dispaly task
+    xTaskCreate(vTaskDisplay, "Display", 2048, NULL, 1, &xTaskDisplayHandle);
     //At First create and start Mode tasks
     xTaskCreate(vTaskPowerOnMode, "PowerOnMode", 2048, NULL, 1, &xTaskPowerOnModeHandle);
     xTaskCreate(vTaskBackgroundMode, "BackgroundMode", 2048, NULL, 1, &xTaskBackgroundModeHandle);
@@ -118,36 +132,32 @@ void app_main(void)
     xTaskCreate(vTaskDeveloperMode, "DeveloperMode", 2048, NULL, 1, &xTaskDeveloperModeHandle);
     //Than second create ModeSwitcher task, or else we notify from ModeSwithcher task to nowhere
     xTaskCreate(vTaskModeSwitcher, "ModeSwitcher", 2048, NULL, 1, &xTaskModeSwitcherHandle);
-
-    //i2c init
-    ESP_ERROR_CHECK(i2c_master_init(GPIO_I2C_SCL, GPIO_I2C_SDA, I2C_FREQ, I2C_PORT_NUM));
-
-    //SSD1309 display init
-    ssd1306_Init(GPIO_DISPLAY_RESET);
     
 
     //Main loop
     char ch = '0';
     while (1) {
-        ssd1306_SetCursor(60, 27);
+        /*ssd1306_SetCursor(60, 27);
         ssd1306_WriteChar(ch, Font_7x10, White);
         if (ch < 'z') {
             ch++;
         } else {
             ch = '0';
         }
-        ssd1306_UpdateScreen();
+        ssd1306_UpdateScreen();*/
         
         vTaskDelay(500 / portTICK_PERIOD_MS);
     }
 }
 
+
+// !!!может эта задача ненужна, а сразу запускать PowerOn mode без начального ожидания notification и блокировки !!!
 /**
  * @brief Task that switch working modes
  * 
  * @param pvParameters 
  */
-void vTaskModeSwitcher(void *pvParameters) {    //может эта задача ненужна, а сразу запускать PowerOn mode без начального ожидания notification и блокировки
+void vTaskModeSwitcher(void *pvParameters) {
     while (1) {
         ESP_LOGI(TAG_TASK, "ModeSwitcher activate");
         //notificate and unblock coresponding task
@@ -446,6 +456,39 @@ void vTaskDeveloperMode(void *pvParameters) {
             }
         }
 
+    }
+    
+}
+
+/**
+ * @brief Task for displaying info on ssd1309 display
+ * 
+ * @param pvParameters 
+ */
+void vTaskDisplay(void *pvParameters) {
+    while (1)
+    {
+        // Clear screen
+        ssd1306_Fill(Black);
+        // Flush buffer to screen
+        //ssd1306_UpdateScreen();
+        //select current mode
+        if (MenuCurrentMode == POWER_ON_MODE) {
+            ssd1306_SetCursor(18, 10);
+            ssd1306_WriteString("Power on mode", Font_7x10, White);
+            ssd1306_UpdateScreen();
+        } else if (MenuCurrentMode == BACKGROUND_MODE) {
+            ssd1306_SetCursor(11, 10);
+            ssd1306_WriteString("Background mode", Font_7x10, White);
+            ssd1306_UpdateScreen();
+        } else if (MenuCurrentMode == INITIALIZATION_MODE) {
+            ssd1306_SetCursor(14, 10);
+            ssd1306_WriteString("Initialization", Font_7x10, White);
+            ssd1306_UpdateScreen();
+
+        }
+        // !!!переделать с ожидания delay на ожидание уведомления taskNotify от задач режимов, чтобы не крутить в холостую обновляя статичную информацию
+        vTaskDelay(100 / portTICK_PERIOD_MS);
     }
     
 }
