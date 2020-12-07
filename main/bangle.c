@@ -33,7 +33,7 @@ typedef enum {
 
 const char* msgHello = "Hello";
 
-//LOGs
+//LOGss
 static const char* TAG_TASK = "vTasks";
 
 volatile int64_t last_micros = 0;   ///< Delay measuring in usec 
