@@ -1,23 +1,27 @@
 {
-  "configurations": [
-    {
-      "name": "Linux",
-      "cStandard": "c11",
-      "cppStandard": "c++17",
-      "includePath": [
-        "${config:idf.espIdfPath}/components/**",
-        "${config:idf.espIdfPathWin}/components/**",
-        "${workspaceFolder}/**"
-      ],
-      "browse": {
-        "path": [
-          "${config:idf.espIdfPath}/components",
-          "${config:idf.espIdfPathWin}/components",
-          "${workspaceFolder}"
-        ],
-        "limitSymbolsToIncludedHeaders": false
-      }
-    }
-  ],
-  "version": 4
+    "configurations": [
+        {
+            "name": "Linux",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "includePath": [
+                "C:\\dev\\espressif\\tools\\xtensa-esp32s2-elf\\esp-2020r2-8.2.0\\xtensa-esp32s2-elf\\xtensa-esp32s2-elf\\include",
+                "C:\\dev\\espressif\\tools\\xtensa-esp32s2-elf\\esp-2020r2-8.2.0\\xtensa-esp32s2-elf\\lib\\gcc\\xtensa-esp32s2-elf\\8.2.0\\include",
+                "${workspaceFolder}\\build\\config",
+                "C:\\dev\\esp-idf\\components\\**",
+                "${workspaceFolder}\\**"
+            ],
+            "browse": {
+                "path": [
+                    "${config:idf.espIdfPath}\\components",
+                    "${config:idf.espIdfPathWin}\\components",
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": false
+            },
+            "compilerPath": "",
+            "intelliSenseMode": "gcc-x64"
+        }
+    ],
+    "version": 4
 }

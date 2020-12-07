@@ -1172,3 +1172,16 @@ build/esp-idf/xtensa/CMakeFiles/__idf_xtensa.dir/expression_with_stack_xtensa_as
 build/esp-idf/xtensa/CMakeFiles/__idf_xtensa.dir/expression_with_stack_xtensa.c.obj
 build/esp-idf/xtensa/CMakeFiles/__idf_xtensa.dir/trax.c.obj
 build/partition_table/partition-table.bin
+build/esp-idf/freertos/CMakeFiles/__idf_freertos.dir/port.c.obj.d
+build/esp-idf/freertos/CMakeFiles/__idf_freertos.dir/queue.c.obj.d
+build/esp-idf/freertos/CMakeFiles/__idf_freertos.dir/tasks.c.obj.d
+build/esp-idf/freertos/CMakeFiles/__idf_freertos.dir/xtensa_context.S.obj.d
+build/esp-idf/main/CMakeFiles/__idf_main.dir/i2c_bus.c.obj
+build/esp-idf/main/CMakeFiles/__idf_main.dir/i2c_bus.c.obj
+build/esp-idf/main/CMakeFiles/__idf_main.dir/i2c_bus.c.obj
+build/esp-idf/main/CMakeFiles/__idf_main.dir/i2c_bus.c.obj
+build/esp-idf/main/CMakeFiles/__idf_main.dir/i2c_bus.c.obj
+build/esp-idf/main/CMakeFiles/__idf_main.dir/i2c_bus.c.obj
+build/esp-idf/main/CMakeFiles/__idf_main.dir/i2c_bus.c.obj
+build/esp-idf/main/CMakeFiles/__idf_main.dir/ssd1306_fonts.c.obj
+build/esp-idf/main/CMakeFiles/__idf_main.dir/ssd1306.c.obj

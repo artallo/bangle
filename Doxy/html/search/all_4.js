@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['ischangingacceldata_6',['isChangingAccelData',['../bangle_8c.html#a684f3c15e12ea43dadb1fad18388cd11',1,'bangle.c']]],
-  ['isdatacheck_5fok_7',['isDataCheck_OK',['../bangle_8c.html#adbc264cd61e7937a2920534e7a810ea0',1,'bangle.c']]],
-  ['isdataexists_8',['isDataExists',['../bangle_8c.html#a8887d86aae99820a6477c590136f75a4',1,'bangle.c']]],
-  ['isenoughbatterypower_9',['isEnoughBatteryPower',['../bangle_8c.html#a8f9f02467b201497bf3a7d2d4865f832',1,'bangle.c']]],
-  ['isenoughsensors_10',['isEnoughSensors',['../bangle_8c.html#a1891d703da209be96b49a85924aa5855',1,'bangle.c']]],
-  ['isexternalpower_11',['isExternalPower',['../bangle_8c.html#affb6edb32d49afb4ca7526f2c350467c',1,'bangle.c']]]
+  ['fontdef_7',['FontDef',['../struct_font_def.html',1,'']]],
+  ['fontheight_8',['FontHeight',['../struct_font_def.html#a62f376116f9d475e50cf9f8c73b7d5c4',1,'FontDef']]],
+  ['fontwidth_9',['FontWidth',['../struct_font_def.html#a622dc4e31410b33f1944f153864dc0d4',1,'FontDef']]]
 ];
