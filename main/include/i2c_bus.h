@@ -6,6 +6,10 @@
  * @date 2020-11-12
  * @copyright Copyright (c) 2020
  */
+
+#ifndef I2C_BUS_H__
+#define I2C_BUS_H__
+
 #include "driver/i2c.h"
 
 #define ACK_VAL 0x00
@@ -21,3 +25,5 @@ typedef struct
 } i2c_bus_t;
 
 esp_err_t i2c_master_init(int scl, int sda, int freq, int port_num);
+
+#endif /* I2C_BUS_H__ */

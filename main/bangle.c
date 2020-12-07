@@ -13,7 +13,7 @@
 #include "freertos/queue.h"
 #include "freertos/task.h"
 #include "sdkconfig.h"
-#include "devconfig.h"
+#include "esp_config.h"
 #include "i2c_bus.h"
 #include "ssd1306.h"
 
@@ -95,6 +95,8 @@ static void IRAM_ATTR button_isr_handler(void* arg)
 void app_main(void)
 {   
     ESP_LOGI(TAG_TASK, "%s", msgHello);
+    printf("min stack size: %d\n", configMINIMAL_STACK_SIZE);
+    printf("max priorities: %d\n", configMAX_PRIORITIES);
     
     //i2c init
     ESP_ERROR_CHECK(i2c_master_init(GPIO_I2C_SCL, GPIO_I2C_SDA, I2C_FREQ, I2C_PORT_NUM));
@@ -135,7 +137,8 @@ void app_main(void)
     
 
     //Main loop
-    char ch = '0';
+    //char ch = '0';
+    //char* pcWrBuf = (char*) calloc(10, 50);
     while (1) {
         /*ssd1306_SetCursor(60, 27);
         ssd1306_WriteChar(ch, Font_7x10, White);
@@ -145,7 +148,10 @@ void app_main(void)
             ch = '0';
         }
         ssd1306_UpdateScreen();*/
-        
+        //vTaskList(pcWrBuf);
+        //vTaskGetRunTimeStats(pcWrBuf);
+        //printf("%s", pcWrBuf);
+
         vTaskDelay(500 / portTICK_PERIOD_MS);
     }
 }
