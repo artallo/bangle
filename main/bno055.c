@@ -336,7 +336,7 @@ esp_err_t bno055_set_default_conf(bno055_config_t * p_bno_conf){
 
 
 
-esp_err_t bno055_open(bno055_config_t * p_bno_conf )
+ esp_err_t bno055_open(bno055_config_t * p_bno_conf )
 {
     if(BNO055_I2C_PORT >= I2C_NUM_MAX) return ESP_ERR_INVALID_ARG;
     
@@ -348,17 +348,17 @@ esp_err_t bno055_open(bno055_config_t * p_bno_conf )
     
     x_bno_dev[BNO055_I2C_PORT].bno_is_open = 0;
 
-    i2c_config_t conf;
+    /*i2c_config_t conf;
     conf.mode = I2C_MODE_MASTER;
     conf.sda_io_num = p_bno_conf->sda_io_num;        
     conf.sda_pullup_en = p_bno_conf->sda_pullup_en;  
     conf.scl_io_num = p_bno_conf->scl_io_num;        
     conf.scl_pullup_en = p_bno_conf->scl_pullup_en;  
-    conf.master.clk_speed = p_bno_conf->clk_speed;
+    conf.master.clk_speed = p_bno_conf->clk_speed;*/
     
     esp_err_t err;
     
-    err = i2c_param_config(BNO055_I2C_PORT, &conf);
+    /*err = i2c_param_config(BNO055_I2C_PORT, &conf);
     ESP_LOGD(TAG, "i2c_param_config() returned 0x%02X", err);
     if( err != ESP_OK ) return err;
         
@@ -366,7 +366,7 @@ esp_err_t bno055_open(bno055_config_t * p_bno_conf )
                               I2C_MASTER_RX_BUF_DISABLE,
                               I2C_MASTER_TX_BUF_DISABLE, 0);
     ESP_LOGD(TAG, "i2c_driver_install() returned 0x%02X", err);
-    if( err != ESP_OK ) return err;
+    if( err != ESP_OK ) return err;*/
     
     err = i2c_set_timeout(BNO055_I2C_PORT, p_bno_conf->timeout);
     ESP_LOGD(TAG, "i2c_set_timeout() returned 0x%02X", err);
@@ -432,7 +432,9 @@ errExit:
 esp_err_t bno055_close (void)
 {
     x_bno_dev[BNO055_I2C_PORT].bno_is_open = 0;
-    return i2c_driver_delete(BNO055_I2C_PORT);
+    //return i2c_driver_delete(BNO055_I2C_PORT);
+    return ESP_OK;
+
   
 }
 

@@ -13,6 +13,8 @@
 #include "freertos/queue.h"
 #include "freertos/task.h"
 #include "sdkconfig.h"
+
+#include "bno055.h"
 #include "esp_config.h"
 #include "i2c_bus.h"
 #include "ssd1306.h"
@@ -75,6 +77,7 @@ bool isChangingAccelData();
 bool isDataExists();
 bool AskingServer();
 void BLE_SendAuthInfo();
+bool bno055Init();
 
 /**
  * @brief Button pressed ISR
@@ -103,6 +106,9 @@ void app_main(void)
 
     //SSD1309 display init
     ssd1306_Init(GPIO_DISPLAY_RESET);
+
+    //bno0555 init;
+    bno055Init();
 
     //Create queue to store button pressing
     xQueueButtonHandle = xQueueCreate(1, sizeof(bool));
@@ -634,4 +640,43 @@ bool AskingServer() {
 void BLE_SendAuthInfo() {
     ESP_LOGI(TAG_TASK, "send auth info via BLE");
     vTaskDelay(600 / portTICK_PERIOD_MS);
+}
+
+/**
+ * @brief Init BNO055. Set initial params, switch operation mode to NDOF.
+ * 
+ * @return true 
+ * @return false 
+ */
+bool bno055Init() {
+    printf("Init BNO055..\n");
+    bno055_config_t bno_conf;
+    esp_err_t err;
+    err = bno055_set_default_conf(&bno_conf);
+    err = bno055_open(&bno_conf);
+    printf("bno055_open() returned 0x%02X \n", err);
+
+    if( err != ESP_OK ) {
+        printf("bno055_open error!\n");
+        err = bno055_close();
+        return false;
+    }
+
+    /*err = bno055_set_ext_crystal_use(1);
+    if( err != ESP_OK ) {
+        printf("Couldn't set external crystal use\n");
+        err = bno055_close();
+        return false;
+    }
+    vTaskDelay(1000 / portTICK_RATE_MS);*/
+
+    err = bno055_set_opmode(OPERATION_MODE_NDOF);
+    printf("bno055_set_opmode(OPERATION_MODE_NDOF) returned 0x%02x \n", err);
+    if( err != ESP_OK ) {
+        printf("Couldn't set NDOF mode\n");
+        err = bno055_close();
+        return false;
+    }
+    vTaskDelay(1000 / portTICK_RATE_MS);
+    return true;
 }
