@@ -19,6 +19,9 @@
 #include "i2c_bus.h"
 #include "ssd1306.h"
 
+#include "esp_bt.h"
+#include "esp_ibeacon_api.h"
+
 
 ///Type which describe all working modes
 typedef enum {  
