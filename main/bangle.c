@@ -659,7 +659,7 @@ void BLE_SendAuthInfo(uint16_t sensor_cnt) {
     extern esp_ble_ibeacon_vendor_t vendor_config;
     //vendor_config.proximity_uuid[0] = 0x50;
     //vendor_config.proximity_uuid[1] = 0x51;
-    vendor_config.major = sensor_cnt;
+    vendor_config.major = ((sensor_cnt&0xFF00)>>8) + ((sensor_cnt&0xFF)<<8);
     esp_ble_ibeacon_t ibeacon_adv_data;
     esp_err_t status = esp_ble_config_ibeacon_data (&vendor_config, &ibeacon_adv_data);
     if (status == ESP_OK){
@@ -677,7 +677,7 @@ void BLE_SendAuthInfo(uint16_t sensor_cnt) {
 
     esp_ble_gap_start_advertising(&ble_adv_params);
     
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    vTaskDelay(1700 / portTICK_PERIOD_MS);
 
     esp_ble_gap_stop_advertising();
 }
