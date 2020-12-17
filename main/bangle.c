@@ -12,6 +12,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "freertos/task.h"
+#include "nvs_flash.h"
 #include "sdkconfig.h"
 
 #include "bno055.h"
@@ -20,6 +21,11 @@
 #include "ssd1306.h"
 
 #include "esp_bt.h"
+//#include "esp_gap_ble_api.h"
+#include "esp_gattc_api.h"
+#include "esp_gatt_defs.h"
+#include "esp_bt_main.h"
+#include "esp_bt_defs.h"
 #include "esp_ibeacon_api.h"
 
 
@@ -79,7 +85,10 @@ bool isDataCheck_OK();
 bool isChangingAccelData();
 bool isDataExists();
 bool AskingServer();
-void BLE_SendAuthInfo();
+void BLE_SendAuthInfo(uint16_t);
+bool BLE_Init();
+bool BLE_Deint();
+
 bool bno055Init();
 
 /**
@@ -111,7 +120,10 @@ void app_main(void)
     ssd1306_Init(GPIO_DISPLAY_RESET);
 
     //bno0555 init;
-    bno055Init();
+    //bno055Init();
+
+    //BT init
+    BLE_Init();
 
     //Create queue to store button pressing
     xQueueButtonHandle = xQueueCreate(1, sizeof(bool));
@@ -265,6 +277,7 @@ void vTaskBackgroundMode(void *pvParameters) {
  * @param pvParameters 
  */
 void vTaskInitializationMode(void *pvParameters) {
+    uint16_t sensor_cnt = 0;
     while (1) {
         //first time wait indefinitley for notification to activate task
         if (MenuCurrentMode != INITIALIZATION_MODE) {
@@ -284,7 +297,7 @@ void vTaskInitializationMode(void *pvParameters) {
         } else {
             //send auth info via BLE / WiFi
             ESP_LOGI(TAG_TASK, "Enought sensors: NO");
-            BLE_SendAuthInfo();
+            BLE_SendAuthInfo(sensor_cnt++);
         }
 
     }
@@ -640,9 +653,77 @@ bool AskingServer() {
  * @brief Send config message (iBeacon?) with connection info to sensors
  * 
  */
-void BLE_SendAuthInfo() {
+void BLE_SendAuthInfo(uint16_t sensor_cnt) {
     ESP_LOGI(TAG_TASK, "send auth info via BLE");
-    vTaskDelay(600 / portTICK_PERIOD_MS);
+    
+    extern esp_ble_ibeacon_vendor_t vendor_config;
+    //vendor_config.proximity_uuid[0] = 0x50;
+    //vendor_config.proximity_uuid[1] = 0x51;
+    vendor_config.major = sensor_cnt;
+    esp_ble_ibeacon_t ibeacon_adv_data;
+    esp_err_t status = esp_ble_config_ibeacon_data (&vendor_config, &ibeacon_adv_data);
+    if (status == ESP_OK){
+        esp_ble_gap_config_adv_data_raw((uint8_t*)&ibeacon_adv_data, sizeof(ibeacon_adv_data));
+    }
+
+    esp_ble_adv_params_t ble_adv_params = {
+        .adv_int_min        = 0x20,
+        .adv_int_max        = 0x40,
+        .adv_type           = ADV_TYPE_NONCONN_IND,
+        .own_addr_type      = BLE_ADDR_TYPE_PUBLIC,
+        .channel_map        = ADV_CHNL_ALL,
+        .adv_filter_policy = ADV_FILTER_ALLOW_SCAN_ANY_CON_ANY,
+    };
+
+    esp_ble_gap_start_advertising(&ble_adv_params);
+    
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+    esp_ble_gap_stop_advertising();
+}
+
+/**
+ * @brief Init NVS_FLASH and BLE, allocate memory on HEAP
+ * 
+ * @return true 
+ * @return false 
+ */
+bool BLE_Init() {
+    esp_err_t err;
+    
+    err = nvs_flash_init();
+    err = esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT);
+    esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
+    esp_bt_controller_init(&bt_cfg);
+    esp_bt_controller_enable(ESP_BT_MODE_BLE);
+
+    esp_bluedroid_init();
+    esp_bluedroid_enable();
+
+    
+
+    return true;
+}
+
+/**
+ * @brief Deinit BLE, disable BT and free allocated memory on HEAP
+ * 
+ * @return true 
+ * @return false 
+ */
+bool BLE_Deinit() {
+    esp_bluedroid_disable();
+    esp_bluedroid_deinit();
+    printf("Deinit iBeacon free heap %d\n", xPortGetFreeHeapSize());
+
+    esp_bt_controller_disable();
+    esp_bt_controller_deinit();
+    printf("Deinit BT free heap %d\n", xPortGetFreeHeapSize());
+
+    esp_bt_mem_release(ESP_BT_MODE_BTDM);
+    printf("Mem release BT_BTDM free heap %d\n", xPortGetFreeHeapSize());
+
+    return true;
 }
 
 /**

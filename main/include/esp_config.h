@@ -21,4 +21,6 @@
 #define I2C_FREQ 100000 ///< I2C frequency
 #define I2C_PORT_NUM I2C_NUM_1 ///< I2C port number. There are 2 i2c port in esp32: I2C_NUM_0 and I2C_NUM_1
 
+#define WIFI_UUID {'W', 'I', 'F', 'I', '-', 'P', 'a', 's', 's', 'w', 'o', 'r', 'd', 0x64, 0x78, 0x25} ///< WiFi AP name/psw (SSID/PSW)
+
 #endif /* ESP_CONFIG_H__ */

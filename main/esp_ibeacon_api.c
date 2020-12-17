@@ -24,7 +24,7 @@
 
 //#include "esp_gap_ble_api.h"
 #include "esp_ibeacon_api.h"
-
+#include "esp_config.h"
 
 const uint8_t uuid_zeros[ESP_UUID_LEN_128] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
@@ -40,7 +40,7 @@ esp_ble_ibeacon_head_t ibeacon_common_head = {
 
 /* Vendor part of iBeacon data*/
 esp_ble_ibeacon_vendor_t vendor_config = {
-    .proximity_uuid = ESP_UUID,
+    .proximity_uuid = WIFI_UUID,
     .major = ENDIAN_CHANGE_U16(ESP_MAJOR), //Major=ESP_MAJOR
     .minor = ENDIAN_CHANGE_U16(ESP_MINOR), //Minor=ESP_MINOR
     .measured_power = 0xC5

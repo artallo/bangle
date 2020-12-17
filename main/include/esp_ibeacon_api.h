@@ -43,7 +43,7 @@
 /* Espressif WeChat official account can be found using WeChat "Yao Yi Yao Zhou Bian", 
  * if device advertises using ESP defined UUID. 
  * Please refer to http://zb.weixin.qq.com for further information. */
-#define ESP_UUID    {'A', 'S', 'U', 'S', 0xA4, 0xE2, 0x4F, 0xB1, 0xAF, 0xCF, 0xC6, 0xEB, 0x07, 0x64, 0x78, 0x25}
+//#define ESP_UUID    {'A', 'S', 'U', 'S', 0xA4, 0xE2, 0x4F, 0xB1, 0xAF, 0xCF, 0xC6, 0xEB, 0x07, 0x64, 0x78, 0x25}
 #define ESP_MAJOR   10167
 #define ESP_MINOR   61958
 
