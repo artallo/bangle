@@ -19,15 +19,7 @@
 #include "esp_config.h"
 #include "i2c_bus.h"
 #include "ssd1306.h"
-
-#include "esp_bt.h"
-//#include "esp_gap_ble_api.h"
-#include "esp_gattc_api.h"
-#include "esp_gatt_defs.h"
-#include "esp_bt_main.h"
-#include "esp_bt_defs.h"
-#include "esp_ibeacon_api.h"
-
+#include "esp_ble.h"
 
 ///Type which describe all working modes
 typedef enum {  
@@ -86,8 +78,8 @@ bool isChangingAccelData();
 bool isDataExists();
 bool AskingServer();
 void BLE_SendAuthInfo(uint16_t);
-bool BLE_Init();
-bool BLE_Deint();
+//bool BLE_Init();
+//bool BLE_Deint();
 
 bool bno055Init();
 
@@ -112,6 +104,9 @@ void app_main(void)
     ESP_LOGI(TAG_TASK, "%s", msgHello);
     printf("min stack size: %d\n", configMINIMAL_STACK_SIZE);
     printf("max priorities: %d\n", configMAX_PRIORITIES);
+
+    //NVS init
+    nvs_flash_init();
     
     //i2c init
     ESP_ERROR_CHECK(i2c_master_init(GPIO_I2C_SCL, GPIO_I2C_SDA, I2C_FREQ, I2C_PORT_NUM));
@@ -680,50 +675,6 @@ void BLE_SendAuthInfo(uint16_t sensor_cnt) {
     vTaskDelay(1700 / portTICK_PERIOD_MS);
 
     esp_ble_gap_stop_advertising();
-}
-
-/**
- * @brief Init NVS_FLASH and BLE, allocate memory on HEAP
- * 
- * @return true 
- * @return false 
- */
-bool BLE_Init() {
-    esp_err_t err;
-    
-    err = nvs_flash_init();
-    err = esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT);
-    esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
-    esp_bt_controller_init(&bt_cfg);
-    esp_bt_controller_enable(ESP_BT_MODE_BLE);
-
-    esp_bluedroid_init();
-    esp_bluedroid_enable();
-
-    
-
-    return true;
-}
-
-/**
- * @brief Deinit BLE, disable BT and free allocated memory on HEAP
- * 
- * @return true 
- * @return false 
- */
-bool BLE_Deinit() {
-    esp_bluedroid_disable();
-    esp_bluedroid_deinit();
-    printf("Deinit iBeacon free heap %d\n", xPortGetFreeHeapSize());
-
-    esp_bt_controller_disable();
-    esp_bt_controller_deinit();
-    printf("Deinit BT free heap %d\n", xPortGetFreeHeapSize());
-
-    esp_bt_mem_release(ESP_BT_MODE_BTDM);
-    printf("Mem release BT_BTDM free heap %d\n", xPortGetFreeHeapSize());
-
-    return true;
 }
 
 /**
