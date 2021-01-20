@@ -83,9 +83,13 @@ $(function() {
 <code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
 <code>#include &quot;freertos/queue.h&quot;</code><br />
 <code>#include &quot;freertos/task.h&quot;</code><br />
+<code>#include &quot;nvs_flash.h&quot;</code><br />
 <code>#include &quot;sdkconfig.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="devconfig_8h_source.html">devconfig.h</a>&quot;</code><br />
+<code>#include &quot;bno055.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="esp__config_8h_source.html">esp_config.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="i2c__bus_8h_source.html">i2c_bus.h</a>&quot;</code><br />
+<code>#include &quot;ssd1306.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="esp__ble_8h_source.html">esp_ble.h</a>&quot;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
@@ -147,6 +151,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a4a1a74a0790ad6d7be2e80d25dc34b43"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a4a1a74a0790ad6d7be2e80d25dc34b43">vTaskDeveloperMode</a> (void *pvParameters)</td></tr>
 <tr class="memdesc:a4a1a74a0790ad6d7be2e80d25dc34b43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Task for Developer mode.  <a href="bangle_8c.html#a4a1a74a0790ad6d7be2e80d25dc34b43">More...</a><br /></td></tr>
 <tr class="separator:a4a1a74a0790ad6d7be2e80d25dc34b43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac47a4f5c3b196898e64d1f14a2502797"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#ac47a4f5c3b196898e64d1f14a2502797">vTaskDisplay</a> (void *pvParameters)</td></tr>
+<tr class="memdesc:ac47a4f5c3b196898e64d1f14a2502797"><td class="mdescLeft">&#160;</td><td class="mdescRight">Task for displaying info on ssd1309 display.  <a href="bangle_8c.html#ac47a4f5c3b196898e64d1f14a2502797">More...</a><br /></td></tr>
+<tr class="separator:ac47a4f5c3b196898e64d1f14a2502797"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affb6edb32d49afb4ca7526f2c350467c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#affb6edb32d49afb4ca7526f2c350467c">isExternalPower</a> (bool flag)</td></tr>
 <tr class="memdesc:affb6edb32d49afb4ca7526f2c350467c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check and return true if ext. power present.  <a href="bangle_8c.html#affb6edb32d49afb4ca7526f2c350467c">More...</a><br /></td></tr>
 <tr class="separator:affb6edb32d49afb4ca7526f2c350467c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,10 +178,13 @@ Functions</h2></td></tr>
 <tr class="memitem:a04abf6c86159a917c029fe413e5eeb21"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a04abf6c86159a917c029fe413e5eeb21">AskingServer</a> ()</td></tr>
 <tr class="memdesc:a04abf6c86159a917c029fe413e5eeb21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ask server that it's ready receive data.  <a href="bangle_8c.html#a04abf6c86159a917c029fe413e5eeb21">More...</a><br /></td></tr>
 <tr class="separator:a04abf6c86159a917c029fe413e5eeb21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5cdfc5088d72dc798229a20e007443c"><td class="memItemLeft" align="right" valign="top"><a id="ac5cdfc5088d72dc798229a20e007443c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#ac5cdfc5088d72dc798229a20e007443c">BLE_SendAuthInfo</a> ()</td></tr>
-<tr class="memdesc:ac5cdfc5088d72dc798229a20e007443c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send config message (iBeacon?) with connection info to sensors. <br /></td></tr>
-<tr class="separator:ac5cdfc5088d72dc798229a20e007443c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c15160eb420cecbcfb9b4e650bc36ac"><td class="memItemLeft" align="right" valign="top"><a id="a3c15160eb420cecbcfb9b4e650bc36ac"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a3c15160eb420cecbcfb9b4e650bc36ac">BLE_SendAuthInfo</a> (uint16_t sensor_cnt)</td></tr>
+<tr class="memdesc:a3c15160eb420cecbcfb9b4e650bc36ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send config message (iBeacon?) with connection info to sensors. <br /></td></tr>
+<tr class="separator:a3c15160eb420cecbcfb9b4e650bc36ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec91b5e168f33b4df5cd94a0ee011d9e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#aec91b5e168f33b4df5cd94a0ee011d9e">bno055Init</a> ()</td></tr>
+<tr class="memdesc:aec91b5e168f33b4df5cd94a0ee011d9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Init BNO055. Set initial params, switch operation mode to NDOF.  <a href="bangle_8c.html#aec91b5e168f33b4df5cd94a0ee011d9e">More...</a><br /></td></tr>
+<tr class="separator:aec91b5e168f33b4df5cd94a0ee011d9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5a5c8f9c1782a70279b28716ff783ae"><td class="memItemLeft" align="right" valign="top">static void IRAM_ATTR&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#ad5a5c8f9c1782a70279b28716ff783ae">button_isr_handler</a> (void *arg)</td></tr>
 <tr class="memdesc:ad5a5c8f9c1782a70279b28716ff783ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Button pressed ISR.  <a href="bangle_8c.html#ad5a5c8f9c1782a70279b28716ff783ae">More...</a><br /></td></tr>
 <tr class="separator:ad5a5c8f9c1782a70279b28716ff783ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -184,6 +194,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>app_main</b> (void)</
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
+<tr class="memitem:aeccdfce8a5988024cb86bc80960decc6"><td class="memItemLeft" align="right" valign="top"><a id="aeccdfce8a5988024cb86bc80960decc6"></a>
+const char *&#160;</td><td class="memItemRight" valign="bottom"><b>msgHello</b> = &quot;Hello&quot;</td></tr>
+<tr class="separator:aeccdfce8a5988024cb86bc80960decc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb93cf359bc1fbbc00515e0d0ba10f9d"><td class="memItemLeft" align="right" valign="top"><a id="aeb93cf359bc1fbbc00515e0d0ba10f9d"></a>
 static const char *&#160;</td><td class="memItemRight" valign="bottom"><b>TAG_TASK</b> = &quot;vTasks&quot;</td></tr>
 <tr class="separator:aeb93cf359bc1fbbc00515e0d0ba10f9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -235,6 +248,10 @@ static TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class=
 static TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#aeca269c55d837ebc9356e227d6906c9d">xTaskSleepModeHandle</a> = NULL</td></tr>
 <tr class="memdesc:aeca269c55d837ebc9356e227d6906c9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">vTaskSleepMode task handler <br /></td></tr>
 <tr class="separator:aeca269c55d837ebc9356e227d6906c9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d85aae42ec817d09b47474d96db19c2"><td class="memItemLeft" align="right" valign="top"><a id="a3d85aae42ec817d09b47474d96db19c2"></a>
+static TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a3d85aae42ec817d09b47474d96db19c2">xTaskDisplayHandle</a> = NULL</td></tr>
+<tr class="memdesc:a3d85aae42ec817d09b47474d96db19c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">vTaskDisplay task handler <br /></td></tr>
+<tr class="separator:a3d85aae42ec817d09b47474d96db19c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64595abd6a1f9926c668db38d0ba0367"><td class="memItemLeft" align="right" valign="top"><a id="a64595abd6a1f9926c668db38d0ba0367"></a>
 static QueueHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bangle_8c.html#a64595abd6a1f9926c668db38d0ba0367">xQueueButtonHandle</a> = NULL</td></tr>
 <tr class="memdesc:a64595abd6a1f9926c668db38d0ba0367"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queue for communication between ButtonPressed task and other mode tasks. <br /></td></tr>
@@ -262,6 +279,28 @@ static QueueHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class
 </div><div class="memdoc">
 
 <p>Ask server that it's ready receive data. </p>
+<dl class="section return"><dt>Returns</dt><dd>true </dd>
+<dd>
+false </dd></dl>
+
+</div>
+</div>
+<a id="aec91b5e168f33b4df5cd94a0ee011d9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec91b5e168f33b4df5cd94a0ee011d9e">&#9670;&nbsp;</a></span>bno055Init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool bno055Init </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Init BNO055. Set initial params, switch operation mode to NDOF. </p>
 <dl class="section return"><dt>Returns</dt><dd>true </dd>
 <dd>
 false </dd></dl>
@@ -579,6 +618,32 @@ false </dd></dl>
 </div><div class="memdoc">
 
 <p>Task for Developer mode. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvParameters</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ac47a4f5c3b196898e64d1f14a2502797"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac47a4f5c3b196898e64d1f14a2502797">&#9670;&nbsp;</a></span>vTaskDisplay()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vTaskDisplay </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>pvParameters</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Task for displaying info on ssd1309 display. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pvParameters</td><td></td></tr>

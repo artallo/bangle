@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['i2c_5ffreq_106',['I2C_FREQ',['../devconfig_8h.html#a8b7500a141450a9df212017430c0df9e',1,'devconfig.h']]],
-  ['i2c_5fport_5fnum_107',['I2C_PORT_NUM',['../devconfig_8h.html#a09996f09e16ea78e133dea56a72955af',1,'devconfig.h']]]
+  ['gpio_5fbutton_139',['GPIO_BUTTON',['../esp__config_8h.html#adb2845496c385fbffeccda1b626e3f66',1,'esp_config.h']]],
+  ['gpio_5fdisplay_5freset_140',['GPIO_DISPLAY_RESET',['../esp__config_8h.html#a8af93658f3d82c2b0247754197ace24b',1,'esp_config.h']]],
+  ['gpio_5fi2c_5fscl_141',['GPIO_I2C_SCL',['../esp__config_8h.html#a3bfc1c95ba292ec467aef54be6188f4b',1,'esp_config.h']]],
+  ['gpio_5fi2c_5fsda_142',['GPIO_I2C_SDA',['../esp__config_8h.html#a9bf3defac3da07aa64e639b91c9cb2d2',1,'esp_config.h']]]
 ];

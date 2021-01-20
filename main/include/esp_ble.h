@@ -10,7 +10,7 @@
 #define _ESP_BLE_H__
 
 #include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
+//#include "freertos/task.h"
 
 #include "esp_bt.h"
 //#include "esp_gap_ble_api.h"

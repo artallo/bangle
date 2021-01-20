@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['askingserver_0',['AskingServer',['../bangle_8c.html#a04abf6c86159a917c029fe413e5eeb21',1,'bangle.c']]]
+  ['_5f_5fattribute_5f_5f_0',['__attribute__',['../struct____attribute____.html',1,'']]]
 ];

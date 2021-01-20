@@ -1,14 +1,10 @@
 var searchData=
 [
-  ['xqueuebuttonhandle_43',['xQueueButtonHandle',['../bangle_8c.html#a64595abd6a1f9926c668db38d0ba0367',1,'bangle.c']]],
-  ['xtaskbackgroundmodehandle_44',['xTaskBackgroundModeHandle',['../bangle_8c.html#ae79a3d69070b6065306c9529465bc27f',1,'bangle.c']]],
-  ['xtaskbuttonpressedhandle_45',['xTaskButtonPressedHandle',['../bangle_8c.html#a840c3a03236d10242daae38687d446be',1,'bangle.c']]],
-  ['xtaskdatacollectionmodehandle_46',['xTaskDatacollectionModeHandle',['../bangle_8c.html#aceba3fc16bf1d5e36224418528401309',1,'bangle.c']]],
-  ['xtaskdatatransfermodehandle_47',['xTaskDatatransferModeHandle',['../bangle_8c.html#ab79c570d4e639b27a35e686e02586c8a',1,'bangle.c']]],
-  ['xtaskdevelopermodehandle_48',['xTaskDeveloperModeHandle',['../bangle_8c.html#a514c422ff5dd15d478f2f367ee3647ff',1,'bangle.c']]],
-  ['xtaskinitializationmodehandle_49',['xTaskInitializationModeHandle',['../bangle_8c.html#afda3169ecbfa13d36a1c6ed47151abdb',1,'bangle.c']]],
-  ['xtaskmodeswitcherhandle_50',['xTaskModeSwitcherHandle',['../bangle_8c.html#a0dafce8d656b6d2e562f7714fef8d497',1,'bangle.c']]],
-  ['xtaskpoweronmodehandle_51',['xTaskPowerOnModeHandle',['../bangle_8c.html#ac07e4c61ef33dc26d4c99aa4607c4a54',1,'bangle.c']]],
-  ['xtasksensorcheckmodehandle_52',['xTaskSensorcheckModeHandle',['../bangle_8c.html#a234c96b67aa3e06f55a48de49ce7e7e5',1,'bangle.c']]],
-  ['xtasksleepmodehandle_53',['xTaskSleepModeHandle',['../bangle_8c.html#aeca269c55d837ebc9356e227d6906c9d',1,'bangle.c']]]
+  ['ssd1306_5fconf_2eh_44',['ssd1306_conf.h',['../ssd1306__conf_8h.html',1,'']]],
+  ['ssd1306_5fi2c_5faddr_45',['SSD1306_I2C_ADDR',['../ssd1306__conf_8h.html#a40b6cafd3649547b7cf9629607d04a28',1,'ssd1306_conf.h']]],
+  ['ssd1306_5fi2c_5fport_46',['SSD1306_I2C_PORT',['../ssd1306__conf_8h.html#adb7cfd65deeaec67becf32be56d27171',1,'ssd1306_conf.h']]],
+  ['ssd1306_5finclude_5ffont_5f6x8_47',['SSD1306_INCLUDE_FONT_6x8',['../ssd1306__conf_8h.html#ad9983ce2680dc6fba7084916ea032097',1,'ssd1306_conf.h']]],
+  ['ssd1306_5finclude_5ffont_5f7x10_48',['SSD1306_INCLUDE_FONT_7x10',['../ssd1306__conf_8h.html#af7806558e877a5c7ce10dd6f8ad1c3c2',1,'ssd1306_conf.h']]],
+  ['ssd1306_5ft_49',['SSD1306_t',['../struct_s_s_d1306__t.html',1,'']]],
+  ['ssd1306_5fvertex_50',['SSD1306_VERTEX',['../struct_s_s_d1306___v_e_r_t_e_x.html',1,'']]]
 ];
