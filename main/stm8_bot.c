@@ -7,10 +7,7 @@
  * @copyright Copyright (c) 2021
  */
 
-#include <stdio.h>
 #include <string.h>
-#include <sys/unistd.h>
-
 #include "stm8_bot.h"
 
 int i2c_read_register(uint8_t reg) {
@@ -37,7 +34,7 @@ int i2c_read_register(uint8_t reg) {
     return reg_val;
 }
 
-int i2c_read_data (uint8_t reg, uint8_t *buf, uint8_t n_bytes) {
+esp_err_t i2c_read_data (uint8_t reg, uint8_t *buf, uint8_t n_bytes) {
 
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     
@@ -61,15 +58,25 @@ int i2c_read_data (uint8_t reg, uint8_t *buf, uint8_t n_bytes) {
     // Now execute the command
     esp_err_t err = i2c_master_cmd_begin(I2C_NUM_1, cmd, 1000 / portTICK_RATE_MS);
     i2c_cmd_link_delete(cmd);
-    printf("sec: %d, min: %d, hr: %d month: %d, year: %d\n", BCD_DEC(buf[0]), BCD_DEC(buf[1]), BCD_DEC(buf[2]), buf[4], buf[5]);
-
-    return 0;
+    //printf("sec: %d, min: %d, hr: %d month: %d, year: %d\n", BCD_DEC(buf[0]), BCD_DEC(buf[1]), BCD_DEC(buf[2]), buf[4], buf[5]);
+    return err;
 }
 
 
-stm_time_t stm8_bot_getTime() {
-    stm_time_t t;
-    for (int r = 0x06; r <= 0x0B; r++) {
+esp_err_t stm8_bot_getTime(stm8_time_t *t) {
+    //variant with conversion
+    /*i2c_read_data(PSU_I2C_REG_RTC_TR1, (uint8_t*) t, 6);
+    for (int i = 0; i < 6; i++) {
+        ((uint8_t*)t)[i] = BCD_TO_DEC(((uint8_t*) t)[i]);
+    }*/
 
+    //variant with additional buffer
+    uint8_t buf[6];
+    i2c_read_data(PSU_I2C_REG_RTC_TR1, buf, 6);
+    for (int i = 0; i < 6; i++) {
+        buf[i] = BCD_TO_DEC(buf[i]);
     }
+    memcpy(t, buf, 6);
+
+    return ESP_OK;
 }
