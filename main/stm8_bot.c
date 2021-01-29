@@ -184,13 +184,13 @@ esp_err_t stm8_bot_setTime(stm8_time_t *t) {
     buf[5] = ((buf[5] / 10) << 4) + (buf[5] % 10); //year
     
     //set INIT bit in PSU_I2C_REG_RTC_ISR1 register to goto time init mode
-    i2c_write_register(PSU_I2C_REG_RTC_ISR1, 0b10110001);
+    stm8_bot_i2c_write_register(PSU_I2C_REG_RTC_ISR1, 0b10110001);
 
     //write date/time to STM RTC registers
     stm8_bot_i2c_write_data(PSU_I2C_REG_RTC_TR1, buf, 6);
 
     //clear INIT bit in PSU_I2C_REG_RTC_ISR1 register to goto time freerun mode
-     i2c_write_register(PSU_I2C_REG_RTC_ISR1, 0); //0b01010001   
+    stm8_bot_i2c_write_register(PSU_I2C_REG_RTC_ISR1, 0); //0b01010001   
     
     return ESP_OK;
 }
