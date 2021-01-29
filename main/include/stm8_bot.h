@@ -19,7 +19,7 @@
 #define PSU_I2C_ADDR 0x58
 
 #define PSU_I2C_REG_PWR_CR 0x01
-#define PSU_I2C_REG_PWR_CR_HV_EN 0x03
+#define PSU_I2C_REG_PWR_CR_HV_EN 0x08
 
 //RTC registers
 #define PSU_I2C_REG_RTC_TR1 0x06
@@ -47,8 +47,12 @@ int stm8_bot_i2c_read_register(uint8_t reg);
 esp_err_t stm8_bot_i2c_write_register(uint8_t reg, uint8_t val);
 esp_err_t stm8_bot_i2c_read_data (uint8_t reg, uint8_t *buf, uint8_t n_bytes);
 esp_err_t stm8_bot_i2c_write_data (uint8_t reg, uint8_t *buf, uint8_t n_bytes);
+
 esp_err_t stm8_bot_getTime(stm8_time_t *t);
 esp_err_t stm8_bot_setTime(stm8_time_t *t);
+
+//PSU staff (управление контроллером питания)
+esp_err_t stm8_bot_psu_en_display(bool s);
 
 //utility
 

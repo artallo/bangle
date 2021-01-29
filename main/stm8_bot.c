@@ -194,3 +194,15 @@ esp_err_t stm8_bot_setTime(stm8_time_t *t) {
     
     return ESP_OK;
 }
+
+//PSU controller I2C addr: 0x58, reg: 0x01, HV_EN (bit 3): set to 1 (12V ON)
+esp_err_t stm8_bot_psu_en_display(bool s) {
+    uint8_t val = stm8_bot_i2c_read_register(PSU_I2C_REG_PWR_CR);
+    if (s) {    //true - set HV_EN bit to enable power
+        val |= PSU_I2C_REG_PWR_CR_HV_EN;
+    } else {    //false - clear HV_EN bit
+        val &= ~PSU_I2C_REG_PWR_CR_HV_EN;
+    }
+    stm8_bot_i2c_write_register(PSU_I2C_REG_PWR_CR, val);
+    return ESP_OK;
+}

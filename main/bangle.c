@@ -18,6 +18,7 @@
 #include "bno055.h"
 #include "esp_config.h"
 #include "i2c_bus.h"
+#include "stm8_bot.h"
 #include "ssd1306.h"
 #include "esp_ble.h"
 
@@ -110,6 +111,9 @@ void app_main(void)
     
     //i2c init
     ESP_ERROR_CHECK(i2c_master_init(GPIO_I2C_SCL, GPIO_I2C_SDA, I2C_FREQ, I2C_PORT_NUM));
+
+    //PSU enable display power
+    stm8_bot_psu_en_display(true);
 
     //SSD1309 display init
     ssd1306_Init(GPIO_DISPLAY_RESET);
