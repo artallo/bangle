@@ -98,7 +98,7 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>PSU_I2C_REG_PWR_CR</b>&#160;&#160;&#160;0x01</td></tr>
 <tr class="separator:a3d2a198528eaa352ca70f90726387abd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6df3af2f0faccc9c7a164ff4caa7e7bb"><td class="memItemLeft" align="right" valign="top"><a id="a6df3af2f0faccc9c7a164ff4caa7e7bb"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>PSU_I2C_REG_PWR_CR_HV_EN</b>&#160;&#160;&#160;0x03</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>PSU_I2C_REG_PWR_CR_HV_EN</b>&#160;&#160;&#160;0x08</td></tr>
 <tr class="separator:a6df3af2f0faccc9c7a164ff4caa7e7bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b7848e088a1c5745f237184d31dbe16"><td class="memItemLeft" align="right" valign="top"><a id="a8b7848e088a1c5745f237184d31dbe16"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>PSU_I2C_REG_RTC_TR1</b>&#160;&#160;&#160;0x06</td></tr>
@@ -142,6 +142,9 @@ Functions</h2></td></tr>
 <tr class="memitem:afae7aee08885b242b376497fe4ddfc0a"><td class="memItemLeft" align="right" valign="top">esp_err_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stm8__bot_8h.html#afae7aee08885b242b376497fe4ddfc0a">stm8_bot_setTime</a> (<a class="el" href="structstm8__time__t.html">stm8_time_t</a> *t)</td></tr>
 <tr class="memdesc:afae7aee08885b242b376497fe4ddfc0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set date/time on bottom STM8L.  <a href="stm8__bot_8h.html#afae7aee08885b242b376497fe4ddfc0a">More...</a><br /></td></tr>
 <tr class="separator:afae7aee08885b242b376497fe4ddfc0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5e4cd919c6314e77d5852aedda9c333"><td class="memItemLeft" align="right" valign="top">esp_err_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stm8__bot_8h.html#ae5e4cd919c6314e77d5852aedda9c333">stm8_bot_psu_en_display</a> (bool s)</td></tr>
+<tr class="memdesc:ae5e4cd919c6314e77d5852aedda9c333"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable/disable 12V to power up display.  <a href="stm8__bot_8h.html#ae5e4cd919c6314e77d5852aedda9c333">More...</a><br /></td></tr>
+<tr class="separator:ae5e4cd919c6314e77d5852aedda9c333"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Bottom STM8L stuff (RTC, POWER, ..) </p>
@@ -325,6 +328,33 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">reg</td><td></td></tr>
     <tr><td class="paramname">val</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>esp_err_t </dd></dl>
+
+</div>
+</div>
+<a id="ae5e4cd919c6314e77d5852aedda9c333"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5e4cd919c6314e77d5852aedda9c333">&#9670;&nbsp;</a></span>stm8_bot_psu_en_display()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">esp_err_t stm8_bot_psu_en_display </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enable/disable 12V to power up display. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>true - enable, false - disable </td></tr>
   </table>
   </dd>
 </dl>

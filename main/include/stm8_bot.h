@@ -1,7 +1,7 @@
 /**
  * @file stm8_bot.h
  * @author your name (you@domain.com)
- * @brief Bottom STM8L stuff (RTC, POWER, ..)
+ * @brief Bottom STM8L stuff (RTC, POWER)
  * @version 0.1
  * @date 2021-01-21
  * @copyright Copyright (c) 2021

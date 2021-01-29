@@ -82,7 +82,7 @@ $(function() {
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#define PSU_I2C_ADDR 0x58</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_PWR_CR 0x01</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_PWR_CR_HV_EN 0x03</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_PWR_CR_HV_EN 0x08</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">//RTC registers</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_RTC_TR1 0x06</span></div>
@@ -106,21 +106,26 @@ $(function() {
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#a188af5e9ab25d5d0af94881f1c1001d2">stm8_bot_i2c_write_register</a>(uint8_t reg, uint8_t val);</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#a316d7cb6777c7f9d1f5f5bf35e1014e1">stm8_bot_i2c_read_data</a> (uint8_t reg, uint8_t *buf, uint8_t n_bytes);</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#a0c135fd5903b44500c954e4912a8b6ac">stm8_bot_i2c_write_data</a> (uint8_t reg, uint8_t *buf, uint8_t n_bytes);</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#ae5cbe647a6b52f4e78fb36f38e3d819c">stm8_bot_getTime</a>(<a class="code" href="structstm8__time__t.html">stm8_time_t</a> *t);</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#afae7aee08885b242b376497fe4ddfc0a">stm8_bot_setTime</a>(<a class="code" href="structstm8__time__t.html">stm8_time_t</a> *t);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">//utility</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* __STM_BOT_H__ */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#ae5cbe647a6b52f4e78fb36f38e3d819c">stm8_bot_getTime</a>(<a class="code" href="structstm8__time__t.html">stm8_time_t</a> *t);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#afae7aee08885b242b376497fe4ddfc0a">stm8_bot_setTime</a>(<a class="code" href="structstm8__time__t.html">stm8_time_t</a> *t);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">//PSU staff (управление контроллером питания)</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#ae5e4cd919c6314e77d5852aedda9c333">stm8_bot_psu_en_display</a>(<span class="keywordtype">bool</span> s);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">//utility</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* __STM_BOT_H__ */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="astructstm8__time__t_html"><div class="ttname"><a href="structstm8__time__t.html">stm8_time_t</a></div><div class="ttdoc">Struct date/time for STM8.</div><div class="ttdef"><b>Definition:</b> stm8_bot.h:37</div></div>
-<div class="ttc" id="astm8__bot_8h_html_afae7aee08885b242b376497fe4ddfc0a"><div class="ttname"><a href="stm8__bot_8h.html#afae7aee08885b242b376497fe4ddfc0a">stm8_bot_setTime</a></div><div class="ttdeci">esp_err_t stm8_bot_setTime(stm8_time_t *t)</div><div class="ttdoc">Set date/time on bottom STM8L.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:173</div></div>
+<div class="ttc" id="astm8__bot_8h_html_afae7aee08885b242b376497fe4ddfc0a"><div class="ttname"><a href="stm8__bot_8h.html#afae7aee08885b242b376497fe4ddfc0a">stm8_bot_setTime</a></div><div class="ttdeci">esp_err_t stm8_bot_setTime(stm8_time_t *t)</div><div class="ttdoc">Set date/time on bottom STM8L.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:174</div></div>
 <div class="ttc" id="astm8__bot_8h_html_a316d7cb6777c7f9d1f5f5bf35e1014e1"><div class="ttname"><a href="stm8__bot_8h.html#a316d7cb6777c7f9d1f5f5bf35e1014e1">stm8_bot_i2c_read_data</a></div><div class="ttdeci">esp_err_t stm8_bot_i2c_read_data(uint8_t reg, uint8_t *buf, uint8_t n_bytes)</div><div class="ttdoc">Read n registers to buffer from bottom STM8.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:76</div></div>
 <div class="ttc" id="ai2c__bus_8h_html"><div class="ttname"><a href="i2c__bus_8h.html">i2c_bus.h</a></div><div class="ttdoc">Инициализация и работа с шиной I2C.</div></div>
 <div class="ttc" id="astm8__bot_8h_html_a0c135fd5903b44500c954e4912a8b6ac"><div class="ttname"><a href="stm8__bot_8h.html#a0c135fd5903b44500c954e4912a8b6ac">stm8_bot_i2c_write_data</a></div><div class="ttdeci">esp_err_t stm8_bot_i2c_write_data(uint8_t reg, uint8_t *buf, uint8_t n_bytes)</div><div class="ttdoc">Write from buffer to n registers of bottom STM8.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:110</div></div>
 <div class="ttc" id="astm8__bot_8h_html_ae9c224ecd55c8fd8430ca28bad3e0630"><div class="ttname"><a href="stm8__bot_8h.html#ae9c224ecd55c8fd8430ca28bad3e0630">stm8_bot_i2c_read_register</a></div><div class="ttdeci">int stm8_bot_i2c_read_register(uint8_t reg)</div><div class="ttdoc">Read one register from bottom STM8.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:19</div></div>
 <div class="ttc" id="astm8__bot_8h_html_ae5cbe647a6b52f4e78fb36f38e3d819c"><div class="ttname"><a href="stm8__bot_8h.html#ae5cbe647a6b52f4e78fb36f38e3d819c">stm8_bot_getTime</a></div><div class="ttdeci">esp_err_t stm8_bot_getTime(stm8_time_t *t)</div><div class="ttdoc">Get date/time from bottom STM8L.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:143</div></div>
 <div class="ttc" id="astm8__bot_8h_html_a188af5e9ab25d5d0af94881f1c1001d2"><div class="ttname"><a href="stm8__bot_8h.html#a188af5e9ab25d5d0af94881f1c1001d2">stm8_bot_i2c_write_register</a></div><div class="ttdeci">esp_err_t stm8_bot_i2c_write_register(uint8_t reg, uint8_t val)</div><div class="ttdoc">Write one register to bottom STM8.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:49</div></div>
+<div class="ttc" id="astm8__bot_8h_html_ae5e4cd919c6314e77d5852aedda9c333"><div class="ttname"><a href="stm8__bot_8h.html#ae5e4cd919c6314e77d5852aedda9c333">stm8_bot_psu_en_display</a></div><div class="ttdeci">esp_err_t stm8_bot_psu_en_display(bool s)</div><div class="ttdoc">Enable/disable 12V to power up display.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:204</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20
