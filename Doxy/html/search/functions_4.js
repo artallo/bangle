@@ -1,14 +1,9 @@
 var searchData=
 [
-  ['vtaskbackgroundmode_109',['vTaskBackgroundMode',['../bangle_8c.html#a34a460c5c0b689408b68bac85468e34f',1,'bangle.c']]],
-  ['vtaskbuttonpressed_110',['vTaskButtonPressed',['../bangle_8c.html#ae4cd16db3f3c99944c8c45ad1d571314',1,'bangle.c']]],
-  ['vtaskdatacollectionmode_111',['vTaskDatacollectionMode',['../bangle_8c.html#ac0bb00e95f5ca8192d5de25e2fe64514',1,'bangle.c']]],
-  ['vtaskdatatransfermode_112',['vTaskDatatransferMode',['../bangle_8c.html#a7324aa4ec1fe692ea2eeae954b7057f0',1,'bangle.c']]],
-  ['vtaskdevelopermode_113',['vTaskDeveloperMode',['../bangle_8c.html#a4a1a74a0790ad6d7be2e80d25dc34b43',1,'bangle.c']]],
-  ['vtaskdisplay_114',['vTaskDisplay',['../bangle_8c.html#ac47a4f5c3b196898e64d1f14a2502797',1,'bangle.c']]],
-  ['vtaskinitializationmode_115',['vTaskInitializationMode',['../bangle_8c.html#af10abe668a3749eac6f5718d9c36f0ab',1,'bangle.c']]],
-  ['vtaskmodeswitcher_116',['vTaskModeSwitcher',['../bangle_8c.html#a4d2d40f6029064dba1ee85d731c4cddb',1,'bangle.c']]],
-  ['vtaskpoweronmode_117',['vTaskPowerOnMode',['../bangle_8c.html#af8562384c6bff082d01f9713a8186cb9',1,'bangle.c']]],
-  ['vtasksensorcheckmode_118',['vTaskSensorcheckMode',['../bangle_8c.html#a8494f8ed2e03b7ddf5bb2633f362e1cc',1,'bangle.c']]],
-  ['vtasksleepmode_119',['vTaskSleepMode',['../bangle_8c.html#a940a88352b2d1bcf87480f9da0a3bb52',1,'bangle.c']]]
+  ['stm8_5fbot_5fgettime_119',['stm8_bot_getTime',['../stm8__bot_8h.html#ae5cbe647a6b52f4e78fb36f38e3d819c',1,'stm8_bot_getTime(stm8_time_t *t):&#160;stm8_bot.c'],['../stm8__bot_8c.html#ae5cbe647a6b52f4e78fb36f38e3d819c',1,'stm8_bot_getTime(stm8_time_t *t):&#160;stm8_bot.c']]],
+  ['stm8_5fbot_5fi2c_5fread_5fdata_120',['stm8_bot_i2c_read_data',['../stm8__bot_8h.html#a316d7cb6777c7f9d1f5f5bf35e1014e1',1,'stm8_bot_i2c_read_data(uint8_t reg, uint8_t *buf, uint8_t n_bytes):&#160;stm8_bot.c'],['../stm8__bot_8c.html#a316d7cb6777c7f9d1f5f5bf35e1014e1',1,'stm8_bot_i2c_read_data(uint8_t reg, uint8_t *buf, uint8_t n_bytes):&#160;stm8_bot.c']]],
+  ['stm8_5fbot_5fi2c_5fread_5fregister_121',['stm8_bot_i2c_read_register',['../stm8__bot_8h.html#ae9c224ecd55c8fd8430ca28bad3e0630',1,'stm8_bot_i2c_read_register(uint8_t reg):&#160;stm8_bot.c'],['../stm8__bot_8c.html#ae9c224ecd55c8fd8430ca28bad3e0630',1,'stm8_bot_i2c_read_register(uint8_t reg):&#160;stm8_bot.c']]],
+  ['stm8_5fbot_5fi2c_5fwrite_5fdata_122',['stm8_bot_i2c_write_data',['../stm8__bot_8h.html#a0c135fd5903b44500c954e4912a8b6ac',1,'stm8_bot_i2c_write_data(uint8_t reg, uint8_t *buf, uint8_t n_bytes):&#160;stm8_bot.c'],['../stm8__bot_8c.html#a0c135fd5903b44500c954e4912a8b6ac',1,'stm8_bot_i2c_write_data(uint8_t reg, uint8_t *buf, uint8_t n_bytes):&#160;stm8_bot.c']]],
+  ['stm8_5fbot_5fi2c_5fwrite_5fregister_123',['stm8_bot_i2c_write_register',['../stm8__bot_8h.html#a188af5e9ab25d5d0af94881f1c1001d2',1,'stm8_bot_i2c_write_register(uint8_t reg, uint8_t val):&#160;stm8_bot.c'],['../stm8__bot_8c.html#a188af5e9ab25d5d0af94881f1c1001d2',1,'stm8_bot_i2c_write_register(uint8_t reg, uint8_t val):&#160;stm8_bot.c']]],
+  ['stm8_5fbot_5fsettime_124',['stm8_bot_setTime',['../stm8__bot_8h.html#afae7aee08885b242b376497fe4ddfc0a',1,'stm8_bot_setTime(stm8_time_t *t):&#160;stm8_bot.c'],['../stm8__bot_8c.html#afae7aee08885b242b376497fe4ddfc0a',1,'stm8_bot_setTime(stm8_time_t *t):&#160;stm8_bot.c']]]
 ];

@@ -16,6 +16,7 @@
     "stdio.h": "c",
     "task.h": "c",
     "esp_log.h": "c",
-    "freertos.h": "c"
+    "freertos.h": "c",
+    "stm8_bot.h": "c"
   }
 }

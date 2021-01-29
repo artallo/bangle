@@ -30,7 +30,10 @@
 #define PSU_I2C_REG_RTC_DR3 0x0B
 #define PSU_I2C_REG_RTC_ISR1 0x0E
 
-//time structure
+/**
+ * @brief Struct date/time for STM8
+ * 
+ */
 typedef struct {
     uint8_t sec;
     uint8_t min;
@@ -40,6 +43,13 @@ typedef struct {
     uint8_t year;
 } stm8_time_t;
 
+int stm8_bot_i2c_read_register(uint8_t reg);
+esp_err_t stm8_bot_i2c_write_register(uint8_t reg, uint8_t val);
+esp_err_t stm8_bot_i2c_read_data (uint8_t reg, uint8_t *buf, uint8_t n_bytes);
+esp_err_t stm8_bot_i2c_write_data (uint8_t reg, uint8_t *buf, uint8_t n_bytes);
 esp_err_t stm8_bot_getTime(stm8_time_t *t);
+esp_err_t stm8_bot_setTime(stm8_time_t *t);
+
+//utility
 
 #endif /* __STM_BOT_H__ */

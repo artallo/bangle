@@ -10,7 +10,13 @@
 #include <string.h>
 #include "stm8_bot.h"
 
-int i2c_read_register(uint8_t reg) {
+/**
+ * @brief Read one register from bottom STM8
+ * 
+ * @param reg 
+ * @return int 
+ */
+int stm8_bot_i2c_read_register(uint8_t reg) {
     uint8_t reg_val;
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     i2c_master_start(cmd);
@@ -30,12 +36,44 @@ int i2c_read_register(uint8_t reg) {
         printf("PSU I2C register %d read error!\n", reg);
         //ESP_ERROR_CHECK(ret);
     }
-    //printf("register: %d\n", rtc_tr1_val);
     return reg_val;
 }
 
-esp_err_t i2c_read_data (uint8_t reg, uint8_t *buf, uint8_t n_bytes) {
+/**
+ * @brief Write one register to bottom STM8
+ * 
+ * @param reg 
+ * @param val 
+ * @return esp_err_t 
+ */
+esp_err_t stm8_bot_i2c_write_register(uint8_t reg, uint8_t val) {
+    i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+    cmd = i2c_cmd_link_create();
+    i2c_master_start(cmd);
+    i2c_master_write_byte(cmd, (PSU_I2C_ADDR << 1) | I2C_MASTER_WRITE, 1);
+    i2c_master_write_byte(cmd, reg, 1);
+    i2c_master_write_byte(cmd, val, 1);
+    i2c_master_stop(cmd);    
+    esp_err_t err = i2c_master_cmd_begin(I2C_NUM_1, cmd, 1000 / portTICK_RATE_MS);
+    i2c_cmd_link_delete(cmd);
+    if (err == ESP_OK) {
+        printf("PSU I2C register %d write value %d OK!\n", reg, val);
+    } else {
+        printf("PSU I2C register %d write error!\n", reg);
+    }
 
+    return err;
+}
+
+/**
+ * @brief Read n registers to buffer from bottom STM8
+ * 
+ * @param reg 
+ * @param buf 
+ * @param n_bytes 
+ * @return esp_err_t 
+ */
+esp_err_t stm8_bot_i2c_read_data (uint8_t reg, uint8_t *buf, uint8_t n_bytes) {
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     
     // making the command - begin 
@@ -58,11 +96,50 @@ esp_err_t i2c_read_data (uint8_t reg, uint8_t *buf, uint8_t n_bytes) {
     // Now execute the command
     esp_err_t err = i2c_master_cmd_begin(I2C_NUM_1, cmd, 1000 / portTICK_RATE_MS);
     i2c_cmd_link_delete(cmd);
-    //printf("sec: %d, min: %d, hr: %d month: %d, year: %d\n", BCD_DEC(buf[0]), BCD_DEC(buf[1]), BCD_DEC(buf[2]), buf[4], buf[5]);
     return err;
 }
 
+/**
+ * @brief Write from buffer to n registers of bottom STM8
+ * 
+ * @param reg 
+ * @param buf 
+ * @param n_bytes 
+ * @return esp_err_t 
+ */
+esp_err_t stm8_bot_i2c_write_data (uint8_t reg, uint8_t *buf, uint8_t n_bytes) {
+    i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+    
+    // making the command - begin 
+    i2c_master_start(cmd);  // start condition
+    // device address with write bit
+    i2c_master_write_byte(cmd, (PSU_I2C_ADDR << 1) | I2C_MASTER_WRITE, 1); 
+    // send the register address
+    i2c_master_write_byte(cmd, reg, 1);   
 
+    i2c_master_start(cmd);  // start condition again
+    // device address with read bit
+    i2c_master_write_byte(cmd, (PSU_I2C_ADDR << 1) | I2C_MASTER_READ, 1);
+    // read n_bytes-1, issue ACK
+    i2c_master_read(cmd, buf, n_bytes - 1, ACK_VAL);
+    // read the last byte, issue NACK
+    i2c_master_read_byte(cmd, buf + n_bytes - 1, NACK_VAL); 
+    i2c_master_stop(cmd);  // stop condition
+    // making the command - end 
+
+    // Now execute the command
+    esp_err_t err = i2c_master_cmd_begin(I2C_NUM_1, cmd, 1000 / portTICK_RATE_MS);
+    i2c_cmd_link_delete(cmd);
+    return err;
+}
+
+/**
+ * @brief Get date/time from bottom STM8L
+ * 
+ * Get date/time and put data in stm8_time_t *t sructure
+ * @param t 
+ * @return esp_err_t 
+ */
 esp_err_t stm8_bot_getTime(stm8_time_t *t) {
     //variant with conversion
     /*i2c_read_data(PSU_I2C_REG_RTC_TR1, (uint8_t*) t, 6);
@@ -72,11 +149,43 @@ esp_err_t stm8_bot_getTime(stm8_time_t *t) {
 
     //variant with additional buffer
     uint8_t buf[6];
-    i2c_read_data(PSU_I2C_REG_RTC_TR1, buf, 6);
-    for (int i = 0; i < 6; i++) {
-        buf[i] = BCD_TO_DEC(buf[i]);
-    }
+    stm8_bot_i2c_read_data(PSU_I2C_REG_RTC_TR1, buf, 6);
+
+    //convert raw BCD date/time data from STM to DEC representation
+    buf[0] = ((buf[0] & 0b01110000) >> 4) * 10 + (buf[0] & 0b00001111); //sec
+    buf[1] = ((buf[1] & 0b01110000) >> 4) * 10 + (buf[1] & 0b00001111); //min
+    buf[2] = ((buf[2] & 0b01110000) >> 4) * 10 + (buf[2] & 0b00001111); //hr
+    buf[3] = ((buf[3] & 0b00110000) >> 4) * 10 + (buf[3] & 0b00001111); //day
+    buf[4] = ((buf[4] & 0b00010000) >> 4) * 10 + (buf[4] & 0b00001111); //month
+    buf[5] = ((buf[5] & 0b11110000) >> 4) * 10 + (buf[5] & 0b00001111); //year
+    
     memcpy(t, buf, 6);
 
+    return ESP_OK;
+}
+
+/**
+ * @brief Set date/time on bottom STM8L
+ * 
+ * @param t 
+ * @return esp_err_t 
+ */
+esp_err_t stm8_bot_setTime(stm8_time_t *t) {
+    uint8_t buf[6];
+    memcpy(buf, t, 6);
+    
+    //convert date/time from DEC to BCD format for STM
+    buf[0] = ((buf[0] / 10) << 4) + (buf[0] % 10); //sec
+    buf[1] = ((buf[1] / 10) << 4) + (buf[1] % 10); //min
+    buf[2] = ((buf[2] / 10) << 4) + (buf[2] % 10); //hr
+    //buf[0] = ((buf[0] & 0b01110000) >> 4) * 10 + (buf[0] & 0b00001111); //sec
+    //buf[1] = ((buf[1] & 0b01110000) >> 4) * 10 + (buf[1] & 0b00001111); //min
+    buf[2] = ((buf[2] & 0b01110000) >> 4) * 10 + (buf[2] & 0b00001111); //hr
+    buf[3] = ((buf[3] & 0b00110000) >> 4) * 10 + (buf[3] & 0b00001111); //day
+    buf[4] = ((buf[4] & 0b00010000) >> 4) * 10 + (buf[4] & 0b00001111); //month
+    buf[5] = ((buf[5] & 0b11110000) >> 4) * 10 + (buf[5] & 0b00001111); //year
+
+    stm8_bot_i2c_write_data(PSU_I2C_REG_RTC_TR1, buf, 6);
+    
     return ESP_OK;
 }
