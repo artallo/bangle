@@ -159,6 +159,7 @@ esp_err_t stm8_bot_getTime(stm8_time_t *t) {
     buf[4] = ((buf[4] & 0b00010000) >> 4) * 10 + (buf[4] & 0b00001111); //month
     buf[5] = ((buf[5] & 0b11110000) >> 4) * 10 + (buf[5] & 0b00001111); //year
     
+    //copy buf to date/time structure
     memcpy(t, buf, 6);
 
     return ESP_OK;
@@ -178,14 +179,18 @@ esp_err_t stm8_bot_setTime(stm8_time_t *t) {
     buf[0] = ((buf[0] / 10) << 4) + (buf[0] % 10); //sec
     buf[1] = ((buf[1] / 10) << 4) + (buf[1] % 10); //min
     buf[2] = ((buf[2] / 10) << 4) + (buf[2] % 10); //hr
-    //buf[0] = ((buf[0] & 0b01110000) >> 4) * 10 + (buf[0] & 0b00001111); //sec
-    //buf[1] = ((buf[1] & 0b01110000) >> 4) * 10 + (buf[1] & 0b00001111); //min
-    buf[2] = ((buf[2] & 0b01110000) >> 4) * 10 + (buf[2] & 0b00001111); //hr
-    buf[3] = ((buf[3] & 0b00110000) >> 4) * 10 + (buf[3] & 0b00001111); //day
-    buf[4] = ((buf[4] & 0b00010000) >> 4) * 10 + (buf[4] & 0b00001111); //month
-    buf[5] = ((buf[5] & 0b11110000) >> 4) * 10 + (buf[5] & 0b00001111); //year
+    buf[3] = ((buf[3] / 10) << 4) + (buf[3] % 10); //day
+    buf[4] = ((buf[4] / 10) << 4) + (buf[4] % 10); //month
+    buf[5] = ((buf[5] / 10) << 4) + (buf[5] % 10); //year
+    
+    //set INIT bit in PSU_I2C_REG_RTC_ISR1 register to goto time init mode
+    i2c_write_register(PSU_I2C_REG_RTC_ISR1, 0b10110001);
 
+    //write date/time to STM RTC registers
     stm8_bot_i2c_write_data(PSU_I2C_REG_RTC_TR1, buf, 6);
+
+    //clear INIT bit in PSU_I2C_REG_RTC_ISR1 register to goto time freerun mode
+     i2c_write_register(PSU_I2C_REG_RTC_ISR1, 0); //0b01010001   
     
     return ESP_OK;
 }
