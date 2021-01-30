@@ -210,11 +210,12 @@ esp_err_t stm8_bot_psu_en_display(bool s) {
 /**
  * @brief Check and return true if ext. power present
  * 
- * @return true
- * @return false
+ * @return true - ext. power present
+ * @return false - no ext. power
  */
 bool stm8_bot_pcu_isExternalPower(bool flag) {
-    
+    uint8_t pwr_sr = stm8_bot_i2c_read_register(PSU_I2C_REG_PWR_SR);
+    return (pwr_sr & PSU_I2C_REG_PWR_SR_EXT_PWR);
     return flag;
 }
 
