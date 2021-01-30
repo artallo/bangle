@@ -116,15 +116,10 @@ esp_err_t stm8_bot_i2c_write_data (uint8_t reg, uint8_t *buf, uint8_t n_bytes) {
     i2c_master_write_byte(cmd, (PSU_I2C_ADDR << 1) | I2C_MASTER_WRITE, 1); 
     // send the register address
     i2c_master_write_byte(cmd, reg, 1);   
-
-    i2c_master_start(cmd);  // start condition again
-    // device address with read bit
-    i2c_master_write_byte(cmd, (PSU_I2C_ADDR << 1) | I2C_MASTER_READ, 1);
-    // read n_bytes-1, issue ACK
-    i2c_master_read(cmd, buf, n_bytes - 1, ACK_VAL);
-    // read the last byte, issue NACK
-    i2c_master_read_byte(cmd, buf + n_bytes - 1, NACK_VAL); 
-    i2c_master_stop(cmd);  // stop condition
+    // write n_bytes, ACK
+    i2c_master_write(cmd, buf, n_bytes, 1);
+    // stop condition
+    i2c_master_stop(cmd);
     // making the command - end 
 
     // Now execute the command
