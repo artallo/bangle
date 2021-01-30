@@ -18,8 +18,13 @@
 //PSU - Power Supply Unit
 #define PSU_I2C_ADDR 0x58
 
+//PWR_CR register
 #define PSU_I2C_REG_PWR_CR 0x01
-#define PSU_I2C_REG_PWR_CR_HV_EN 0x08
+#define PSU_I2C_REG_PWR_CR_HV_EN 0b00001000 //HV_EN bit mask
+
+//PWR_SR regisrter
+#define PSU_I2C_REG_PWR_SR 0x02
+#define PSU_I2C_REG_PWR_SR_EXT_PWR 0b00000100 //EXT_PWR bit mask
 
 //RTC registers
 #define PSU_I2C_REG_RTC_TR1 0x06
@@ -43,17 +48,19 @@ typedef struct {
     uint8_t year;
 } stm8_time_t;
 
+//i2c stuff
 int stm8_bot_i2c_read_register(uint8_t reg);
 esp_err_t stm8_bot_i2c_write_register(uint8_t reg, uint8_t val);
 esp_err_t stm8_bot_i2c_read_data (uint8_t reg, uint8_t *buf, uint8_t n_bytes);
 esp_err_t stm8_bot_i2c_write_data (uint8_t reg, uint8_t *buf, uint8_t n_bytes);
 
+//date/time stuff
 esp_err_t stm8_bot_getTime(stm8_time_t *t);
 esp_err_t stm8_bot_setTime(stm8_time_t *t);
 
 //PSU staff (управление контроллером питания)
 esp_err_t stm8_bot_psu_en_display(bool s);
-
-//utility
+bool stm8_bot_pcu_isExternalPower(bool flag);
+bool stm8_bot_psu_isEnoughBatteryPower();
 
 #endif /* __STM_BOT_H__ */

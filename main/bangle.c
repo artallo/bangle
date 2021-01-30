@@ -35,7 +35,7 @@ typedef enum {
     DEVELOPER_MODE
 } menu_mode_t; 
 
-const char* msgHello = "Hello";
+//const char* msgHello = "Hello";
 
 //LOGs
 static const char* TAG_TASK = "vTasks";
@@ -70,8 +70,6 @@ void vTaskSleepMode(void *pvParameters);
 void vTaskDeveloperMode(void *pvParameters);
 void vTaskDisplay(void *pvParameters);
 
-bool isExternalPower(bool);
-bool isEnoughBatteryPower();
 bool isEnoughSensors();
 bool ChekingSensorsConnection();
 bool isDataCheck_OK();
@@ -102,7 +100,7 @@ static void IRAM_ATTR button_isr_handler(void* arg)
 
 void app_main(void)
 {   
-    ESP_LOGI(TAG_TASK, "%s", msgHello);
+    ESP_LOGI(TAG_TASK, "%s", "app_main() started");
     printf("min stack size: %d\n", configMINIMAL_STACK_SIZE);
     printf("max priorities: %d\n", configMAX_PRIORITIES);
 
@@ -155,7 +153,7 @@ void app_main(void)
     xTaskCreate(vTaskDatatransferMode, "DatatransferMode", 2048, NULL, 1, &xTaskDatatransferModeHandle);
     xTaskCreate(vTaskSleepMode, "SleepMode", 2048, NULL, 1, &xTaskSleepModeHandle);
     xTaskCreate(vTaskDeveloperMode, "DeveloperMode", 2048, NULL, 1, &xTaskDeveloperModeHandle);
-    //Than second create ModeSwitcher task, or else we notify from ModeSwithcher task to nowhere
+    //Then at last create ModeSwitcher task, or else we would notify from ModeSwithcher task to nowhere
     xTaskCreate(vTaskModeSwitcher, "ModeSwitcher", 2048, NULL, 1, &xTaskModeSwitcherHandle);
     
 
@@ -175,17 +173,18 @@ void app_main(void)
         //vTaskGetRunTimeStats(pcWrBuf);
         //printf("%s", pcWrBuf);
         
-        stm8_time_t t;
+        //output date/time to console
+        /*stm8_time_t t;
         memset(&t, 0, 6);
         stm8_bot_getTime(&t);
-        printf("Time: %d:%d:%d Date: %d.%d.%d\n", t.hr, t.min, t.sec, t.day, t.month, t.year);
+        printf("Time: %d:%d:%d Date: %d.%d.%d\n", t.hr, t.min, t.sec, t.day, t.month, t.year);*/
         
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
 
 
-// !!!может эта задача ненужна, а сразу запускать PowerOn mode без начального ожидания notification и блокировки !!!
+// !!!может эта задача не нужна, а сразу запускать PowerOn mode без начального ожидания notification и блокировки !!!
 /**
  * @brief Task that switch working modes
  * 
@@ -217,14 +216,14 @@ void vTaskPowerOnMode(void *pvParameters) {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         ESP_LOGI(TAG_TASK, "PowerOnMode activate");
         //check ext. power and batterys and notify corespondent task
-        if (isExternalPower(false)) {
+        if (stm8_bot_pcu_isExternalPower(false)) {
             ESP_LOGI(TAG_TASK, "Ext. power: YES");
-            /*if (isEnoughBatteryPower()) {
+            /*if (stm8_bot_psu_isEnoughBatteryPower()) {
                 xTaskNotifyGive(xTaskDataTransferHandle);
             }*/
         } else {
             ESP_LOGI(TAG_TASK, "Ext. power: NO");
-            if (isEnoughBatteryPower()) {
+            if (stm8_bot_psu_isEnoughBatteryPower()) {
                 ESP_LOGI(TAG_TASK, "Enough batt. power: YES");
                 ESP_LOGI(TAG_TASK, "Notifing vTaskBackgroundMode");
                 xTaskNotifyGive(xTaskBackgroundModeHandle);
@@ -413,7 +412,7 @@ void vTaskDatatransferMode(void *pvParameters) {
             MenuCurrentMode = DATA_TRANSFER_MODE;
             ESP_LOGI(TAG_TASK, "DatatransferMode activate");
         }
-        if (isExternalPower(true) == true) {    //if ext. power present
+        if (stm8_bot_pcu_isExternalPower(true) == true) {    //if ext. power present
             if (isDataExists()) {   //check if data exists
                 if (AskingServer() ==  true) {  //check if server ready
                     ESP_LOGI(TAG_TASK, "Ext. power present, data exists and server ready");
@@ -520,9 +519,16 @@ void vTaskDisplay(void *pvParameters) {
             ssd1306_SetCursor(14, 10);
             ssd1306_WriteString("Initialization", Font_7x10, White);
             ssd1306_UpdateScreen();
-
+        } else if (MenuCurrentMode == SENSOR_CHECK_MODE) {
+            ssd1306_SetCursor(15, 10);
+            ssd1306_WriteString("Sensor check", Font_7x10, White);
+            ssd1306_UpdateScreen();
+        } else if (MenuCurrentMode == DATA_COLLECTION_MODE) {
+            ssd1306_SetCursor(13, 10);
+            ssd1306_WriteString("Data collection", Font_7x10, White);
+            ssd1306_UpdateScreen();
         }
-        // !!!переделать с ожидания delay на ожидание уведомления taskNotify от задач режимов, чтобы не крутить в холостую обновляя статичную информацию
+        // TODO: возможно ли переделать с ожидания delay на ожидание уведомления taskNotify от задач режимов, чтобы не крутить в холостую обновляя статичную информацию
         vTaskDelay(100 / portTICK_PERIOD_MS);
     }
     
@@ -562,26 +568,6 @@ void vTaskButtonPressed(void *pvParameters) {
             xQueueSendToBack(xQueueButtonHandle, (void*) &ButtonShortPress, 10 / portTICK_PERIOD_MS);
         }
     }
-}
-
-/**
- * @brief Check and return true if ext. power present
- * 
- * @return true
- * @return false
- */
-bool isExternalPower(bool flag) {
-    return flag;
-}
-
-/**
- * @brief Check and return true if batt. charged
- * 
- * @return true
- * @return false
- */
-bool isEnoughBatteryPower() {
-    return true;
 }
 
 /**

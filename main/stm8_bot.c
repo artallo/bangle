@@ -206,3 +206,24 @@ esp_err_t stm8_bot_psu_en_display(bool s) {
     stm8_bot_i2c_write_register(PSU_I2C_REG_PWR_CR, val);
     return ESP_OK;
 }
+
+/**
+ * @brief Check and return true if ext. power present
+ * 
+ * @return true
+ * @return false
+ */
+bool stm8_bot_pcu_isExternalPower(bool flag) {
+    
+    return flag;
+}
+
+/**
+ * @brief Check and return true if batt. charged
+ * 
+ * @return true
+ * @return false
+ */
+bool stm8_bot_psu_isEnoughBatteryPower() {
+    return true;
+}
