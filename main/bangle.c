@@ -112,6 +112,9 @@ void app_main(void)
     //i2c init
     ESP_ERROR_CHECK(i2c_master_init(GPIO_I2C_SCL, GPIO_I2C_SDA, I2C_FREQ, I2C_PORT_NUM));
 
+    //set date/time
+    stm8_bot_setTime(&(stm8_time_t){0, 0 , 12, 30, 1, 21});
+
     //PSU enable display power
     stm8_bot_psu_en_display(true);
 
@@ -171,8 +174,12 @@ void app_main(void)
         //vTaskList(pcWrBuf);
         //vTaskGetRunTimeStats(pcWrBuf);
         //printf("%s", pcWrBuf);
-
-        vTaskDelay(500 / portTICK_PERIOD_MS);
+        
+        stm8_time_t t;
+        stm8_bot_getTime(&t);
+        printf("Time: %d:%d:%d Date: %d.%d.%d\n", t.hr, t.min, t.sec, t.day, t.month, t.year);
+        
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
 
