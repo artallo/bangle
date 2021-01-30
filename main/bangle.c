@@ -176,6 +176,7 @@ void app_main(void)
         //printf("%s", pcWrBuf);
         
         stm8_time_t t;
+        memset(&t, 0, 6);
         stm8_bot_getTime(&t);
         printf("Time: %d:%d:%d Date: %d.%d.%d\n", t.hr, t.min, t.sec, t.day, t.month, t.year);
         
