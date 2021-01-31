@@ -1,20 +1,12 @@
 var searchData=
 [
-  ['ssd1306_5fconf_2eh_44',['ssd1306_conf.h',['../ssd1306__conf_8h.html',1,'']]],
-  ['ssd1306_5fi2c_5faddr_45',['SSD1306_I2C_ADDR',['../ssd1306__conf_8h.html#a40b6cafd3649547b7cf9629607d04a28',1,'ssd1306_conf.h']]],
-  ['ssd1306_5fi2c_5fport_46',['SSD1306_I2C_PORT',['../ssd1306__conf_8h.html#adb7cfd65deeaec67becf32be56d27171',1,'ssd1306_conf.h']]],
-  ['ssd1306_5finclude_5ffont_5f6x8_47',['SSD1306_INCLUDE_FONT_6x8',['../ssd1306__conf_8h.html#ad9983ce2680dc6fba7084916ea032097',1,'ssd1306_conf.h']]],
-  ['ssd1306_5finclude_5ffont_5f7x10_48',['SSD1306_INCLUDE_FONT_7x10',['../ssd1306__conf_8h.html#af7806558e877a5c7ce10dd6f8ad1c3c2',1,'ssd1306_conf.h']]],
-  ['ssd1306_5ft_49',['SSD1306_t',['../struct_s_s_d1306__t.html',1,'']]],
-  ['ssd1306_5fvertex_50',['SSD1306_VERTEX',['../struct_s_s_d1306___v_e_r_t_e_x.html',1,'']]],
-  ['stm8_5fbot_2ec_51',['stm8_bot.c',['../stm8__bot_8c.html',1,'']]],
-  ['stm8_5fbot_2eh_52',['stm8_bot.h',['../stm8__bot_8h.html',1,'']]],
-  ['stm8_5fbot_5fgettime_53',['stm8_bot_getTime',['../stm8__bot_8h.html#ae5cbe647a6b52f4e78fb36f38e3d819c',1,'stm8_bot_getTime(stm8_time_t *t):&#160;stm8_bot.c'],['../stm8__bot_8c.html#ae5cbe647a6b52f4e78fb36f38e3d819c',1,'stm8_bot_getTime(stm8_time_t *t):&#160;stm8_bot.c']]],
-  ['stm8_5fbot_5fi2c_5fread_5fdata_54',['stm8_bot_i2c_read_data',['../stm8__bot_8h.html#a316d7cb6777c7f9d1f5f5bf35e1014e1',1,'stm8_bot_i2c_read_data(uint8_t reg, uint8_t *buf, uint8_t n_bytes):&#160;stm8_bot.c'],['../stm8__bot_8c.html#a316d7cb6777c7f9d1f5f5bf35e1014e1',1,'stm8_bot_i2c_read_data(uint8_t reg, uint8_t *buf, uint8_t n_bytes):&#160;stm8_bot.c']]],
-  ['stm8_5fbot_5fi2c_5fread_5fregister_55',['stm8_bot_i2c_read_register',['../stm8__bot_8h.html#ae9c224ecd55c8fd8430ca28bad3e0630',1,'stm8_bot_i2c_read_register(uint8_t reg):&#160;stm8_bot.c'],['../stm8__bot_8c.html#ae9c224ecd55c8fd8430ca28bad3e0630',1,'stm8_bot_i2c_read_register(uint8_t reg):&#160;stm8_bot.c']]],
-  ['stm8_5fbot_5fi2c_5fwrite_5fdata_56',['stm8_bot_i2c_write_data',['../stm8__bot_8h.html#a0c135fd5903b44500c954e4912a8b6ac',1,'stm8_bot_i2c_write_data(uint8_t reg, uint8_t *buf, uint8_t n_bytes):&#160;stm8_bot.c'],['../stm8__bot_8c.html#a0c135fd5903b44500c954e4912a8b6ac',1,'stm8_bot_i2c_write_data(uint8_t reg, uint8_t *buf, uint8_t n_bytes):&#160;stm8_bot.c']]],
-  ['stm8_5fbot_5fi2c_5fwrite_5fregister_57',['stm8_bot_i2c_write_register',['../stm8__bot_8h.html#a188af5e9ab25d5d0af94881f1c1001d2',1,'stm8_bot_i2c_write_register(uint8_t reg, uint8_t val):&#160;stm8_bot.c'],['../stm8__bot_8c.html#a188af5e9ab25d5d0af94881f1c1001d2',1,'stm8_bot_i2c_write_register(uint8_t reg, uint8_t val):&#160;stm8_bot.c']]],
-  ['stm8_5fbot_5fpsu_5fen_5fdisplay_58',['stm8_bot_psu_en_display',['../stm8__bot_8h.html#ae5e4cd919c6314e77d5852aedda9c333',1,'stm8_bot_psu_en_display(bool s):&#160;stm8_bot.c'],['../stm8__bot_8c.html#ae5e4cd919c6314e77d5852aedda9c333',1,'stm8_bot_psu_en_display(bool s):&#160;stm8_bot.c']]],
-  ['stm8_5fbot_5fsettime_59',['stm8_bot_setTime',['../stm8__bot_8h.html#afae7aee08885b242b376497fe4ddfc0a',1,'stm8_bot_setTime(stm8_time_t *t):&#160;stm8_bot.c'],['../stm8__bot_8c.html#afae7aee08885b242b376497fe4ddfc0a',1,'stm8_bot_setTime(stm8_time_t *t):&#160;stm8_bot.c']]],
-  ['stm8_5ftime_5ft_60',['stm8_time_t',['../structstm8__time__t.html',1,'']]]
+  ['psu_5fi2c_5fdischarge_5fthreshold_42',['PSU_I2C_DISCHARGE_THRESHOLD',['../stm8__bot_8h.html#a3ae0f7a2ddf203a3f279e102961476d1',1,'stm8_bot.h']]],
+  ['psu_5fi2c_5freg_5fmain1_5fbat_5fu_43',['PSU_I2C_REG_MAIN1_BAT_U',['../stm8__bot_8h.html#acb45390d5aee4282f099ebc2f7d811ba',1,'stm8_bot.h']]],
+  ['psu_5fi2c_5freg_5fmain2_5fbat_5fu_44',['PSU_I2C_REG_MAIN2_BAT_U',['../stm8__bot_8h.html#a8bf1d694cc22e1738e3df0204d528bef',1,'stm8_bot.h']]],
+  ['psu_5fi2c_5freg_5frtc_5fdr1_45',['PSU_I2C_REG_RTC_DR1',['../stm8__bot_8h.html#a7735aef41ca46e7eca9917b461b38b32',1,'stm8_bot.h']]],
+  ['psu_5fi2c_5freg_5frtc_5fdr2_46',['PSU_I2C_REG_RTC_DR2',['../stm8__bot_8h.html#ae08548a6927eafac783f9b8b4ea69622',1,'stm8_bot.h']]],
+  ['psu_5fi2c_5freg_5frtc_5fdr3_47',['PSU_I2C_REG_RTC_DR3',['../stm8__bot_8h.html#a99f8dc79384ba8db68630ca65f828988',1,'stm8_bot.h']]],
+  ['psu_5fi2c_5freg_5frtc_5ftr1_48',['PSU_I2C_REG_RTC_TR1',['../stm8__bot_8h.html#a8b7848e088a1c5745f237184d31dbe16',1,'stm8_bot.h']]],
+  ['psu_5fi2c_5freg_5frtc_5ftr2_49',['PSU_I2C_REG_RTC_TR2',['../stm8__bot_8h.html#ae45751972b16f96714242fa5de82c411',1,'stm8_bot.h']]],
+  ['psu_5fi2c_5freg_5frtc_5ftr3_50',['PSU_I2C_REG_RTC_TR3',['../stm8__bot_8h.html#a1eb4eec67f96f60473f678433ff857ec',1,'stm8_bot.h']]]
 ];

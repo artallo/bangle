@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['wifi_5fuuid_72',['WIFI_UUID',['../esp__config_8h.html#af5006b585e337184c90464204ac3f9e7',1,'esp_config.h']]]
+  ['tasks_5fmodes_2ec_70',['tasks_modes.c',['../tasks__modes_8c.html',1,'']]],
+  ['tasks_5fmodes_2eh_71',['tasks_modes.h',['../tasks__modes_8h.html',1,'']]]
 ];

@@ -25,13 +25,19 @@
 #define PSU_I2C_REG_PWR_SR 0x02
 #define PSU_I2C_REG_PWR_SR_EXT_PWR 0b00000100 //EXT_PWR bit mask
 
+//Battery registers
+#define PSU_I2C_REG_MAIN1_BAT_U 0x03 ///< Voltage of first main battery
+#define PSU_I2C_REG_MAIN2_BAT_U 0x04 ///< Voltage of second main battery
+#define PSU_I2C_REG_AUX_BAT_U 0x05
+#define PSU_I2C_DISCHARGE_THRESHOLD 3600 ///< Battery discharge threshold in mV
+
 //RTC registers
-#define PSU_I2C_REG_RTC_TR1 0x06
-#define PSU_I2C_REG_RTC_TR2 0x07
-#define PSU_I2C_REG_RTC_TR3 0x08
-#define PSU_I2C_REG_RTC_DR1 0x09
-#define PSU_I2C_REG_RTC_DR2 0x0A
-#define PSU_I2C_REG_RTC_DR3 0x0B
+#define PSU_I2C_REG_RTC_TR1 0x06 ///< seconds
+#define PSU_I2C_REG_RTC_TR2 0x07 ///< minutes
+#define PSU_I2C_REG_RTC_TR3 0x08 ///< hours
+#define PSU_I2C_REG_RTC_DR1 0x09 ///< days
+#define PSU_I2C_REG_RTC_DR2 0x0A ///< months
+#define PSU_I2C_REG_RTC_DR3 0x0B ///< years
 #define PSU_I2C_REG_RTC_ISR1 0x0E
 
 /**

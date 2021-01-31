@@ -70,62 +70,77 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <a href="stm8__bot_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#ifndef __STM_BOT_H__</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#define __STM_BOT_H__</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="i2c__bus_8h.html">i2c_bus.h</a>&quot;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//BCD to DEC</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#define BCD_TO_DEC(x) (((((x) &amp; 0xF0) &gt;&gt; 4) * 10) + ((x) &amp; 0x0F))</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//PSU - Power Supply Unit</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#define PSU_I2C_ADDR 0x58</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#ifndef __STM_BOT_H__</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#define __STM_BOT_H__</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="i2c__bus_8h.html">i2c_bus.h</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//BCD to DEC</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#define BCD_TO_DEC(x) (((((x) &amp; 0xF0) &gt;&gt; 4) * 10) + ((x) &amp; 0x0F))</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//PSU - Power Supply Unit</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#define PSU_I2C_ADDR 0x58</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//PWR_CR register</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_PWR_CR 0x01</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_PWR_CR_HV_EN 0x08</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_PWR_CR_HV_EN 0b00001000 //HV_EN bit mask</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">//RTC registers</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_RTC_TR1 0x06</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_RTC_TR2 0x07</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_RTC_TR3 0x08</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_RTC_DR1 0x09</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_RTC_DR2 0x0A</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_RTC_DR3 0x0B</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_RTC_ISR1 0x0E</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="structstm8__time__t.html">   37</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    uint8_t sec;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    uint8_t min;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    uint8_t hr;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    uint8_t day;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    uint8_t month;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    uint8_t year;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;} <a class="code" href="structstm8__time__t.html">stm8_time_t</a>;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keywordtype">int</span> <a class="code" href="stm8__bot_8h.html#ae9c224ecd55c8fd8430ca28bad3e0630">stm8_bot_i2c_read_register</a>(uint8_t reg);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#a188af5e9ab25d5d0af94881f1c1001d2">stm8_bot_i2c_write_register</a>(uint8_t reg, uint8_t val);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#a316d7cb6777c7f9d1f5f5bf35e1014e1">stm8_bot_i2c_read_data</a> (uint8_t reg, uint8_t *buf, uint8_t n_bytes);</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#a0c135fd5903b44500c954e4912a8b6ac">stm8_bot_i2c_write_data</a> (uint8_t reg, uint8_t *buf, uint8_t n_bytes);</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#ae5cbe647a6b52f4e78fb36f38e3d819c">stm8_bot_getTime</a>(<a class="code" href="structstm8__time__t.html">stm8_time_t</a> *t);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#afae7aee08885b242b376497fe4ddfc0a">stm8_bot_setTime</a>(<a class="code" href="structstm8__time__t.html">stm8_time_t</a> *t);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">//PSU staff (управление контроллером питания)</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#ae5e4cd919c6314e77d5852aedda9c333">stm8_bot_psu_en_display</a>(<span class="keywordtype">bool</span> s);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">//utility</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* __STM_BOT_H__ */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">//PWR_SR regisrter</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_PWR_SR 0x02</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_PWR_SR_EXT_PWR 0b00000100 //EXT_PWR bit mask</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment">//Battery registers</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="stm8__bot_8h.html#acb45390d5aee4282f099ebc2f7d811ba">   29</a></span>&#160;<span class="preprocessor">#define PSU_I2C_REG_MAIN1_BAT_U 0x03 </span></div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="stm8__bot_8h.html#a8bf1d694cc22e1738e3df0204d528bef">   30</a></span>&#160;<span class="preprocessor">#define PSU_I2C_REG_MAIN2_BAT_U 0x04 </span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_AUX_BAT_U 0x05</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="stm8__bot_8h.html#a3ae0f7a2ddf203a3f279e102961476d1">   32</a></span>&#160;<span class="preprocessor">#define PSU_I2C_DISCHARGE_THRESHOLD 3600 </span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor"></span> </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">//RTC registers</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="stm8__bot_8h.html#a8b7848e088a1c5745f237184d31dbe16">   35</a></span>&#160;<span class="preprocessor">#define PSU_I2C_REG_RTC_TR1 0x06 </span></div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="stm8__bot_8h.html#ae45751972b16f96714242fa5de82c411">   36</a></span>&#160;<span class="preprocessor">#define PSU_I2C_REG_RTC_TR2 0x07 </span></div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="stm8__bot_8h.html#a1eb4eec67f96f60473f678433ff857ec">   37</a></span>&#160;<span class="preprocessor">#define PSU_I2C_REG_RTC_TR3 0x08 </span></div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="stm8__bot_8h.html#a7735aef41ca46e7eca9917b461b38b32">   38</a></span>&#160;<span class="preprocessor">#define PSU_I2C_REG_RTC_DR1 0x09 </span></div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="stm8__bot_8h.html#ae08548a6927eafac783f9b8b4ea69622">   39</a></span>&#160;<span class="preprocessor">#define PSU_I2C_REG_RTC_DR2 0x0A </span></div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="stm8__bot_8h.html#a99f8dc79384ba8db68630ca65f828988">   40</a></span>&#160;<span class="preprocessor">#define PSU_I2C_REG_RTC_DR3 0x0B </span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#define PSU_I2C_REG_RTC_ISR1 0x0E</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="structstm8__time__t.html">   47</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    uint8_t sec;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    uint8_t min;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    uint8_t hr;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    uint8_t day;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    uint8_t month;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    uint8_t year;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;} <a class="code" href="structstm8__time__t.html">stm8_time_t</a>;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">//i2c stuff</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="keywordtype">int</span> <a class="code" href="stm8__bot_8h.html#ae9c224ecd55c8fd8430ca28bad3e0630">stm8_bot_i2c_read_register</a>(uint8_t reg);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#a188af5e9ab25d5d0af94881f1c1001d2">stm8_bot_i2c_write_register</a>(uint8_t reg, uint8_t val);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#a316d7cb6777c7f9d1f5f5bf35e1014e1">stm8_bot_i2c_read_data</a> (uint8_t reg, uint8_t *buf, uint8_t n_bytes);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#a0c135fd5903b44500c954e4912a8b6ac">stm8_bot_i2c_write_data</a> (uint8_t reg, uint8_t *buf, uint8_t n_bytes);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">//date/time stuff</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#ae5cbe647a6b52f4e78fb36f38e3d819c">stm8_bot_getTime</a>(<a class="code" href="structstm8__time__t.html">stm8_time_t</a> *t);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#afae7aee08885b242b376497fe4ddfc0a">stm8_bot_setTime</a>(<a class="code" href="structstm8__time__t.html">stm8_time_t</a> *t);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">//PSU staff (управление контроллером питания)</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;esp_err_t <a class="code" href="stm8__bot_8h.html#ae5e4cd919c6314e77d5852aedda9c333">stm8_bot_psu_en_display</a>(<span class="keywordtype">bool</span> s);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="stm8__bot_8h.html#aef3edbb421494210719289e8afa39a84">stm8_bot_pcu_isExternalPower</a>(<span class="keywordtype">bool</span> flag);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="stm8__bot_8h.html#a6d3f9b0ff632bc9da580bf0837d22e6a">stm8_bot_psu_isEnoughBatteryPower</a>();</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* __STM_BOT_H__ */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="astructstm8__time__t_html"><div class="ttname"><a href="structstm8__time__t.html">stm8_time_t</a></div><div class="ttdoc">Struct date/time for STM8.</div><div class="ttdef"><b>Definition:</b> stm8_bot.h:37</div></div>
-<div class="ttc" id="astm8__bot_8h_html_afae7aee08885b242b376497fe4ddfc0a"><div class="ttname"><a href="stm8__bot_8h.html#afae7aee08885b242b376497fe4ddfc0a">stm8_bot_setTime</a></div><div class="ttdeci">esp_err_t stm8_bot_setTime(stm8_time_t *t)</div><div class="ttdoc">Set date/time on bottom STM8L.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:174</div></div>
+<div class="ttc" id="astructstm8__time__t_html"><div class="ttname"><a href="structstm8__time__t.html">stm8_time_t</a></div><div class="ttdoc">Struct date/time for STM8.</div><div class="ttdef"><b>Definition:</b> stm8_bot.h:47</div></div>
+<div class="ttc" id="astm8__bot_8h_html_afae7aee08885b242b376497fe4ddfc0a"><div class="ttname"><a href="stm8__bot_8h.html#afae7aee08885b242b376497fe4ddfc0a">stm8_bot_setTime</a></div><div class="ttdeci">esp_err_t stm8_bot_setTime(stm8_time_t *t)</div><div class="ttdoc">Set date/time on bottom STM8L.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:169</div></div>
 <div class="ttc" id="astm8__bot_8h_html_a316d7cb6777c7f9d1f5f5bf35e1014e1"><div class="ttname"><a href="stm8__bot_8h.html#a316d7cb6777c7f9d1f5f5bf35e1014e1">stm8_bot_i2c_read_data</a></div><div class="ttdeci">esp_err_t stm8_bot_i2c_read_data(uint8_t reg, uint8_t *buf, uint8_t n_bytes)</div><div class="ttdoc">Read n registers to buffer from bottom STM8.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:76</div></div>
+<div class="ttc" id="astm8__bot_8h_html_a6d3f9b0ff632bc9da580bf0837d22e6a"><div class="ttname"><a href="stm8__bot_8h.html#a6d3f9b0ff632bc9da580bf0837d22e6a">stm8_bot_psu_isEnoughBatteryPower</a></div><div class="ttdeci">bool stm8_bot_psu_isEnoughBatteryPower()</div><div class="ttdoc">Check and return true if battery charge is above 3.6V.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:232</div></div>
 <div class="ttc" id="ai2c__bus_8h_html"><div class="ttname"><a href="i2c__bus_8h.html">i2c_bus.h</a></div><div class="ttdoc">Инициализация и работа с шиной I2C.</div></div>
 <div class="ttc" id="astm8__bot_8h_html_a0c135fd5903b44500c954e4912a8b6ac"><div class="ttname"><a href="stm8__bot_8h.html#a0c135fd5903b44500c954e4912a8b6ac">stm8_bot_i2c_write_data</a></div><div class="ttdeci">esp_err_t stm8_bot_i2c_write_data(uint8_t reg, uint8_t *buf, uint8_t n_bytes)</div><div class="ttdoc">Write from buffer to n registers of bottom STM8.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:110</div></div>
 <div class="ttc" id="astm8__bot_8h_html_ae9c224ecd55c8fd8430ca28bad3e0630"><div class="ttname"><a href="stm8__bot_8h.html#ae9c224ecd55c8fd8430ca28bad3e0630">stm8_bot_i2c_read_register</a></div><div class="ttdeci">int stm8_bot_i2c_read_register(uint8_t reg)</div><div class="ttdoc">Read one register from bottom STM8.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:19</div></div>
-<div class="ttc" id="astm8__bot_8h_html_ae5cbe647a6b52f4e78fb36f38e3d819c"><div class="ttname"><a href="stm8__bot_8h.html#ae5cbe647a6b52f4e78fb36f38e3d819c">stm8_bot_getTime</a></div><div class="ttdeci">esp_err_t stm8_bot_getTime(stm8_time_t *t)</div><div class="ttdoc">Get date/time from bottom STM8L.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:143</div></div>
+<div class="ttc" id="astm8__bot_8h_html_ae5cbe647a6b52f4e78fb36f38e3d819c"><div class="ttname"><a href="stm8__bot_8h.html#ae5cbe647a6b52f4e78fb36f38e3d819c">stm8_bot_getTime</a></div><div class="ttdeci">esp_err_t stm8_bot_getTime(stm8_time_t *t)</div><div class="ttdoc">Get date/time from bottom STM8L.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:138</div></div>
 <div class="ttc" id="astm8__bot_8h_html_a188af5e9ab25d5d0af94881f1c1001d2"><div class="ttname"><a href="stm8__bot_8h.html#a188af5e9ab25d5d0af94881f1c1001d2">stm8_bot_i2c_write_register</a></div><div class="ttdeci">esp_err_t stm8_bot_i2c_write_register(uint8_t reg, uint8_t val)</div><div class="ttdoc">Write one register to bottom STM8.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:49</div></div>
-<div class="ttc" id="astm8__bot_8h_html_ae5e4cd919c6314e77d5852aedda9c333"><div class="ttname"><a href="stm8__bot_8h.html#ae5e4cd919c6314e77d5852aedda9c333">stm8_bot_psu_en_display</a></div><div class="ttdeci">esp_err_t stm8_bot_psu_en_display(bool s)</div><div class="ttdoc">Enable/disable 12V to power up display.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:204</div></div>
+<div class="ttc" id="astm8__bot_8h_html_ae5e4cd919c6314e77d5852aedda9c333"><div class="ttname"><a href="stm8__bot_8h.html#ae5e4cd919c6314e77d5852aedda9c333">stm8_bot_psu_en_display</a></div><div class="ttdeci">esp_err_t stm8_bot_psu_en_display(bool s)</div><div class="ttdoc">Enable/disable 12V to power up display.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:199</div></div>
+<div class="ttc" id="astm8__bot_8h_html_aef3edbb421494210719289e8afa39a84"><div class="ttname"><a href="stm8__bot_8h.html#aef3edbb421494210719289e8afa39a84">stm8_bot_pcu_isExternalPower</a></div><div class="ttdeci">bool stm8_bot_pcu_isExternalPower(bool flag)</div><div class="ttdoc">Check and return true if ext. power present.</div><div class="ttdef"><b>Definition:</b> stm8_bot.c:216</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20

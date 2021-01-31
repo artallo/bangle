@@ -215,16 +215,28 @@ esp_err_t stm8_bot_psu_en_display(bool s) {
  */
 bool stm8_bot_pcu_isExternalPower(bool flag) {
     uint8_t pwr_sr = stm8_bot_i2c_read_register(PSU_I2C_REG_PWR_SR);
-    return (pwr_sr & PSU_I2C_REG_PWR_SR_EXT_PWR);
-    return flag;
+
+    //uncomment this string on release version
+    //return (pwr_sr & PSU_I2C_REG_PWR_SR_EXT_PWR);
+
+    return flag; //this is debug version, just return flag
 }
 
 /**
- * @brief Check and return true if batt. charged
+ * @brief Check and return true if battery charge is above 3.6V
  * 
+ * Batter voltage calculation: U(mV) = 3000 + PSU_I2C_REG_MAIN1_BAT_U * 10
  * @return true
  * @return false
  */
 bool stm8_bot_psu_isEnoughBatteryPower() {
-    return true;
+    uint16_t u1 = stm8_bot_i2c_read_register(PSU_I2C_REG_MAIN1_BAT_U);
+    uint16_t u2 = stm8_bot_i2c_read_register(PSU_I2C_REG_MAIN2_BAT_U);
+    u1 = 3000 + u1 * 10;
+    u2 = 3000 + u2 * 10;
+    printf("MAIN1_BAT_U: %dmV, MAIN2_BAT_U: %dmV\n", u1, u2);
+    if ((u1 > PSU_I2C_DISCHARGE_THRESHOLD) && (u2 > PSU_I2C_DISCHARGE_THRESHOLD)) {
+        return true;
+    }
+    return false;
 }
