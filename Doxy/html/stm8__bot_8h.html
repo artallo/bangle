@@ -172,12 +172,12 @@ Functions</h2></td></tr>
 <tr class="memitem:ae5e4cd919c6314e77d5852aedda9c333"><td class="memItemLeft" align="right" valign="top">esp_err_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stm8__bot_8h.html#ae5e4cd919c6314e77d5852aedda9c333">stm8_bot_psu_en_display</a> (bool s)</td></tr>
 <tr class="memdesc:ae5e4cd919c6314e77d5852aedda9c333"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable/disable 12V to power up display.  <a href="stm8__bot_8h.html#ae5e4cd919c6314e77d5852aedda9c333">More...</a><br /></td></tr>
 <tr class="separator:ae5e4cd919c6314e77d5852aedda9c333"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef3edbb421494210719289e8afa39a84"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stm8__bot_8h.html#aef3edbb421494210719289e8afa39a84">stm8_bot_pcu_isExternalPower</a> (bool flag)</td></tr>
-<tr class="memdesc:aef3edbb421494210719289e8afa39a84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check and return true if ext. power present.  <a href="stm8__bot_8h.html#aef3edbb421494210719289e8afa39a84">More...</a><br /></td></tr>
-<tr class="separator:aef3edbb421494210719289e8afa39a84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d3f9b0ff632bc9da580bf0837d22e6a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stm8__bot_8h.html#a6d3f9b0ff632bc9da580bf0837d22e6a">stm8_bot_psu_isEnoughBatteryPower</a> ()</td></tr>
-<tr class="memdesc:a6d3f9b0ff632bc9da580bf0837d22e6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check and return true if battery charge is above 3.6V.  <a href="stm8__bot_8h.html#a6d3f9b0ff632bc9da580bf0837d22e6a">More...</a><br /></td></tr>
-<tr class="separator:a6d3f9b0ff632bc9da580bf0837d22e6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8ea6d305ccee77f7078c457bc811bcf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stm8__bot_8h.html#ad8ea6d305ccee77f7078c457bc811bcf">stm8_bot_psu_isExternalPower</a> (bool flag)</td></tr>
+<tr class="memdesc:ad8ea6d305ccee77f7078c457bc811bcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check and return true if ext. power present.  <a href="stm8__bot_8h.html#ad8ea6d305ccee77f7078c457bc811bcf">More...</a><br /></td></tr>
+<tr class="separator:ad8ea6d305ccee77f7078c457bc811bcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b32a02074d07a4578c86515e20df789"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stm8__bot_8h.html#a2b32a02074d07a4578c86515e20df789">stm8_bot_psu_isEnoughBatteryPower</a> (bool flag)</td></tr>
+<tr class="memdesc:a2b32a02074d07a4578c86515e20df789"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check and return true if battery charge is above 3.6V.  <a href="stm8__bot_8h.html#a2b32a02074d07a4578c86515e20df789">More...</a><br /></td></tr>
+<tr class="separator:a2b32a02074d07a4578c86515e20df789"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Bottom STM8L stuff (RTC, POWER) </p>
@@ -367,29 +367,6 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aef3edbb421494210719289e8afa39a84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aef3edbb421494210719289e8afa39a84">&#9670;&nbsp;</a></span>stm8_bot_pcu_isExternalPower()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool stm8_bot_pcu_isExternalPower </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>flag</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Check and return true if ext. power present. </p>
-<dl class="section return"><dt>Returns</dt><dd>true - ext. power present </dd>
-<dd>
-false - no ext. power </dd></dl>
-
-</div>
-</div>
 <a id="ae5e4cd919c6314e77d5852aedda9c333"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae5e4cd919c6314e77d5852aedda9c333">&#9670;&nbsp;</a></span>stm8_bot_psu_en_display()</h2>
 
@@ -417,8 +394,8 @@ false - no ext. power </dd></dl>
 
 </div>
 </div>
-<a id="a6d3f9b0ff632bc9da580bf0837d22e6a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6d3f9b0ff632bc9da580bf0837d22e6a">&#9670;&nbsp;</a></span>stm8_bot_psu_isEnoughBatteryPower()</h2>
+<a id="a2b32a02074d07a4578c86515e20df789"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b32a02074d07a4578c86515e20df789">&#9670;&nbsp;</a></span>stm8_bot_psu_isEnoughBatteryPower()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -426,16 +403,52 @@ false - no ext. power </dd></dl>
         <tr>
           <td class="memname">bool stm8_bot_psu_isEnoughBatteryPower </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>flag</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Check and return true if battery charge is above 3.6V. </p>
-<p>Batter voltage calculation: U(mV) = 3000 + PSU_I2C_REG_MAIN1_BAT_U * 10 </p><dl class="section return"><dt>Returns</dt><dd>true </dd>
+<p>Battery voltage calculation: U(mV) = 3000 + PSU_I2C_REG_MAIN1_BAT_U * 10 </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">flag</td><td>for debug purposes only, return value is flag value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true </dd>
 <dd>
 false </dd></dl>
+
+</div>
+</div>
+<a id="ad8ea6d305ccee77f7078c457bc811bcf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8ea6d305ccee77f7078c457bc811bcf">&#9670;&nbsp;</a></span>stm8_bot_psu_isExternalPower()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool stm8_bot_psu_isExternalPower </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>flag</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check and return true if ext. power present. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">flag</td><td>for debug purposes only, return value is flag value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true - ext. power present </dd>
+<dd>
+false - no ext. power </dd></dl>
 
 </div>
 </div>

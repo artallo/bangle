@@ -210,6 +210,7 @@ esp_err_t stm8_bot_psu_en_display(bool s) {
 /**
  * @brief Check and return true if ext. power present
  * 
+ * @param flag for debug purposes only, return value is flag value
  * @return true - ext. power present
  * @return false - no ext. power
  */
@@ -225,7 +226,8 @@ bool stm8_bot_psu_isExternalPower(bool flag) {
 /**
  * @brief Check and return true if battery charge is above 3.6V
  * 
- * Batter voltage calculation: U(mV) = 3000 + PSU_I2C_REG_MAIN1_BAT_U * 10
+ * Battery voltage calculation: U(mV) = 3000 + PSU_I2C_REG_MAIN1_BAT_U * 10
+ * @param flag for debug purposes only, return value is flag value
  * @return true
  * @return false
  */

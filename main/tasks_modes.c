@@ -119,17 +119,31 @@ void vTaskPowerOnMode(void *pvParameters) {
             ESP_LOGI(TAG_TASK, "PowerOnMode activate");
         }
         //check ext. power and batterys and notify corespondent task
-        if (stm8_bot_psu_isExternalPower(false)) {
+        if (stm8_bot_psu_isExternalPower(true)) {
             ESP_LOGI(TAG_TASK, "Ext. power: YES");
-            /*if (stm8_bot_psu_isEnoughBatteryPower()) {
-                xTaskNotifyGive(xTaskDataTransferHandle);
-            }*/
+            if (stm8_bot_psu_isEnoughBatteryPower(true)) {
+                ESP_LOGI(TAG_TASK, "Enough batt. power: YES");
+                ESP_LOGI(TAG_TASK, "Goto Data transfer mode..");
+                //delay for display
+                vTaskDelay(1500 / portTICK_PERIOD_MS);
+                xTaskNotifyGive(xTaskDatatransferModeHandle);
+                //delay that new task activate and change MenuCurrentMode variable, so this task go to begin and wait notification in blocked state
+                vTaskDelay(50 / portTICK_PERIOD_MS);
+            } else {    //battery charge LOW
+                ESP_LOGI(TAG_TASK, "Enough batt. power: NO");
+                ESP_LOGI(TAG_TASK, ".. delay and goto block begin");
+                vTaskDelay(2500 / portTICK_PERIOD_MS);
+            }
         } else {        //external power NO
             ESP_LOGI(TAG_TASK, "Ext. power: NO");
-            if (stm8_bot_psu_isEnoughBatteryPower(false)) {
+            if (stm8_bot_psu_isEnoughBatteryPower(true)) {
                 ESP_LOGI(TAG_TASK, "Enough batt. power: YES");
                 ESP_LOGI(TAG_TASK, "Notifing vTaskBackgroundMode");
+                //delay for display
+                vTaskDelay(1500 / portTICK_PERIOD_MS);
                 xTaskNotifyGive(xTaskBackgroundModeHandle);
+                //delay that new task activate and change MenuCurrentMode variable, so this task go to begin and wait notification in blocked state
+                vTaskDelay(50 / portTICK_PERIOD_MS);
             } else {    //battery charge LOW
                 ESP_LOGI(TAG_TASK, "Enough batt. power: NO");
                 ESP_LOGI(TAG_TASK, ".. delay and goto block begin");
@@ -325,6 +339,8 @@ void vTaskDatatransferMode(void *pvParameters) {
                     ESP_LOGI(TAG_TASK, "Ext. power present, data exists and server ready");
                     //do data transfering
                     ESP_LOGI(TAG_TASK, "Data transfering..");
+                    //delay for display info
+                    vTaskDelay(2500 / portTICK_PERIOD_MS);
                 }
             } else {    //no data to transfer
                 ESP_LOGI(TAG_TASK, "No data to transfer..");
