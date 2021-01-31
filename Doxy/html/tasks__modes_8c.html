@@ -154,7 +154,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>tasks_init</b> ()</td
 <tr class="separator:a04abf6c86159a917c029fe413e5eeb21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62ceacc0f11bd6f81198310d7016706b"><td class="memItemLeft" align="right" valign="top"><a id="a62ceacc0f11bd6f81198310d7016706b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tasks__modes_8c.html#a62ceacc0f11bd6f81198310d7016706b">ble_send_authInfo</a> (uint16_t wifi_num, uint16_t sensor_cnt)</td></tr>
-<tr class="memdesc:a62ceacc0f11bd6f81198310d7016706b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send config message (iBeacon?) with connection info to sensors. <br /></td></tr>
+<tr class="memdesc:a62ceacc0f11bd6f81198310d7016706b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send config message (iBeacon) with connection info to sensors. <br /></td></tr>
 <tr class="separator:a62ceacc0f11bd6f81198310d7016706b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f18ebc0af12588f6d4ad88d1c19930b"><td class="memItemLeft" align="right" valign="top"><a id="a4f18ebc0af12588f6d4ad88d1c19930b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>esp_gap_cb</b> (esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *param)</td></tr>
@@ -162,8 +162,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>esp_gap_cb</b> (esp_g
 <tr class="memitem:a945150c5b57b97500f046d6393b0d545"><td class="memItemLeft" align="right" valign="top"><a id="a945150c5b57b97500f046d6393b0d545"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ble_init_beacon_mode</b> ()</td></tr>
 <tr class="separator:a945150c5b57b97500f046d6393b0d545"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87bc6f69b1dfdd0f590ab7fbe2b8a11c"><td class="memItemLeft" align="right" valign="top"><a id="a87bc6f69b1dfdd0f590ab7fbe2b8a11c"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>ble_get_confirmation</b> ()</td></tr>
+<tr class="memitem:a87bc6f69b1dfdd0f590ab7fbe2b8a11c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tasks__modes_8c.html#a87bc6f69b1dfdd0f590ab7fbe2b8a11c">ble_get_confirmation</a> ()</td></tr>
+<tr class="memdesc:a87bc6f69b1dfdd0f590ab7fbe2b8a11c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Waiting for confirmation via BLE from sensors.  <a href="tasks__modes_8c.html#a87bc6f69b1dfdd0f590ab7fbe2b8a11c">More...</a><br /></td></tr>
 <tr class="separator:a87bc6f69b1dfdd0f590ab7fbe2b8a11c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -250,6 +250,28 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>sensor_cnt</b> = 
 </div><div class="memdoc">
 
 <p>Ask server that it's ready receive data. </p>
+<dl class="section return"><dt>Returns</dt><dd>true </dd>
+<dd>
+false </dd></dl>
+
+</div>
+</div>
+<a id="a87bc6f69b1dfdd0f590ab7fbe2b8a11c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87bc6f69b1dfdd0f590ab7fbe2b8a11c">&#9670;&nbsp;</a></span>ble_get_confirmation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ble_get_confirmation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Waiting for confirmation via BLE from sensors. </p>
 <dl class="section return"><dt>Returns</dt><dd>true </dd>
 <dd>
 false </dd></dl>
