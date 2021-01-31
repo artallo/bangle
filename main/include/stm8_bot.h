@@ -65,7 +65,7 @@ esp_err_t stm8_bot_setTime(stm8_time_t *t);
 
 //PSU staff (управление контроллером питания)
 esp_err_t stm8_bot_psu_en_display(bool s);
-bool stm8_bot_pcu_isExternalPower(bool flag);
-bool stm8_bot_psu_isEnoughBatteryPower();
+bool stm8_bot_psu_isExternalPower(bool flag);
+bool stm8_bot_psu_isEnoughBatteryPower(bool flag);
 
 #endif /* __STM_BOT_H__ */

@@ -15,7 +15,7 @@
 #include "stm8_bot.h"
 #include "tasks_modes.h"
 
-volatile menu_mode_t MenuCurrentMode = POWER_ON_MODE; ///< Current working mode, starts from POWER_ON_MODE
+volatile menu_mode_t MenuCurrentMode = STARTING_MODE; ///< Current working mode, starts from STARTING_MODE
 volatile int64_t last_micros = 0;   ///< Delay measuring in usec
 
 //Handlers
@@ -66,7 +66,7 @@ bool tasks_init() {
     gpio_isr_handler_add(GPIO_BUTTON, button_isr_handler, (void*) GPIO_BUTTON);
 
     //Set starting mode to POWER_ON_MODE
-    MenuCurrentMode = POWER_ON_MODE;
+    MenuCurrentMode = STARTING_MODE;
     //Create Dispaly task
     xTaskCreate(vTaskDisplay, "Display", 2048, NULL, 1, &xTaskDisplayHandle);
     //At First create and start Mode tasks
@@ -94,7 +94,7 @@ void vTaskModeSwitcher(void *pvParameters) {
     while (1) {
         ESP_LOGI(TAG_TASK, "ModeSwitcher activate");
         //notificate and unblock coresponding task
-        if (MenuCurrentMode == POWER_ON_MODE) {
+        if (MenuCurrentMode == STARTING_MODE) {
             ESP_LOGI(TAG_TASK, "Notifing vTaskPowerOnMode");
             xTaskNotifyGive(xTaskPowerOnModeHandle);
         } else if (MenuCurrentMode == BACKGROUND_MODE) {
@@ -112,21 +112,28 @@ void vTaskModeSwitcher(void *pvParameters) {
  */
 void vTaskPowerOnMode(void *pvParameters) {
     while (1) {
-        //wait indefinitly until task was unblocked with notification
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-        ESP_LOGI(TAG_TASK, "PowerOnMode activate");
+        if (MenuCurrentMode != POWER_ON_MODE) {
+            //wait indefinitly until task was unblocked with notification
+            ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+            MenuCurrentMode = POWER_ON_MODE;
+            ESP_LOGI(TAG_TASK, "PowerOnMode activate");
+        }
         //check ext. power and batterys and notify corespondent task
-        if (stm8_bot_pcu_isExternalPower(false)) {
+        if (stm8_bot_psu_isExternalPower(false)) {
             ESP_LOGI(TAG_TASK, "Ext. power: YES");
             /*if (stm8_bot_psu_isEnoughBatteryPower()) {
                 xTaskNotifyGive(xTaskDataTransferHandle);
             }*/
-        } else {
+        } else {        //external power NO
             ESP_LOGI(TAG_TASK, "Ext. power: NO");
-            if (stm8_bot_psu_isEnoughBatteryPower()) {
+            if (stm8_bot_psu_isEnoughBatteryPower(false)) {
                 ESP_LOGI(TAG_TASK, "Enough batt. power: YES");
                 ESP_LOGI(TAG_TASK, "Notifing vTaskBackgroundMode");
                 xTaskNotifyGive(xTaskBackgroundModeHandle);
+            } else {    //battery charge LOW
+                ESP_LOGI(TAG_TASK, "Enough batt. power: NO");
+                ESP_LOGI(TAG_TASK, ".. delay and goto block begin");
+                vTaskDelay(2500 / portTICK_PERIOD_MS);
             }
         }
     }
@@ -312,7 +319,7 @@ void vTaskDatatransferMode(void *pvParameters) {
             MenuCurrentMode = DATA_TRANSFER_MODE;
             ESP_LOGI(TAG_TASK, "DatatransferMode activate");
         }
-        if (stm8_bot_pcu_isExternalPower(true) == true) {    //if ext. power present
+        if (stm8_bot_psu_isExternalPower(true) == true) {    //if ext. power present
             if (isDataExists()) {   //check if data exists
                 if (AskingServer() ==  true) {  //check if server ready
                     ESP_LOGI(TAG_TASK, "Ext. power present, data exists and server ready");

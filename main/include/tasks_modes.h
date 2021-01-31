@@ -14,7 +14,8 @@
 #include "freertos/task.h"
 
 ///Type which describe all working modes
-typedef enum {  
+typedef enum {
+    STARTING_MODE,
     POWER_ON_MODE,
     BACKGROUND_MODE,
     INITIALIZATION_MODE,

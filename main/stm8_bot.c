@@ -213,7 +213,7 @@ esp_err_t stm8_bot_psu_en_display(bool s) {
  * @return true - ext. power present
  * @return false - no ext. power
  */
-bool stm8_bot_pcu_isExternalPower(bool flag) {
+bool stm8_bot_psu_isExternalPower(bool flag) {
     uint8_t pwr_sr = stm8_bot_i2c_read_register(PSU_I2C_REG_PWR_SR);
 
     //uncomment this string on release version
@@ -229,14 +229,17 @@ bool stm8_bot_pcu_isExternalPower(bool flag) {
  * @return true
  * @return false
  */
-bool stm8_bot_psu_isEnoughBatteryPower() {
-    uint16_t u1 = stm8_bot_i2c_read_register(PSU_I2C_REG_MAIN1_BAT_U);
+bool stm8_bot_psu_isEnoughBatteryPower(bool flag) {
+    //uncomment next block in release version
+  /*uint16_t u1 = stm8_bot_i2c_read_register(PSU_I2C_REG_MAIN1_BAT_U);
     uint16_t u2 = stm8_bot_i2c_read_register(PSU_I2C_REG_MAIN2_BAT_U);
     u1 = 3000 + u1 * 10;
     u2 = 3000 + u2 * 10;
     printf("MAIN1_BAT_U: %dmV, MAIN2_BAT_U: %dmV\n", u1, u2);
     if ((u1 > PSU_I2C_DISCHARGE_THRESHOLD) && (u2 > PSU_I2C_DISCHARGE_THRESHOLD)) {
         return true;
-    }
-    return false;
+    } else {
+        return false;
+    }*/
+    return flag;
 }
