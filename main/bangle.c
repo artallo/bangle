@@ -84,7 +84,7 @@ void app_main(void)
         stm8_time_t t;
         memset(&t, 0, 6);
         stm8_bot_getTime(&t);
-        printf("Time: %d:%d:%d Date: %d.%d.%d\n", t.hr, t.min, t.sec, t.day, t.month, t.year);*/
+        printf("Time: %d:%d:%d Date: %d.%d.%d\n", t.hr, t.min, t.sec, t.day, t.month, t.year);
         
         vTaskDelay(30000 / portTICK_PERIOD_MS);
     }

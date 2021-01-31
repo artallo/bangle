@@ -48,11 +48,14 @@ bool isDataCheck_OK();
 bool isChangingAccelData();
 bool isDataExists();
 bool AskingServer();
-void BLE_SendAuthInfo(uint16_t);
+void ble_send_authInfo(uint16_t, uint16_t);
+bool ble_get_confirmation();
+void ble_init_beacon_mode();
 
 bool tasks_init();
 
 static const char* TAG_TASK = "vTasks";
+static const char* TAG_BLE = "BLE";
 
 
 #endif /* __TASKS_MODES_H__ */

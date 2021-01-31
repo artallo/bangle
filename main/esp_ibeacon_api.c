@@ -46,6 +46,15 @@ esp_ble_ibeacon_vendor_t vendor_config = {
     .measured_power = 0xC5
 };
 
+esp_ble_scan_params_t ble_scan_params = {
+    .scan_type              = BLE_SCAN_TYPE_ACTIVE,
+    .own_addr_type          = BLE_ADDR_TYPE_PUBLIC,
+    .scan_filter_policy     = BLE_SCAN_FILTER_ALLOW_ALL,
+    .scan_interval          = 0x250,
+    .scan_window            = 0x250,
+    .scan_duplicate         = BLE_SCAN_DUPLICATE_DISABLE
+};
+
 bool esp_ble_is_ibeacon_packet (uint8_t *adv_data, uint8_t adv_data_len){
     bool result = false;
 

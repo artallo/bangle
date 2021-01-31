@@ -1,7 +1,7 @@
 #include "esp_ble.h"
 
 /**
- * @brief Init BLE, allocate memory on HEAP
+ * @brief Init BLE, allocate memory
  * 
  * @return true 
  * @return false 
@@ -18,13 +18,11 @@ bool BLE_Init() {
     esp_bluedroid_init();
     esp_bluedroid_enable();
 
-    
-
     return true;
 }
 
 /**
- * @brief Deinit BLE, disable BT and free allocated memory on HEAP
+ * @brief Deinit BLE, disable BT and free allocated memory
  * 
  * @return true 
  * @return false 

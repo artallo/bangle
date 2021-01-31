@@ -32,6 +32,8 @@ static TaskHandle_t xTaskSleepModeHandle = NULL; ///< vTaskSleepMode task handle
 static TaskHandle_t xTaskDisplayHandle = NULL; ///< vTaskDisplay task handler
 static QueueHandle_t xQueueButtonHandle = NULL; ///< Queue for communication between ButtonPressed task and other mode tasks
 
+uint16_t sensor_cnt = 0;
+
 /**
  * @brief Button pressed ISR
  * 
@@ -178,6 +180,7 @@ void vTaskBackgroundMode(void *pvParameters) {
             if (ButtonShortPress) {     //if short press
                 ESP_LOGI(TAG_TASK, "Short pressing: feedback_blink, go to Initialization Mode");
                 //TODO: feedback_blink, go to Initialization Mode
+                sensor_cnt = 0;
                 //notify xTaskInitializationMode
                 xTaskNotifyGive(xTaskInitializationModeHandle);
                 //delay that new task activate and change MenuCurrentMode variable, so this task go to begin and wait notification in blocked state
@@ -204,14 +207,14 @@ void vTaskBackgroundMode(void *pvParameters) {
  * @param pvParameters 
  */
 void vTaskInitializationMode(void *pvParameters) {
-    uint16_t sensor_cnt = 0;
     while (1) {
         //first time wait indefinitley for notification to activate task
         if (MenuCurrentMode != INITIALIZATION_MODE) {
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
             MenuCurrentMode = INITIALIZATION_MODE;
             ESP_LOGI(TAG_TASK, "InitializationMode activate");
-            //TODO: Инициализация сервера, проверка наличия таблицы соответствия
+            //однократно инициализация режима маяка
+            ble_init_beacon_mode();
         }
         if (isEnoughSensors()) {
             //go to SensorsCheck task
@@ -224,7 +227,11 @@ void vTaskInitializationMode(void *pvParameters) {
         } else {
             //send auth info via BLE / WiFi
             ESP_LOGI(TAG_TASK, "Enought sensors: NO");
-            BLE_SendAuthInfo(sensor_cnt++);
+            ble_send_authInfo(1, ++sensor_cnt);
+            /*while (! ble_get_confirmation()) {
+                ESP_LOGI(TAG_BLE, "wating confirmation..");
+                vTaskDelay(50 / portTICK_PERIOD_MS);
+            };*/
         }
 
     }
@@ -454,6 +461,10 @@ void vTaskDisplay(void *pvParameters) {
             ssd1306_SetCursor(13, 10);
             ssd1306_WriteString("Data transfer", Font_7x10, White);
             ssd1306_UpdateScreen();
+        } else if (MenuCurrentMode == DEVELOPER_MODE) {
+            ssd1306_SetCursor(14, 10);
+            ssd1306_WriteString("Developer mode", Font_7x10, White);
+            ssd1306_UpdateScreen();
         }
         // TODO: возможно ли переделать с ожидания delay на ожидание уведомления taskNotify от задач режимов, чтобы не крутить в холостую обновляя статичную информацию
         vTaskDelay(100 / portTICK_PERIOD_MS);
@@ -505,7 +516,7 @@ void vTaskButtonPressed(void *pvParameters) {
  */
 bool isEnoughSensors() {
     static uint8_t  sensor_cnt = 0;
-    if (sensor_cnt < 9) {
+    if (sensor_cnt < 4) {
         sensor_cnt++;
         ESP_LOGI(TAG_TASK, "Now %d sensors connected", sensor_cnt);
         return false;
@@ -573,13 +584,14 @@ bool AskingServer() {
  * @brief Send config message (iBeacon?) with connection info to sensors
  * 
  */
-void BLE_SendAuthInfo(uint16_t sensor_cnt) {
+void ble_send_authInfo(uint16_t wifi_num, uint16_t sensor_cnt) {
     ESP_LOGI(TAG_TASK, "send auth info via BLE");
     
     extern esp_ble_ibeacon_vendor_t vendor_config;
     //vendor_config.proximity_uuid[0] = 0x50;
     //vendor_config.proximity_uuid[1] = 0x51;
     vendor_config.major = ((sensor_cnt&0xFF00)>>8) + ((sensor_cnt&0xFF)<<8);
+    vendor_config.minor = ((wifi_num&0xFF00)>>8) + ((wifi_num&0xFF)<<8);
     esp_ble_ibeacon_t ibeacon_adv_data;
     esp_err_t status = esp_ble_config_ibeacon_data (&vendor_config, &ibeacon_adv_data);
     if (status == ESP_OK){
@@ -597,7 +609,105 @@ void BLE_SendAuthInfo(uint16_t sensor_cnt) {
 
     esp_ble_gap_start_advertising(&ble_adv_params);
     
-    vTaskDelay(1700 / portTICK_PERIOD_MS);
+    vTaskDelay(3000 / portTICK_PERIOD_MS);
 
     esp_ble_gap_stop_advertising();
+}
+
+void esp_gap_cb(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t* param)
+{
+    esp_err_t err;
+
+    switch(event)
+    {
+        /*case ESP_GAP_BLE_SCAN_PARAM_SET_COMPLETE_EVT: {
+            uint32_t duration = 3; //seconds
+            esp_ble_gap_start_scanning(duration);
+            break;
+        }*/
+        case ESP_GAP_BLE_SCAN_START_COMPLETE_EVT: {
+            if((err = param->scan_start_cmpl.status) != ESP_BT_STATUS_SUCCESS) {
+                ESP_LOGE(TAG_BLE,"Scan start failed: %s", esp_err_to_name(err));
+            }
+            else {
+                ESP_LOGI(TAG_BLE,"Start scanning...");
+            }
+            break;
+        }
+        case ESP_GAP_BLE_SCAN_RESULT_EVT: {
+            esp_ble_gap_cb_param_t* scan_result = (esp_ble_gap_cb_param_t*)param;
+            switch(scan_result->scan_rst.search_evt)
+            {
+                case ESP_GAP_SEARCH_INQ_RES_EVT: {
+                    ESP_LOGI(TAG_BLE, "iBeacon Found");
+                    if (esp_ble_is_ibeacon_packet(scan_result->scan_rst.ble_adv, scan_result->scan_rst.adv_data_len)){
+                        esp_ble_ibeacon_t *ibeacon_data = (esp_ble_ibeacon_t*)(scan_result->scan_rst.ble_adv);
+                        ESP_LOGI(TAG_BLE, "----------iBeacon Found----------");
+                        esp_log_buffer_hex("IBEACON_DEMO: Device address:", scan_result->scan_rst.bda, ESP_BD_ADDR_LEN );
+                        esp_log_buffer_hex("IBEACON_DEMO: Proximity UUID:", ibeacon_data->ibeacon_vendor.proximity_uuid, ESP_UUID_LEN_128);
+
+                        uint16_t major = ENDIAN_CHANGE_U16(ibeacon_data->ibeacon_vendor.major);
+                        uint16_t minor = ENDIAN_CHANGE_U16(ibeacon_data->ibeacon_vendor.minor);
+                        ESP_LOGI(TAG_BLE, "Major: 0x%04x (%d)", major, major);
+                        ESP_LOGI(TAG_BLE, "Minor: 0x%04x (%d)", minor, minor);
+                        ESP_LOGI(TAG_BLE, "Measured power (RSSI at a 1m distance):%d dbm", ibeacon_data->ibeacon_vendor.measured_power);
+                        ESP_LOGI(TAG_BLE, "RSSI of packet:%d dbm", scan_result->scan_rst.rssi);
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        case ESP_GAP_BLE_SCAN_STOP_COMPLETE_EVT: {
+            if((err = param->scan_stop_cmpl.status) != ESP_BT_STATUS_SUCCESS) {
+                ESP_LOGE(TAG_BLE,"Scan stop failed: %s", esp_err_to_name(err));
+            }
+            else {
+                ESP_LOGI(TAG_BLE,"Stop scan successfully");
+            }
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+void ble_init_beacon_mode() {
+    esp_err_t status;
+    if ((status = esp_ble_gap_register_callback(esp_gap_cb)) != ESP_OK) {
+        ESP_LOGE(TAG_BLE, "gap callback register error: %s", esp_err_to_name(status));
+        return;
+    }
+
+    /*esp_ble_scan_params_t ble_scan_params = {
+    .scan_type              = BLE_SCAN_TYPE_ACTIVE,
+    .own_addr_type          = BLE_ADDR_TYPE_PUBLIC,
+    .scan_filter_policy     = BLE_SCAN_FILTER_ALLOW_ALL,
+    .scan_interval          = 0x50,
+    .scan_window            = 0x30,
+    .scan_duplicate         = BLE_SCAN_DUPLICATE_DISABLE
+    };*/
+
+    extern esp_ble_scan_params_t ble_scan_params;
+    esp_ble_gap_set_scan_params(&ble_scan_params);
+}
+
+bool ble_get_confirmation() {
+
+    /*esp_err_t status;
+    if ((status = esp_ble_gap_register_callback(esp_gap_cb)) != ESP_OK) {
+        ESP_LOGE(TAG_BLE, "gap callback register error: %s", esp_err_to_name(status));
+        return false;
+    }
+
+    extern esp_ble_scan_params_t ble_scan_params;
+    esp_ble_gap_set_scan_params(&ble_scan_params);*/
+    
+    //esp_ble_gap_start_scanning(2);
+    vTaskDelay(2100 / portTICK_PERIOD_MS);
+    //esp_ble_gap_stop_scanning();
+
+    return true;
 }
