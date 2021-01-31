@@ -158,10 +158,16 @@ static void IRAM_ATTR&#160;</td><td class="memItemRight" valign="bottom"><b>butt
 <tr class="memitem:a04abf6c86159a917c029fe413e5eeb21"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tasks__modes_8h.html#a04abf6c86159a917c029fe413e5eeb21">AskingServer</a> ()</td></tr>
 <tr class="memdesc:a04abf6c86159a917c029fe413e5eeb21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ask server that it's ready receive data.  <a href="tasks__modes_8h.html#a04abf6c86159a917c029fe413e5eeb21">More...</a><br /></td></tr>
 <tr class="separator:a04abf6c86159a917c029fe413e5eeb21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae0d88d1cff776395f03faca73193198"><td class="memItemLeft" align="right" valign="top"><a id="aae0d88d1cff776395f03faca73193198"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tasks__modes_8h.html#aae0d88d1cff776395f03faca73193198">BLE_SendAuthInfo</a> (uint16_t)</td></tr>
-<tr class="memdesc:aae0d88d1cff776395f03faca73193198"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send config message (iBeacon?) with connection info to sensors. <br /></td></tr>
-<tr class="separator:aae0d88d1cff776395f03faca73193198"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2b322b1721cf2997bc352831aeed964"><td class="memItemLeft" align="right" valign="top"><a id="af2b322b1721cf2997bc352831aeed964"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tasks__modes_8h.html#af2b322b1721cf2997bc352831aeed964">ble_send_authInfo</a> (uint16_t, uint16_t)</td></tr>
+<tr class="memdesc:af2b322b1721cf2997bc352831aeed964"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send config message (iBeacon?) with connection info to sensors. <br /></td></tr>
+<tr class="separator:af2b322b1721cf2997bc352831aeed964"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87bc6f69b1dfdd0f590ab7fbe2b8a11c"><td class="memItemLeft" align="right" valign="top"><a id="a87bc6f69b1dfdd0f590ab7fbe2b8a11c"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>ble_get_confirmation</b> ()</td></tr>
+<tr class="separator:a87bc6f69b1dfdd0f590ab7fbe2b8a11c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a945150c5b57b97500f046d6393b0d545"><td class="memItemLeft" align="right" valign="top"><a id="a945150c5b57b97500f046d6393b0d545"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ble_init_beacon_mode</b> ()</td></tr>
+<tr class="separator:a945150c5b57b97500f046d6393b0d545"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9edbe53c770f20d4704efe03561ea6c9"><td class="memItemLeft" align="right" valign="top"><a id="a9edbe53c770f20d4704efe03561ea6c9"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>tasks_init</b> ()</td></tr>
 <tr class="separator:a9edbe53c770f20d4704efe03561ea6c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,6 +177,9 @@ Variables</h2></td></tr>
 <tr class="memitem:aeb93cf359bc1fbbc00515e0d0ba10f9d"><td class="memItemLeft" align="right" valign="top"><a id="aeb93cf359bc1fbbc00515e0d0ba10f9d"></a>
 static const char *&#160;</td><td class="memItemRight" valign="bottom"><b>TAG_TASK</b> = &quot;vTasks&quot;</td></tr>
 <tr class="separator:aeb93cf359bc1fbbc00515e0d0ba10f9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45443ead3561a429cb472d597c0205d5"><td class="memItemLeft" align="right" valign="top"><a id="a45443ead3561a429cb472d597c0205d5"></a>
+static const char *&#160;</td><td class="memItemRight" valign="bottom"><b>TAG_BLE</b> = &quot;BLE&quot;</td></tr>
+<tr class="separator:a45443ead3561a429cb472d597c0205d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>FreeRTOS and tasks stuff. Задачи, определяющие режимы работы браслета. </p>

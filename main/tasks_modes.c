@@ -227,7 +227,7 @@ void vTaskInitializationMode(void *pvParameters) {
         } else {
             //send auth info via BLE / WiFi
             ESP_LOGI(TAG_TASK, "Enought sensors: NO");
-            ble_send_authInfo(1, ++sensor_cnt);
+            ble_send_authInfo(1, sensor_cnt);
             /*while (! ble_get_confirmation()) {
                 ESP_LOGI(TAG_BLE, "wating confirmation..");
                 vTaskDelay(50 / portTICK_PERIOD_MS);
@@ -515,7 +515,7 @@ void vTaskButtonPressed(void *pvParameters) {
  * @return false 
  */
 bool isEnoughSensors() {
-    static uint8_t  sensor_cnt = 0;
+    //static uint8_t  sensor_cnt = 0;
     if (sensor_cnt < 4) {
         sensor_cnt++;
         ESP_LOGI(TAG_TASK, "Now %d sensors connected", sensor_cnt);
@@ -581,7 +581,7 @@ bool AskingServer() {
 }
 
 /**
- * @brief Send config message (iBeacon?) with connection info to sensors
+ * @brief Send config message (iBeacon) with connection info to sensors
  * 
  */
 void ble_send_authInfo(uint16_t wifi_num, uint16_t sensor_cnt) {
@@ -694,6 +694,12 @@ void ble_init_beacon_mode() {
     esp_ble_gap_set_scan_params(&ble_scan_params);
 }
 
+/**
+ * @brief Waiting for confirmation via BLE from sensors
+ * 
+ * @return true 
+ * @return false 
+ */
 bool ble_get_confirmation() {
 
     /*esp_err_t status;
