@@ -1449,3 +1449,4 @@ build/esp-idf/main/CMakeFiles/__idf_main.dir/bno055.c.obj
 build/esp-idf/main/CMakeFiles/__idf_main.dir/esp_ble.c.obj
 build/esp-idf/main/CMakeFiles/__idf_main.dir/stm8_bot.c.obj
 build/esp-idf/main/CMakeFiles/__idf_main.dir/tasks_modes.c.obj
+debug.log
