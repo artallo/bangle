@@ -1450,3 +1450,8 @@ build/esp-idf/main/CMakeFiles/__idf_main.dir/esp_ble.c.obj
 build/esp-idf/main/CMakeFiles/__idf_main.dir/stm8_bot.c.obj
 build/esp-idf/main/CMakeFiles/__idf_main.dir/tasks_modes.c.obj
 debug.log
+build/esp-idf/lwip/CMakeFiles/__idf_lwip.dir/port/esp32/tcp_isn/tcp_isn.c.obj
+build/esp-idf/wpa_supplicant/CMakeFiles/__idf_wpa_supplicant.dir/src/crypto/sha1-tlsprf.c.obj
+build/esp-idf/wpa_supplicant/CMakeFiles/__idf_wpa_supplicant.dir/src/crypto/sha256-prf.c.obj
+build/esp-idf/wpa_supplicant/CMakeFiles/__idf_wpa_supplicant.dir/src/crypto/sha384-tlsprf.c.obj
+build/esp-idf/wpa_supplicant/CMakeFiles/__idf_wpa_supplicant.dir/src/crypto/tls_mbedtls.c.obj
