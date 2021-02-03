@@ -58,10 +58,11 @@ esp_ble_scan_params_t ble_scan_params = {
 bool esp_ble_is_ibeacon_packet (uint8_t *adv_data, uint8_t adv_data_len){
     bool result = false;
 
-    if ((adv_data != NULL) && (adv_data_len == 0x1E)){
-        if (!memcmp(adv_data, (uint8_t*)&ibeacon_common_head, sizeof(ibeacon_common_head))){
+    if ((adv_data != NULL) && (adv_data[0] == 0x1A) && (adv_data[2] == 0x4C) && (adv_data[3] == 0x00)){
+        /*if (!memcmp(adv_data, (uint8_t*)&ibeacon_common_head, sizeof(ibeacon_common_head))){
             result = true;
-        }
+        }*/
+        result = true;
     }
 
     return result;

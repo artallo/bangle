@@ -18,6 +18,9 @@
 volatile menu_mode_t MenuCurrentMode = STARTING_MODE; ///< Current working mode, starts from STARTING_MODE
 volatile int64_t last_micros = 0;   ///< Delay measuring in usec
 
+uint8_t ble_remote_sensor_count = 1; ///< Transmit/confirm connecting sensor number
+uint8_t ble_remote_sensor_wifi = 1;  ///< Transmit/confirm connecting sensor wifi network number
+
 //Handlers
 static TaskHandle_t xTaskButtonPressedHandle = NULL; ///< vTaskButtonPressed task handler
 static TaskHandle_t xTaskModeSwitcherHandle = NULL;  ///< vTaskModeSwitcher task handler
@@ -31,8 +34,6 @@ static TaskHandle_t xTaskDatatransferModeHandle = NULL; ///< vTaskDatatransferMo
 static TaskHandle_t xTaskSleepModeHandle = NULL; ///< vTaskSleepMode task handler
 static TaskHandle_t xTaskDisplayHandle = NULL; ///< vTaskDisplay task handler
 static QueueHandle_t xQueueButtonHandle = NULL; ///< Queue for communication between ButtonPressed task and other mode tasks
-
-uint16_t sensor_cnt = 0;
 
 /**
  * @brief Button pressed ISR
@@ -180,7 +181,7 @@ void vTaskBackgroundMode(void *pvParameters) {
             if (ButtonShortPress) {     //if short press
                 ESP_LOGI(TAG_TASK, "Short pressing: feedback_blink, go to Initialization Mode");
                 //TODO: feedback_blink, go to Initialization Mode
-                sensor_cnt = 0;
+                ble_remote_sensor_count = 1;
                 //notify xTaskInitializationMode
                 xTaskNotifyGive(xTaskInitializationModeHandle);
                 //delay that new task activate and change MenuCurrentMode variable, so this task go to begin and wait notification in blocked state
@@ -207,6 +208,8 @@ void vTaskBackgroundMode(void *pvParameters) {
  * @param pvParameters 
  */
 void vTaskInitializationMode(void *pvParameters) {
+    //uint8_t sensor_count = 1; //number of sensor for connection
+    //uint8_t wifi_id = 1; //wifi network table number
     while (1) {
         //first time wait indefinitley for notification to activate task
         if (MenuCurrentMode != INITIALIZATION_MODE) {
@@ -225,13 +228,19 @@ void vTaskInitializationMode(void *pvParameters) {
             vTaskDelay(50 / portTICK_PERIOD_MS);
             //vTaskDelay(pdMS_TO_TICKS(5000));
         } else {
-            //send auth info via BLE / WiFi
+            //send auth info via BLE
             ESP_LOGI(TAG_TASK, "Enought sensors: NO");
-            ble_send_authInfo(1, sensor_cnt);
-            /*while (! ble_get_confirmation()) {
-                ESP_LOGI(TAG_BLE, "wating confirmation..");
-                vTaskDelay(50 / portTICK_PERIOD_MS);
-            };*/
+            //bool is_sensor_confirmed = false;
+            while (1) {
+                ble_send_authInfo(ble_remote_sensor_wifi, ble_remote_sensor_count); //transmiting 3seconds wifi and sensor number via BLE
+                ble_scan_confirmation(ble_remote_sensor_wifi, ble_remote_sensor_count); //goto scan mode for 1sec to rceive confirmation from sensors via BLE
+                if (ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(1100)) != 0) { //if confirmation received within next 1.1sec then break the loop
+                    break;
+                }
+            }
+            // here sensor connection confirmed
+            ++ble_remote_sensor_count;
+            
         }
 
     }
@@ -516,12 +525,12 @@ void vTaskButtonPressed(void *pvParameters) {
  */
 bool isEnoughSensors() {
     //static uint8_t  sensor_cnt = 0;
-    if (sensor_cnt < 4) {
-        sensor_cnt++;
-        ESP_LOGI(TAG_TASK, "Now %d sensors connected", sensor_cnt);
+    if (ble_remote_sensor_count < 5) {
+        //++ble_remote_sensor_count;
+        ESP_LOGI(TAG_TASK, "Now %d sensors connected", ble_remote_sensor_count - 1);
         return false;
     }
-    sensor_cnt = 5;
+    ble_remote_sensor_count = 5;
     return true;
 }
 
@@ -581,15 +590,16 @@ bool AskingServer() {
 }
 
 /**
- * @brief Send config message (iBeacon) with connection info to sensors
+ * @brief Send config message (iBeacon) with connection info to sensors (3 seconds)
  * 
+ * UUID 0 and 1 bytes content 'B' and 'A', minor field content wifi network, major field content sensor number
  */
 void ble_send_authInfo(uint16_t wifi_num, uint16_t sensor_cnt) {
     ESP_LOGI(TAG_TASK, "send auth info via BLE");
     
     extern esp_ble_ibeacon_vendor_t vendor_config;
-    //vendor_config.proximity_uuid[0] = 0x50;
-    //vendor_config.proximity_uuid[1] = 0x51;
+    vendor_config.proximity_uuid[0] = 'B';
+    vendor_config.proximity_uuid[1] = 'A';
     vendor_config.major = ((sensor_cnt&0xFF00)>>8) + ((sensor_cnt&0xFF)<<8);
     vendor_config.minor = ((wifi_num&0xFF00)>>8) + ((wifi_num&0xFF)<<8);
     esp_ble_ibeacon_t ibeacon_adv_data;
@@ -620,11 +630,11 @@ void esp_gap_cb(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t* param)
 
     switch(event)
     {
-        /*case ESP_GAP_BLE_SCAN_PARAM_SET_COMPLETE_EVT: {
-            uint32_t duration = 3; //seconds
+        case ESP_GAP_BLE_SCAN_PARAM_SET_COMPLETE_EVT: {
+            uint32_t duration = 1; //seconds
             esp_ble_gap_start_scanning(duration);
             break;
-        }*/
+        }
         case ESP_GAP_BLE_SCAN_START_COMPLETE_EVT: {
             if((err = param->scan_start_cmpl.status) != ESP_BT_STATUS_SUCCESS) {
                 ESP_LOGE(TAG_BLE,"Scan start failed: %s", esp_err_to_name(err));
@@ -639,10 +649,14 @@ void esp_gap_cb(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t* param)
             switch(scan_result->scan_rst.search_evt)
             {
                 case ESP_GAP_SEARCH_INQ_RES_EVT: {
-                    ESP_LOGI(TAG_BLE, "iBeacon Found");
-                    if (esp_ble_is_ibeacon_packet(scan_result->scan_rst.ble_adv, scan_result->scan_rst.adv_data_len)){
-                        esp_ble_ibeacon_t *ibeacon_data = (esp_ble_ibeacon_t*)(scan_result->scan_rst.ble_adv);
-                        ESP_LOGI(TAG_BLE, "----------iBeacon Found----------");
+                    //ESP_LOGI(TAG_BLE, "iBeacon Found");
+                    if (esp_ble_is_ibeacon_packet(scan_result->scan_rst.ble_adv, scan_result->scan_rst.adv_data_len)) {
+                        if (ble_remote_sensor_confirmed(scan_result->scan_rst.ble_adv)) {
+                            esp_ble_gap_stop_scanning();
+                            xTaskNotifyGive(xTaskInitializationModeHandle);
+                        }
+                        /*esp_ble_ibeacon_t *ibeacon_data = (esp_ble_ibeacon_t*)(scan_result->scan_rst.ble_adv);
+                        ESP_LOGI(TAG_BLE, "iBeacon Found");
                         esp_log_buffer_hex("IBEACON_DEMO: Device address:", scan_result->scan_rst.bda, ESP_BD_ADDR_LEN );
                         esp_log_buffer_hex("IBEACON_DEMO: Proximity UUID:", ibeacon_data->ibeacon_vendor.proximity_uuid, ESP_UUID_LEN_128);
 
@@ -651,7 +665,7 @@ void esp_gap_cb(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t* param)
                         ESP_LOGI(TAG_BLE, "Major: 0x%04x (%d)", major, major);
                         ESP_LOGI(TAG_BLE, "Minor: 0x%04x (%d)", minor, minor);
                         ESP_LOGI(TAG_BLE, "Measured power (RSSI at a 1m distance):%d dbm", ibeacon_data->ibeacon_vendor.measured_power);
-                        ESP_LOGI(TAG_BLE, "RSSI of packet:%d dbm", scan_result->scan_rst.rssi);
+                        ESP_LOGI(TAG_BLE, "RSSI of packet:%d dbm", scan_result->scan_rst.rssi);*/
                     }
                     break;
                 }
@@ -674,6 +688,10 @@ void esp_gap_cb(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t* param)
     }
 }
 
+/**
+ * @brief Init beacon mode and register callback for BLE scan events.
+ * 
+ */
 void ble_init_beacon_mode() {
     esp_err_t status;
     if ((status = esp_ble_gap_register_callback(esp_gap_cb)) != ESP_OK) {
@@ -690,30 +708,41 @@ void ble_init_beacon_mode() {
     .scan_duplicate         = BLE_SCAN_DUPLICATE_DISABLE
     };*/
 
-    extern esp_ble_scan_params_t ble_scan_params;
-    esp_ble_gap_set_scan_params(&ble_scan_params);
+    //extern esp_ble_scan_params_t ble_scan_params;
+    //esp_ble_gap_set_scan_params(&ble_scan_params);
 }
 
 /**
- * @brief Waiting for confirmation via BLE from sensors
+ * @brief Start BLE scan for confirmation from sensors (1 second)
  * 
  * @return true 
  * @return false 
  */
-bool ble_get_confirmation() {
+void ble_scan_confirmation() {
 
     /*esp_err_t status;
     if ((status = esp_ble_gap_register_callback(esp_gap_cb)) != ESP_OK) {
         ESP_LOGE(TAG_BLE, "gap callback register error: %s", esp_err_to_name(status));
         return false;
-    }
+    }*/
 
     extern esp_ble_scan_params_t ble_scan_params;
-    esp_ble_gap_set_scan_params(&ble_scan_params);*/
-    
-    //esp_ble_gap_start_scanning(2);
-    vTaskDelay(2100 / portTICK_PERIOD_MS);
-    //esp_ble_gap_stop_scanning();
+    esp_ble_gap_set_scan_params(&ble_scan_params);
+}
 
-    return true;
+/**
+ * @brief Check confirmaton from sensor received via BLE
+ * 
+ * Major field content sensor number. Minor field content wifi network number. UUID bytes 0 and 1 content values'S' and 'E'
+ * @return true 
+ * @return false 
+ */
+bool ble_remote_sensor_confirmed(uint8_t *adv_data) {
+    if ((adv_data[6] == 'S') && 
+        (adv_data[7] == 'E') && 
+        (adv_data[23] == ble_remote_sensor_count) &&
+        (adv_data[25] == ble_remote_sensor_wifi)) {
+        return true;
+    }
+    return false;
 }

@@ -27,7 +27,7 @@ typedef enum {
     DEVELOPER_MODE
 } menu_mode_t; 
 
-static void IRAM_ATTR button_isr_handler(void* arg);
+//static void IRAM_ATTR button_isr_handler(void* arg);
 
 //Tasks
 void vTaskButtonPressed(void *pvParameters);
@@ -49,8 +49,9 @@ bool isChangingAccelData();
 bool isDataExists();
 bool AskingServer();
 void ble_send_authInfo(uint16_t, uint16_t);
-bool ble_get_confirmation();
+void ble_scan_confirmation();
 void ble_init_beacon_mode();
+bool ble_remote_sensor_confirmed();
 
 bool tasks_init();
 
